@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Sprint3/Client/Client.iml" filepath="$PROJECT_DIR$/Sprint3/Client/Client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/SEP2_Group4.iml" filepath="$PROJECT_DIR$/.idea/SEP2_Group4.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Sprint3/Server/Server.iml" filepath="$PROJECT_DIR$/Sprint3/Server/Server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Sprint3/Shared/Shared.iml" filepath="$PROJECT_DIR$/Sprint3/Shared/Shared.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Sprint1/Sprint1.iml" filepath="$PROJECT_DIR$/Sprint1/Sprint1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Sprint2/Sprint2.iml" filepath="$PROJECT_DIR$/Sprint2/Sprint2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Sprint3/Sprint3.iml" filepath="$PROJECT_DIR$/Sprint3/Sprint3.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Sprint3/UnitTest/UnitTest.iml" filepath="$PROJECT_DIR$/Sprint3/UnitTest/UnitTest.iml" />
+    </modules>
+  </component>
+</project>
