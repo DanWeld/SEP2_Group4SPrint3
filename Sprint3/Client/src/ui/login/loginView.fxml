@@ -17,13 +17,12 @@
             </font>
         </Label>
         <VBox alignment="CENTER" prefHeight="211.0" prefWidth="580.0" spacing="10.0">
-            <children>
-                <Label text="Email:">
+            <children>                <Label text="Email or Username:">
                     <VBox.margin>
                         <Insets />
                     </VBox.margin>
                 </Label>
-                <TextField fx:id="emailField" promptText="Enter your email">
+                <TextField fx:id="emailField" promptText="Enter your email or username">
                     <VBox.margin>
                         <Insets left="150.0" right="150.0" />
                     </VBox.margin>

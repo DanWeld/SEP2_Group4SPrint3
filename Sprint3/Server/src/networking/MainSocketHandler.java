@@ -6,7 +6,7 @@ import model.booking.BookingModel;
 import networking.bookingHandler.BookingHandler;
 import networking.bookingHandler.BookingHandlerImpl;
 import networking.propertyListHandler.PropertyListHandler;
-import services.auth.AuthenticationService;
+import model.authentication.AuthenticationService;
 import utils.JsonParser;
 import model.propertyList.PropertyListModel;
 import networking.propertyListHandler.PropertyListHandlerImpl;
@@ -129,14 +129,30 @@ public class MainSocketHandler implements Runnable
               // Read the login request from the client
               String loginRequestJson = in.readLine();
               
-              // Parse the login request from JSON
+              // Parse the request
               LoginRequest loginRequest = JsonParser.jsonToLoginRequest(loginRequestJson);
               
               // Authenticate the user
-              String result = authService.authenticate(loginRequest.getEmail(), loginRequest.getPassword());
+              String response = authService.authenticate(loginRequest.getCredential(), loginRequest.getPassword());
               
-              // Send the result back to the client
-              out.println(result);
+              // Send the response to the client
+              out.println(response);
+              out.flush();
+            }
+            case "loginByUsername" ->
+            {
+              // Read the login request from the client
+              String loginRequestJson = in.readLine();
+              
+              // Parse the request
+              LoginRequest loginRequest = JsonParser.jsonToLoginRequest(loginRequestJson);
+              
+              // Authenticate the user by username
+              String response = authService.authenticateByUsername(loginRequest.getCredential(), loginRequest.getPassword());
+              
+              // Send the response to the client
+              out.println(response);
+              out.flush();
             }
             case "checkAdmin" ->
             {

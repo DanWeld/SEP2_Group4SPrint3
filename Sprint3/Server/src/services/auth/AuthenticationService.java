@@ -15,6 +15,14 @@ public interface AuthenticationService {
     String authenticate(String email, String password);
     
     /**
+     * Authenticate a user with username and password
+     * @param username User's username
+     * @param password User's password
+     * @return Result message indicating success or failure
+     */
+    String authenticateByUsername(String username, String password);
+    
+    /**
      * Register a new user
      * @param user User to register
      * @return Result message indicating success or failure

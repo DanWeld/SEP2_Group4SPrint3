@@ -8,7 +8,7 @@ import startup.viewHandler.ViewHandler;
 
 public class LoginCtrl
 {
-  @FXML private TextField emailField;
+  @FXML private TextField emailField; // This will accept either email or username
   @FXML private TextField passwordField;
   @FXML private Label messageLabel;
 
@@ -23,7 +23,7 @@ public class LoginCtrl
   {
     this.viewModel = vm;
     this.viewHandler = vh;
-    emailField.textProperty().bindBidirectional(viewModel.emailProperty());
+    emailField.textProperty().bindBidirectional(viewModel.credentialProperty()); // Updated to use credential property
     passwordField.textProperty()
         .bindBidirectional(viewModel.passwordProperty());
     messageLabel.textProperty().bind(viewModel.messageProperty());

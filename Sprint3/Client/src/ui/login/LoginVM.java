@@ -11,7 +11,7 @@ import networking.auth.Authentication;
 import services.UserSession;
 
 public class LoginVM {
-    private final StringProperty emailProp = new SimpleStringProperty();
+    private final StringProperty credentialProp = new SimpleStringProperty(); // Can be email or username
     private final StringProperty pwProp = new SimpleStringProperty();
     private final StringProperty msgProp = new SimpleStringProperty();
     private final BooleanProperty loginBtnEnabledProp = new SimpleBooleanProperty();
@@ -20,21 +20,21 @@ public class LoginVM {
 
     public LoginVM(Authentication authService){
         this.authService = authService;
-        emailProp.addListener(this::updateLoginButtonState);
+        credentialProp.addListener(this::updateLoginButtonState);
         pwProp.addListener(this::updateLoginButtonState);
     }
 
     private void updateLoginButtonState(Observable observable) {
-        boolean shouldDisable = emailProp.get() == null || emailProp.get().isEmpty() || pwProp.get() == null || pwProp.get().isEmpty();
+        boolean shouldDisable = credentialProp.get() == null || credentialProp.get().isEmpty() || pwProp.get() == null || pwProp.get().isEmpty();
         loginBtnEnabledProp.set(!shouldDisable);
     }
 
     public void login(){
-        String email = emailProp.get();
+        String credential = credentialProp.get();
         String password = pwProp.get();
 
-        if (email == null || email.isEmpty()) {
-            msgProp.set("Email cannot be empty");
+        if (credential == null || credential.isEmpty()) {
+            msgProp.set("Email or Username cannot be empty");
             return;
         }
         if (password == null || password.isEmpty()) {
@@ -42,12 +42,24 @@ public class LoginVM {
             return;
         }
         
-        // Call the authentication service
-        String resultMsg = authService.loginUser(email, password);
+        // Determine if it's an email or username login
+        String resultMsg;
+        if (credential.contains("@")) {
+            // It's an email login
+            resultMsg = authService.loginUser(credential, password);
+        } else {
+            // It's a username login
+            resultMsg = authService.loginUserByUsername(credential, password);
+        }
         
         if(resultMsg.equals("Ok")){
             // Create a mock user for testing (in a real app, we'd get this from the server)
-            User user = new User("User", email, "", false);
+            User user;
+            if (credential.contains("@")) {
+                user = new User("User", credential, "", false);
+            } else {
+                user = new User(credential, "user@example.com", "", false);
+            }
             
             // Handle demo mode
             if (resultMsg.contains("demo mode")) {
@@ -62,7 +74,7 @@ public class LoginVM {
             
             msgProp.set("Login successful");
             // Clear fields
-            emailProp.set("");
+            credentialProp.set("");
             pwProp.set("");
         } else {
             loginSuccessfulProp.set(false);
@@ -70,8 +82,13 @@ public class LoginVM {
         }
     }
     
+    public StringProperty credentialProperty() {
+        return credentialProp;
+    }
+    
+    // For backward compatibility with existing views
     public StringProperty emailProperty() {
-        return emailProp;
+        return credentialProp;
     }
     
     public StringProperty passwordProperty(){

@@ -13,6 +13,14 @@ public interface Authentication
   String loginUser(String email, String password);
   
   /**
+   * Logs in a user with the provided username and password
+   * @param username User's username
+   * @param password User's password
+   * @return Message indicating success or failure
+   */
+  String loginUserByUsername(String username, String password);
+  
+  /**
    * Registers a new user with the system
    * @param user The user to register
    * @return Message indicating success or failure

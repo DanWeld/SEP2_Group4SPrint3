@@ -189,6 +189,27 @@ public class Client
     String response = in.readLine();
     return response;
   }
+  
+  public String sendLoginByUsernameRequest(String username, String password) throws IOException {
+    // Create a login request with username
+    LoginRequest loginRequest = new LoginRequest(username, password, true); // true indicates username login
+    String loginRequestJson = JsonParser.toJson(loginRequest);
+
+    // Send the request to the server
+    out.println("loginByUsername");
+    out.println(loginRequestJson);
+    out.flush();
+
+    // Read the response from the server
+    String response = in.readLine();
+    
+    // If login is successful, fire an event to notify listeners
+    if (response != null && response.equals("Ok")) {
+      propertyChangeSupport.firePropertyChange("userLoggedIn", null, username);
+    }
+    
+    return response;
+  }
 
   public boolean isUsernameUnique(String username) throws IOException {
     // Send the request to the server

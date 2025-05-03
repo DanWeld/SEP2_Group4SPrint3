@@ -3,6 +3,7 @@ package services.auth;
 import dtos.User;
 import persistence.UserDAO;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -17,9 +18,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public AuthenticationServiceImpl(UserDAO userDAO) {
         this.userDAO = userDAO;
         this.loggedInUsers = new HashMap<>();
-    }
-
-    @Override
+    }    @Override
     public String authenticate(String email, String password) {
         if (email == null || email.trim().isEmpty()) {
             return "Email cannot be empty";
@@ -29,20 +28,54 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             return "Password cannot be empty";
         }
         
-        User user = userDAO.getUserByEmail(email);
-        
-        if (user == null) {
-            return "Invalid login credentials. Please try again.";
+        try {
+            User user = userDAO.getUserByEmail(email);
+            
+            if (user == null) {
+                return "Invalid login credentials. Please try again.";
+            }
+            
+            if (!user.getPassword().equals(password)) {
+                return "Invalid login credentials. Please try again.";
+            }
+            
+            // User authenticated successfully, add to logged in users
+            loggedInUsers.put(email, user);
+            
+            return "Ok";
+        } catch (SQLException e) {
+            return "Database error: " + e.getMessage();
+        }
+    }
+    
+    @Override
+    public String authenticateByUsername(String username, String password) {
+        if (username == null || username.trim().isEmpty()) {
+            return "Username cannot be empty";
         }
         
-        if (!user.getPassword().equals(password)) {
-            return "Invalid login credentials. Please try again.";
+        if (password == null || password.trim().isEmpty()) {
+            return "Password cannot be empty";
         }
         
-        // User authenticated successfully, add to logged in users
-        loggedInUsers.put(email, user);
-        
-        return "Ok";
+        try {
+            User user = userDAO.getUserByUsername(username);
+            
+            if (user == null) {
+                return "Invalid login credentials. Please try again.";
+            }
+            
+            if (!user.getPassword().equals(password)) {
+                return "Invalid login credentials. Please try again.";
+            }
+            
+            // User authenticated successfully, add to logged in users
+            loggedInUsers.put(user.getEmail(), user);
+            
+            return "Ok";
+        } catch (SQLException e) {
+            return "Database error: " + e.getMessage();
+        }
     }
     
     @Override
@@ -84,22 +117,34 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         } else {
             return "Failed to register user. Please try again.";
         }
-    }
-
-    @Override
+    }    @Override
     public boolean isUsernameUnique(String username) {
-        return userDAO.getUserByUsername(username) == null;
+        try {
+            return userDAO.getUserByUsername(username) == null;
+        } catch (SQLException e) {
+            System.out.println("Error checking username uniqueness: " + e.getMessage());
+            return false; // Default to not unique if there's an error
+        }
     }
 
     @Override
     public boolean isEmailUnique(String email) {
-        return userDAO.getUserByEmail(email) == null;
+        try {
+            return userDAO.getUserByEmail(email) == null;
+        } catch (SQLException e) {
+            System.out.println("Error checking email uniqueness: " + e.getMessage());
+            return false; // Default to not unique if there's an error
+        }
     }
-    
-    @Override
+      @Override
     public boolean isAdmin(String email) {
-        User user = userDAO.getUserByEmail(email);
-        return user != null && user.isAdmin();
+        try {
+            User user = userDAO.getUserByEmail(email);
+            return user != null && user.isAdmin();
+        } catch (SQLException e) {
+            System.out.println("Error checking admin status: " + e.getMessage());
+            return false; // Default to non-admin if there's an error
+        }
     }
     
     /**

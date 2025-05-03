@@ -13,8 +13,7 @@ public class AuthenticationImpl implements Authentication {
         this.client = client;
         this.offlineMode = (client == null);
     }
-    
-    @Override
+      @Override
     public String loginUser(String email, String password) {
         if (email == null || email.isEmpty()) {
             return "Email cannot be empty";
@@ -35,6 +34,33 @@ public class AuthenticationImpl implements Authentication {
         try {
             // Send login request to server through the client
             String response = client.sendLoginRequest(email, password);
+            return response;
+        } catch (Exception e) {
+            return "Error connecting to server: " + e.getMessage();
+        }
+    }
+    
+    @Override
+    public String loginUserByUsername(String username, String password) {
+        if (username == null || username.isEmpty()) {
+            return "Username cannot be empty";
+        }
+        if (password == null || password.isEmpty()) {
+            return "Password cannot be empty";
+        }
+        
+        if (offlineMode) {
+            // In offline mode, return a message but allow login for testing purposes
+            if ("testuser".equals(username) && "Test1234".equals(password)) {
+                return "Ok";
+            } else {
+                return "Server connection unavailable. Using demo mode with credentials: testuser / Test1234";
+            }
+        }
+        
+        try {
+            // Send login request to server through the client
+            String response = client.sendLoginByUsernameRequest(username, password);
             return response;
         } catch (Exception e) {
             return "Error connecting to server: " + e.getMessage();

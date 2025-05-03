@@ -11,8 +11,8 @@ import persistence.daos.bookings.BookingDAO;
 import persistence.daos.bookings.BookingDAOImpl;
 import persistence.daos.properties.PropertyDAO;
 import persistence.daos.properties.PropertyDAOImpl;
-import services.auth.AuthenticationService;
-import services.auth.AuthenticationServiceImpl;
+import model.authentication.AuthenticationService;
+import model.authentication.AuthenticationServiceImpl;
 
 import java.io.IOException;
 import java.net.ServerSocket;
