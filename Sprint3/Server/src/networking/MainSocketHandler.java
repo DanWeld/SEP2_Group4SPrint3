@@ -53,6 +53,12 @@ public class MainSocketHandler implements Runnable
 
   public MainSocketHandler(Socket socket, PropertyListModel propertyListModel, BookingModel bookingModel)
   {
+    this.socket = socket;
+    this.propertyListModel = propertyListModel;
+    this.bookingModel = bookingModel;
+    this.authService = null; // Set to null if not used
+    in = null; // Initialize to null
+    out = null; // Initialize to null
   }
 
   @Override public void run()
