@@ -1,12 +1,11 @@
 package services.auth;
 
 import dtos.User;
-import persistence.UserDAO;
+import persistence.daos.user.UserDAO;
 
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 /**
  * Implementation of the AuthenticationService interface

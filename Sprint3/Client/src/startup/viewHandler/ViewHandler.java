@@ -8,6 +8,8 @@ import dtos.Property;
 import startup.ViewModelFactory;
 import ui.booking.BookingController;
 import ui.booking.BookingVM;
+import ui.bookingHistory.BookingHistoryCtrl;
+import ui.bookingHistory.BookingHistoryVM;
 import ui.dashboard.AdminDashboardCtrl;
 import ui.dashboard.UserDashboardCtrl;
 import ui.login.LoginCtrl;
@@ -28,6 +30,7 @@ public class ViewHandler
   private final PropertyListVM propertyListVM;
   private final BookingVM bookingVM;
   private final RegisterVM registerVM;
+  private final BookingHistoryVM bookingHistoryVM;
   private final LoginVM loginVM;
   private final Stage mainStage;
 
@@ -39,6 +42,8 @@ public class ViewHandler
     bookingVM = viewModelFactory.getBookingVM();
     registerVM = viewModelFactory.getRegisterVM();
     loginVM = viewModelFactory.getLoginVM();
+    bookingHistoryVM = viewModelFactory.getBookingHistoryVM();
+
     mainStage = new Stage();
   }
 
@@ -59,6 +64,7 @@ public class ViewHandler
         case SPECIFY_DATES -> openSpecifyDatesView();
         case USER_DASHBOARD -> showUserDashboardView();
         case ADMIN_DASHBOARD -> showAdminDashboardView();
+        case BOOKING_HISTORY -> showBookingHistoryView();
       }
     } catch (Exception e) {
       e.printStackTrace();
@@ -88,7 +94,7 @@ public class ViewHandler
     {
       FXMLLoader loader = new FXMLLoader();
       loader.setLocation(getClass().getClassLoader().getResource(
-          "ui/register/registerView.fxml"));
+          "ui/register/RegisterView.fxml"));
       Parent root = loader.load();
       RegisterCtrl registerController = loader.getController();
       registerController.initialize(registerVM, this);
@@ -105,7 +111,7 @@ public class ViewHandler
     {
       FXMLLoader loader = new FXMLLoader();
       loader.setLocation(getClass().getClassLoader().getResource(
-          "ui/login/LoginCtrl.fxml"));
+          "ui/login/LoginView.fxml"));
       Parent root = loader.load();
       LoginCtrl loginController = loader.getController();
       loginController.initialize(loginVM, this);
@@ -226,6 +232,23 @@ public class ViewHandler
     mainStage.setScene(adminDashboardScene);
   }
 
+  private Scene bookingHistoryScene;
+  public void showBookingHistoryView() throws Exception
+  {
+    if (bookingHistoryScene == null)
+    {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getClassLoader().getResource(
+          "ui/bookingHistory/bookingHistory.fxml"));
+      Parent root = loader.load();
+      BookingHistoryCtrl controller = loader.getController();
+      controller.initialize(bookingHistoryVM, this);
+      bookingHistoryScene = new Scene(root);
+    }
+    mainStage.setTitle("Booking History");
+    mainStage.setScene(bookingHistoryScene);
+  }
+
   public enum ViewType {
     WELCOME,
     REGISTER,
@@ -234,6 +257,7 @@ public class ViewHandler
     BOOKING,
     SPECIFY_DATES,
     USER_DASHBOARD,
-    ADMIN_DASHBOARD
+    ADMIN_DASHBOARD,
+    BOOKING_HISTORY
   }
 }

@@ -2,11 +2,7 @@ package utils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import dtos.Booking;
-import dtos.LoginRequest;
-import dtos.Property;
-import dtos.PropertyList;
-import dtos.User;
+import dtos.*;
 
 import java.lang.reflect.Type;
 import java.sql.Date;
@@ -128,5 +124,24 @@ public class JsonParser
       }
     }
     return userList;
+  }
+
+  public static String toJson(ArrayList<BookingHistory> bookingHistory)
+  {
+    Gson gson = new Gson();
+    return gson.toJson(bookingHistory);
+  }
+
+  public static List<BookingHistory> jsonToBookingHistory(String jsonResponse)
+  {
+    Gson gson = new Gson();
+    BookingHistory[] bookingHistoryArray = gson.fromJson(jsonResponse, BookingHistory[].class);
+    List<BookingHistory> bookingHistoryList = new ArrayList<>();
+    if (bookingHistoryArray != null) {
+      for (BookingHistory bookingHistory : bookingHistoryArray) {
+        bookingHistoryList.add(bookingHistory);
+      }
+    }
+    return bookingHistoryList;
   }
 }

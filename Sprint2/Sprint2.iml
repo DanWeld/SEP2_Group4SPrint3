@@ -6,6 +6,7 @@
       <sourceFolder url="file://$MODULE_DIR$/UnitTest" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/UnitTest/test" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$" />
     </content>
     <content url="file://$MODULE_DIR$/UnitTest" />
     <orderEntry type="jdk" jdkName="liberica-21 (2)" jdkType="JavaSDK" />

@@ -14,6 +14,7 @@ public class SpecifyDatesController
   private @FXML DatePicker endDate;
   private @FXML Label errMsg;
   private @FXML Button proceedButton;
+  private @FXML Button backButton;
 
   private SpecifyDatesVM specifyDatesVM;
   private ViewHandler viewHandler;
@@ -49,5 +50,10 @@ public class SpecifyDatesController
     specifyDatesVM.setEndDate(endDate.getValue());
     viewHandler.setDates(Date.valueOf(startDate.getValue()), Date.valueOf(endDate.getValue()));
     viewHandler.showView(ViewHandler.ViewType.PROPERTY_LIST);
+  }
+
+  public void onBackButtonClicked()
+  {
+    viewHandler.showView(ViewHandler.ViewType.USER_DASHBOARD);
   }
 }

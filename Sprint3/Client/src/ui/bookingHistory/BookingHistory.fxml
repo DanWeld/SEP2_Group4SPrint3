@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.bookingHistory.BookingHistoryCtrl">
+   <children>
+      <TableView fx:id="table" layoutX="48.0" layoutY="57.0" prefHeight="273.0" prefWidth="505.0">
+        <columns>
+          <TableColumn fx:id="locationColumn" prefWidth="135.60004425048828" text="Location" />
+          <TableColumn fx:id="startDateColumn" prefWidth="129.5999755859375" text="Start Date" />
+            <TableColumn fx:id="endDateColumn" prefWidth="127.60003662109375" text="End date" />
+            <TableColumn fx:id="pricePerNightColumn" prefWidth="110.39998168945311" text="Price" />
+        </columns>
+      </TableView>
+      <Button fx:id="backButton" layoutX="280.0" layoutY="349.0" mnemonicParsing="false" onAction="#onBackButton" text="Back" />
+   </children>
+</AnchorPane>

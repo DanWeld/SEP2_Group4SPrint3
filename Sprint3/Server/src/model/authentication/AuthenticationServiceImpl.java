@@ -1,7 +1,7 @@
 package model.authentication;
 
 import dtos.User;
-import persistence.UserDAO;
+import persistence.daos.user.UserDAO;
 
 import java.sql.SQLException;
 import java.util.HashMap;

@@ -2,6 +2,7 @@ package startup;
 
 import networking.auth.Authentication;
 import ui.booking.BookingVM;
+import ui.bookingHistory.BookingHistoryVM;
 import ui.login.LoginVM;
 import ui.propertyList.PropertyListVM;
 import ui.register.RegisterVM;
@@ -16,6 +17,7 @@ public class ViewModelFactory {
     private final SpecifyDatesVM specifyDatesVM;
     private final PropertyListVM propertyListVM;
     private final BookingVM bookingVM;
+    private final BookingHistoryVM bookingHistoryVM;
     
     public ViewModelFactory(Authentication authService) {
         loginVM = new LoginVM(authService);
@@ -23,6 +25,7 @@ public class ViewModelFactory {
         specifyDatesVM = new SpecifyDatesVM();
         propertyListVM = new PropertyListVM();
         bookingVM = new BookingVM();
+        bookingHistoryVM = new BookingHistoryVM();
     }
     
     public LoginVM getLoginVM() {
@@ -44,4 +47,9 @@ public class ViewModelFactory {
     public BookingVM getBookingVM() {
         return bookingVM;
     }
+
+  public BookingHistoryVM getBookingHistoryVM()
+  {
+    return bookingHistoryVM;
+  }
 }

@@ -1,10 +1,14 @@
 package networking;
 
+import dtos.BookingHistory;
 import dtos.LoginRequest;
 import dtos.User;
 import model.booking.BookingModel;
+import model.bookingHistory.BookingHistoryModel;
 import networking.bookingHandler.BookingHandler;
 import networking.bookingHandler.BookingHandlerImpl;
+import networking.bookingHistoryHandler.BookingHistoryHandler;
+import networking.bookingHistoryHandler.BookingHistoryHandlerImpl;
 import networking.propertyListHandler.PropertyListHandler;
 import model.authentication.AuthenticationService;
 import utils.JsonParser;
@@ -17,20 +21,24 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class MainSocketHandler implements Runnable
 {
   private final Socket socket;
   private final PropertyListModel propertyListModel;
   private final BookingModel bookingModel;
+  private final BookingHistoryModel bookingHistoryModel;
   private final BufferedReader in;
   private final PrintWriter out;
   private PropertyListHandler propertyListHandler;
   private BookingHandler bookingHandler;
   private final AuthenticationService authService;
+  private BookingHistoryHandler bookingHistoryHandler;
 
   public MainSocketHandler(Socket socket, PropertyListModel propertyListModel,
-      BookingModel bookingModel, AuthenticationService authService) throws IOException, SQLException
+      BookingModel bookingModel, AuthenticationService authService,
+      BookingHistoryModel bookingHistoryModel) throws IOException, SQLException
   {
     // Initialize the socket
     this.socket = socket;
@@ -44,21 +52,14 @@ public class MainSocketHandler implements Runnable
     this.propertyListModel = propertyListModel;
     this.bookingModel = bookingModel;
     this.authService = authService;
+    this.bookingHistoryModel = bookingHistoryModel;
 
     // Initialize the handlers
     propertyListHandler = new PropertyListHandlerImpl(socket,
         propertyListModel);
     bookingHandler = new BookingHandlerImpl(socket, bookingModel);
-  }
-
-  public MainSocketHandler(Socket socket, PropertyListModel propertyListModel, BookingModel bookingModel)
-  {
-    this.socket = socket;
-    this.propertyListModel = propertyListModel;
-    this.bookingModel = bookingModel;
-    this.authService = null; // Set to null if not used
-    in = null; // Initialize to null
-    out = null; // Initialize to null
+    bookingHistoryHandler = new BookingHistoryHandlerImpl(socket,
+        bookingHistoryModel);
   }
 
   @Override public void run()
@@ -122,19 +123,22 @@ public class MainSocketHandler implements Runnable
               String request = in.readLine();
 
               // Parse the JSON request
-              LoginRequest loginRequest = JsonParser.jsonToLoginRequest(request);
+              LoginRequest loginRequest = JsonParser.jsonToLoginRequest(
+                  request);
             }
             case "login" ->
             {
               // Read the login request from the client
               String loginRequestJson = in.readLine();
-              
+
               // Parse the request
-              LoginRequest loginRequest = JsonParser.jsonToLoginRequest(loginRequestJson);
-              
+              LoginRequest loginRequest = JsonParser.jsonToLoginRequest(
+                  loginRequestJson);
+
               // Authenticate the user
-              String response = authService.authenticate(loginRequest.getCredential(), loginRequest.getPassword());
-              
+              String response = authService.authenticate(
+                  loginRequest.getCredential(), loginRequest.getPassword());
+
               // Send the response to the client
               out.println(response);
               out.flush();
@@ -143,13 +147,15 @@ public class MainSocketHandler implements Runnable
             {
               // Read the login request from the client
               String loginRequestJson = in.readLine();
-              
+
               // Parse the request
-              LoginRequest loginRequest = JsonParser.jsonToLoginRequest(loginRequestJson);
-              
+              LoginRequest loginRequest = JsonParser.jsonToLoginRequest(
+                  loginRequestJson);
+
               // Authenticate the user by username
-              String response = authService.authenticateByUsername(loginRequest.getCredential(), loginRequest.getPassword());
-              
+              String response = authService.authenticateByUsername(
+                  loginRequest.getCredential(), loginRequest.getPassword());
+
               // Send the response to the client
               out.println(response);
               out.flush();
@@ -158,10 +164,10 @@ public class MainSocketHandler implements Runnable
             {
               // Read the email from the client
               String email = in.readLine();
-              
+
               // Check if the user is an admin
               boolean isAdmin = authService.isAdmin(email);
-              
+
               // Send the result back to the client
               out.println(isAdmin);
             }
@@ -169,13 +175,13 @@ public class MainSocketHandler implements Runnable
             {
               // Read the user from the client
               String userJson = in.readLine();
-              
+
               // Parse the user from JSON
               User user = JsonParser.jsonToUser(userJson);
-              
+
               // Register the user
               String result = authService.registerUser(user);
-              
+
               // Send the result back to the client
               out.println(result);
             }
@@ -183,10 +189,10 @@ public class MainSocketHandler implements Runnable
             {
               // Read the username from the client
               String username = in.readLine();
-              
+
               // Check if the username is unique
               boolean isUnique = authService.isUsernameUnique(username);
-              
+
               // Send the result back to the client
               out.println(isUnique);
             }
@@ -194,12 +200,20 @@ public class MainSocketHandler implements Runnable
             {
               // Read the email from the client
               String email = in.readLine();
-              
+
               // Check if the email is unique
               boolean isUnique = authService.isEmailUnique(email);
-              
+
               // Send the result back to the client
               out.println(isUnique);
+            }
+            case "getBookingHistory" ->
+            {
+              // Read the username from the client
+              String username = in.readLine();
+
+              // Get the booking history
+              bookingHistoryHandler.getBookingHistory(username);
             }
           }
         }
@@ -210,7 +224,7 @@ public class MainSocketHandler implements Runnable
       }
       catch (IOException e)
       {
-        throw new RuntimeException(e);
+        e.printStackTrace();
       }
     }
     finally

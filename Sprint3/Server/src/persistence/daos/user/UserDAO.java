@@ -1,4 +1,4 @@
-package persistence;
+package persistence.daos.user;
 
 import dtos.User;
 

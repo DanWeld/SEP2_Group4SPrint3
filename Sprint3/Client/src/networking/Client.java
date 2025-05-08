@@ -1,11 +1,7 @@
 package networking;
 
-import dtos.Booking;
-import dtos.LoginRequest;
+import dtos.*;
 import utils.JsonParser;
-import dtos.Property;
-import dtos.PropertyList;
-import dtos.User;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -14,6 +10,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Client
 {
@@ -186,8 +184,7 @@ public class Client
     out.flush();
 
     // Read the response from the server
-    String response = in.readLine();
-    return response;
+    return in.readLine();
   }
   
   public String sendLoginByUsernameRequest(String username, String password) throws IOException {
@@ -242,5 +239,17 @@ public class Client
     // Read the response from the server
     String response = in.readLine();
     return Boolean.parseBoolean(response);
+  }
+
+  public List<BookingHistory> getBookingHistory(String username) throws IOException
+  {
+    // Send request to the server
+    out.println("getBookingHistory");
+    out.println(username);
+    out.flush();
+
+    // Read the response from the server
+    String jsonResponse = in.readLine();
+    return JsonParser.jsonToBookingHistory(jsonResponse);
   }
 }
