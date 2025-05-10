@@ -19,4 +19,9 @@ public class BookingClientImpl implements BookingClient
   {
     client.createBooking(propertyID, startDate, endDate, username);
   }
+
+  @Override public void isAvailable(Date startDate, Date endDate, int id)
+  {
+    client.getIsAvailable(startDate, endDate, id);
+  }
 }

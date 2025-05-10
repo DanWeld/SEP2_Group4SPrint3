@@ -1,4 +1,4 @@
-package ui.bookingHistory;
+package ui.pastBookingList;
 
 import dtos.BookingHistory;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -9,7 +9,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import startup.viewHandler.ViewHandler;
 
-public class BookingHistoryCtrl
+public class PastBookingListCtrl
 {
   @FXML private TableView<BookingHistory> table;
   @FXML private TableColumn<BookingHistory, String> locationColumn;
@@ -18,19 +18,19 @@ public class BookingHistoryCtrl
   @FXML private TableColumn<BookingHistory, Double> pricePerNightColumn;
   @FXML private Button backButton;
 
-  private BookingHistoryVM bookingHistoryVM;
+  private PastBookingListVM pastBookingListVM;
   private ViewHandler viewHandler;
 
-  public BookingHistoryCtrl()
+  public PastBookingListCtrl()
   {
   }
 
-  public void initialize(BookingHistoryVM bookingHistoryVM, ViewHandler viewHandler)
+  public void initialize(PastBookingListVM pastBookingListVM, ViewHandler viewHandler)
   {
     this.viewHandler = viewHandler;
-    this.bookingHistoryVM = bookingHistoryVM;
+    this.pastBookingListVM = pastBookingListVM;
 
-    table.setItems(bookingHistoryVM.getBookingHistory());
+    table.setItems(pastBookingListVM.getBookingHistory());
 
     locationColumn.setCellValueFactory(
         data -> new SimpleStringProperty(data.getValue().getLocation()));

@@ -1,5 +1,6 @@
 package networking.bookingHistoryHandler;
 
+import dtos.Booking;
 import dtos.BookingHistory;
 import model.bookingHistory.BookingHistoryModel;
 import utils.JsonParser;
@@ -34,9 +35,24 @@ public class BookingHistoryHandlerImpl
     bookingHistoryModel.addPropertyChangeListener(this);
   }
 
-  public void getBookingHistory(String username)
+  public void getPastBookings(String username)
   {
-    bookingHistoryModel.getBookingHistory(username);
+    bookingHistoryModel.getPastBookings(username);
+  }
+
+  public void getCurrentBookings(String username)
+  {
+    bookingHistoryModel.getCurrentBookings(username);
+  }
+
+  public void getFutureBookings(String username)
+  {
+    bookingHistoryModel.getFutureBookings(username);
+  }
+
+  @Override public void cancelBooking(BookingHistory booking)
+  {
+    bookingHistoryModel.cancelBooking(booking);
   }
 
   @Override public void propertyChange(PropertyChangeEvent evt)

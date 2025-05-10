@@ -8,8 +8,12 @@ import dtos.Property;
 import startup.ViewModelFactory;
 import ui.booking.BookingController;
 import ui.booking.BookingVM;
-import ui.bookingHistory.BookingHistoryCtrl;
-import ui.bookingHistory.BookingHistoryVM;
+import ui.currentBookingList.CurrentBookingListCtrl;
+import ui.currentBookingList.CurrentBookingListVM;
+import ui.futureBookingList.FutureBookingListCtrl;
+import ui.futureBookingList.FutureBookingListVM;
+import ui.pastBookingList.PastBookingListCtrl;
+import ui.pastBookingList.PastBookingListVM;
 import ui.dashboard.AdminDashboardCtrl;
 import ui.dashboard.UserDashboardCtrl;
 import ui.login.LoginCtrl;
@@ -30,7 +34,9 @@ public class ViewHandler
   private final PropertyListVM propertyListVM;
   private final BookingVM bookingVM;
   private final RegisterVM registerVM;
-  private final BookingHistoryVM bookingHistoryVM;
+  private final PastBookingListVM pastBookingListVM;
+  private final CurrentBookingListVM currentBookingListVM;
+  private final FutureBookingListVM futureBookingListVM;
   private final LoginVM loginVM;
   private final Stage mainStage;
 
@@ -42,14 +48,16 @@ public class ViewHandler
     bookingVM = viewModelFactory.getBookingVM();
     registerVM = viewModelFactory.getRegisterVM();
     loginVM = viewModelFactory.getLoginVM();
-    bookingHistoryVM = viewModelFactory.getBookingHistoryVM();
+    pastBookingListVM = viewModelFactory.getBookingHistoryVM();
+    currentBookingListVM = viewModelFactory.getCurrentBookingListVM();
+    futureBookingListVM = viewModelFactory.getFutureBookingListVM();
 
     mainStage = new Stage();
   }
 
   public void start()
   {
-    showView(ViewType.WELCOME);
+    showView(ViewType.USER_DASHBOARD);
     mainStage.show();
   }
 
@@ -64,7 +72,9 @@ public class ViewHandler
         case SPECIFY_DATES -> openSpecifyDatesView();
         case USER_DASHBOARD -> showUserDashboardView();
         case ADMIN_DASHBOARD -> showAdminDashboardView();
-        case BOOKING_HISTORY -> showBookingHistoryView();
+        case PAST_BOOKINGS -> showPastBookingsView();
+        case CURRENT_BOOKINGS -> showCurrentBookingsView();
+        case FUTURE_BOOKINGS -> showFutureBookingsView();
       }
     } catch (Exception e) {
       e.printStackTrace();
@@ -232,21 +242,55 @@ public class ViewHandler
     mainStage.setScene(adminDashboardScene);
   }
 
-  private Scene bookingHistoryScene;
-  public void showBookingHistoryView() throws Exception
+  private Scene pastBookingsScene;
+  public void showPastBookingsView() throws Exception
   {
-    if (bookingHistoryScene == null)
+    if (pastBookingsScene == null)
     {
       FXMLLoader loader = new FXMLLoader();
       loader.setLocation(getClass().getClassLoader().getResource(
-          "ui/bookingHistory/bookingHistory.fxml"));
+          "ui/pastBookingList/PastBookingList.fxml"));
       Parent root = loader.load();
-      BookingHistoryCtrl controller = loader.getController();
-      controller.initialize(bookingHistoryVM, this);
-      bookingHistoryScene = new Scene(root);
+      PastBookingListCtrl controller = loader.getController();
+      controller.initialize(pastBookingListVM, this);
+      pastBookingsScene = new Scene(root);
     }
     mainStage.setTitle("Booking History");
-    mainStage.setScene(bookingHistoryScene);
+    mainStage.setScene(pastBookingsScene);
+  }
+
+  private Scene currentBookingsScene;
+  public void showCurrentBookingsView() throws Exception
+  {
+    if (currentBookingsScene == null)
+    {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getClassLoader().getResource(
+          "ui/currentBookingList/CurrentBookingList.fxml"));
+      Parent root = loader.load();
+      CurrentBookingListCtrl controller = loader.getController();
+      controller.initialize(currentBookingListVM, this);
+      currentBookingsScene = new Scene(root);
+    }
+    mainStage.setTitle("Booking History");
+    mainStage.setScene(currentBookingsScene);
+  }
+
+  private Scene futureBookingsScene;
+  public void showFutureBookingsView() throws Exception
+  {
+    if (futureBookingsScene == null)
+    {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getClassLoader().getResource(
+          "ui/futureBookingList/FutureBookingList.fxml"));
+      Parent root = loader.load();
+      FutureBookingListCtrl controller = loader.getController();
+      controller.initialize(futureBookingListVM, this);
+      futureBookingsScene = new Scene(root);
+    }
+    mainStage.setTitle("Booking History");
+    mainStage.setScene(futureBookingsScene);
   }
 
   public enum ViewType {
@@ -258,6 +302,8 @@ public class ViewHandler
     SPECIFY_DATES,
     USER_DASHBOARD,
     ADMIN_DASHBOARD,
-    BOOKING_HISTORY
+    PAST_BOOKINGS,
+    CURRENT_BOOKINGS,
+    FUTURE_BOOKINGS
   }
 }

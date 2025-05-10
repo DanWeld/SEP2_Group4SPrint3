@@ -1,5 +1,6 @@
 package networking;
 
+import dtos.Booking;
 import dtos.BookingHistory;
 import dtos.LoginRequest;
 import dtos.User;
@@ -21,7 +22,6 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.sql.Date;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 public class MainSocketHandler implements Runnable
 {
@@ -207,13 +207,41 @@ public class MainSocketHandler implements Runnable
               // Send the result back to the client
               out.println(isUnique);
             }
-            case "getBookingHistory" ->
+            case "getPastBookings" ->
             {
               // Read the username from the client
               String username = in.readLine();
 
               // Get the booking history
-              bookingHistoryHandler.getBookingHistory(username);
+              bookingHistoryHandler.getPastBookings(username);
+            }
+            case "getCurrentBookings" ->
+            {
+              // Read the username from the client
+              String username = in.readLine();
+
+              // Get the current bookings
+              bookingHistoryHandler.getCurrentBookings(username);
+            }
+            case "getFutureBookings" ->
+            {
+              // Read the username from the client
+              String username = in.readLine();
+
+              // Get the future bookings
+              bookingHistoryHandler.getFutureBookings(username);
+            }
+            case "cancelBooking" ->
+            {
+              // Read the booking from the client
+              String bookingJson = in.readLine();
+
+              // Parse the booking from JSON
+              BookingHistory booking = (BookingHistory) JsonParser.jsonToObject(bookingJson,
+                  BookingHistory.class);
+
+              // Cancel the booking
+              bookingHistoryHandler.cancelBooking(booking);
             }
           }
         }

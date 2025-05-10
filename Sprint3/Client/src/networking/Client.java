@@ -23,7 +23,8 @@ public class Client
 
   public Client() throws IOException
   {
-    try {
+    try
+    {
       // Initialize the socket connection to the server
       socket = new Socket("localhost", 8080);
       in = new BufferedReader(
@@ -31,8 +32,11 @@ public class Client
       out = new PrintWriter(socket.getOutputStream(), true);
       propertyChangeSupport = new PropertyChangeSupport(this);
       connected = true;
-    } catch (IOException e) {
-      System.out.println("Warning: Could not connect to server. Running in offline mode.");
+    }
+    catch (IOException e)
+    {
+      System.out.println(
+          "Warning: Could not connect to server. Running in offline mode.");
       connected = false;
       propertyChangeSupport = new PropertyChangeSupport(this);
       // Let the exception propagate to handle it at a higher level
@@ -40,7 +44,8 @@ public class Client
     }
   }
 
-  public boolean isConnected() {
+  public boolean isConnected()
+  {
     return connected;
   }
 
@@ -153,7 +158,9 @@ public class Client
         newBooking);
   }
 
-  public String sendLoginRequest(String email, String password) throws IOException {
+  public String sendLoginRequest(String email, String password)
+      throws IOException
+  {
     // Create a login request
     LoginRequest loginRequest = new LoginRequest(email, password);
     String loginRequestJson = JsonParser.toJson(loginRequest);
@@ -165,16 +172,18 @@ public class Client
 
     // Read the response from the server
     String response = in.readLine();
-    
+
     // If login is successful, fire an event to notify listeners
-    if (response != null && response.equals("Ok")) {
+    if (response != null && response.equals("Ok"))
+    {
       propertyChangeSupport.firePropertyChange("userLoggedIn", null, email);
     }
-    
+
     return response;
   }
 
-  public String sendRegisterRequest(User user) throws IOException {
+  public String sendRegisterRequest(User user) throws IOException
+  {
     // Serialize the user object to JSON
     String userJson = JsonParser.toJson(user);
 
@@ -186,10 +195,13 @@ public class Client
     // Read the response from the server
     return in.readLine();
   }
-  
-  public String sendLoginByUsernameRequest(String username, String password) throws IOException {
+
+  public String sendLoginByUsernameRequest(String username, String password)
+      throws IOException
+  {
     // Create a login request with username
-    LoginRequest loginRequest = new LoginRequest(username, password, true); // true indicates username login
+    LoginRequest loginRequest = new LoginRequest(username, password,
+        true); // true indicates username login
     String loginRequestJson = JsonParser.toJson(loginRequest);
 
     // Send the request to the server
@@ -199,16 +211,18 @@ public class Client
 
     // Read the response from the server
     String response = in.readLine();
-    
+
     // If login is successful, fire an event to notify listeners
-    if (response != null && response.equals("Ok")) {
+    if (response != null && response.equals("Ok"))
+    {
       propertyChangeSupport.firePropertyChange("userLoggedIn", null, username);
     }
-    
+
     return response;
   }
 
-  public boolean isUsernameUnique(String username) throws IOException {
+  public boolean isUsernameUnique(String username) throws IOException
+  {
     // Send the request to the server
     out.println("checkUsername");
     out.println(username);
@@ -219,7 +233,8 @@ public class Client
     return Boolean.parseBoolean(response);
   }
 
-  public boolean isEmailUnique(String email) throws IOException {
+  public boolean isEmailUnique(String email) throws IOException
+  {
     // Send the request to the server
     out.println("checkEmail");
     out.println(email);
@@ -229,8 +244,9 @@ public class Client
     String response = in.readLine();
     return Boolean.parseBoolean(response);
   }
-  
-  public boolean isAdmin(String email) throws IOException {
+
+  public boolean isAdmin(String email) throws IOException
+  {
     // Send the request to the server
     out.println("checkAdmin");
     out.println(email);
@@ -241,15 +257,52 @@ public class Client
     return Boolean.parseBoolean(response);
   }
 
-  public List<BookingHistory> getBookingHistory(String username) throws IOException
+  public List<BookingHistory> getBookingHistory(String username)
+      throws IOException
   {
     // Send request to the server
-    out.println("getBookingHistory");
+    out.println("getPastBookings");
     out.println(username);
     out.flush();
 
     // Read the response from the server
     String jsonResponse = in.readLine();
     return JsonParser.jsonToBookingHistory(jsonResponse);
+  }
+
+  public List<BookingHistory> getCurrentBookings(String username)
+      throws IOException
+  {
+    // Send request to the server
+    out.println("getCurrentBookings");
+    out.println(username);
+    out.flush();
+
+    // Read the response from the server
+    String jsonResponse = in.readLine();
+    return JsonParser.jsonToBookingHistory(jsonResponse);
+  }
+
+  public List<BookingHistory> getFutureBookings(String username)
+      throws IOException
+  {
+    // Send request to the server
+    out.println("getFutureBookings");
+    out.println(username);
+    out.flush();
+
+    // Read the response from the server
+    String jsonResponse = in.readLine();
+    return JsonParser.jsonToBookingHistory(jsonResponse);
+  }
+
+  public void cancelBooking(BookingHistory booking) throws IOException
+  {
+    // Send request to the server
+    out.println("cancelBooking");
+    System.out.println("Cancel booking request sent");
+    System.out.println("Booking ID: " + booking);
+    out.println(JsonParser.toJson(booking));
+    out.flush();
   }
 }

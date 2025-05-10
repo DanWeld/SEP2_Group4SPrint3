@@ -29,15 +29,4 @@ public class PropertyListClientImpl implements PropertyListClient
     // Send the request to the server
     client.requestAvailableProperties(datesJson);
   }
-
-  @Override public void isAvailable(Date startDate, Date endDate, int id)
-      throws Exception
-  {
-    client.getIsAvailable(startDate, endDate, id);
-  }
-
-  @Override public void getByID(int id) throws Exception
-  {
-    client.getPropertyByID(id);
-  }
 }

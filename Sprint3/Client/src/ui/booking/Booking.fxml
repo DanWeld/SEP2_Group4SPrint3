@@ -14,7 +14,7 @@
     <Label layoutX="254.0" layoutY="128.0" text="Price per night: " />
     <Label layoutX="36.0" layoutY="235.0" text="Facilities: " />
     <Label layoutX="38.0" layoutY="295.0" text="Change end date: " />
-    <DatePicker fx:id="bookingDateField" layoutX="169.0" layoutY="288.0" onAction="#changeEndDate" prefHeight="32.0" prefWidth="174.0" />
+    <DatePicker fx:id="bookingDateField" layoutX="169.0" layoutY="288.0" prefHeight="32.0" prefWidth="174.0" />
     <TextArea fx:id="newEndDateAvailabilityField" layoutX="431.0" layoutY="288.0" maxHeight="32.0" minHeight="23.0" prefHeight="32.0" prefWidth="130.0" promptText="Availability" />
     <Button fx:id="backButton" layoutX="139.0" layoutY="379.0" mnemonicParsing="false" onAction="#onBackButtonClicked" text="Back" />
    <Label fx:id="errorMsg" layoutX="169.0" layoutY="336.0" prefHeight="32.0" prefWidth="431.0" text="Label" wrapText="true" />

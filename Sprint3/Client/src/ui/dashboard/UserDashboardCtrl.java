@@ -34,9 +34,19 @@ public class UserDashboardCtrl
     viewHandler.showView(ViewHandler.ViewType.SPECIFY_DATES);
   }
 
-  @FXML public void onViewBookings()
+  @FXML public void onViewPastBookings()
   {
-    viewHandler.showView(ViewHandler.ViewType.BOOKING_HISTORY);
+    viewHandler.showView(ViewHandler.ViewType.PAST_BOOKINGS);
+  }
+
+  @FXML public void onViewCurrentBookings()
+  {
+    viewHandler.showView(ViewHandler.ViewType.CURRENT_BOOKINGS);
+  }
+
+  @FXML public void onViewFutureBookings()
+  {
+    viewHandler.showView(ViewHandler.ViewType.FUTURE_BOOKINGS);
   }
 
   @FXML public void onViewProfile()

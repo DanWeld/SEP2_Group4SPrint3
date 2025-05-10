@@ -7,8 +7,6 @@ import model.bookingHistory.BookingHistoryModelManager;
 import model.propertyList.PropertyListModel;
 import model.propertyList.PropertyListModelManager;
 import networking.MainSocketHandler;
-import persistence.daos.bookingHistory.BookingHistoryDAO;
-import persistence.daos.bookingHistory.BookingHistoryDAOImpl;
 import persistence.daos.user.UserDAO;
 import persistence.daos.user.UserDAOImpl;
 import persistence.daos.bookings.BookingDAO;
@@ -59,8 +57,7 @@ public class Server
       AuthenticationService authService = new AuthenticationServiceImpl(userDAO);
 
       // Create a booking history model
-      BookingHistoryDAO bookingHistoryDAO = BookingHistoryDAOImpl.getInstance();
-       BookingHistoryModel bookingHistoryModel = new BookingHistoryModelManager(bookingHistoryDAO);
+       BookingHistoryModel bookingHistoryModel = new BookingHistoryModelManager(bookingDAO);
 
       // Create a new thread for the client
       Thread clientThread = new Thread(

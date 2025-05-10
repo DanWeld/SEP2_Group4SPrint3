@@ -1,7 +1,8 @@
 package model.bookingHistory;
 
+import dtos.Booking;
 import dtos.BookingHistory;
-import persistence.daos.bookingHistory.BookingHistoryDAO;
+import persistence.daos.bookings.BookingDAO;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -11,12 +12,12 @@ public class BookingHistoryModelManager implements BookingHistoryModel
 {
   private PropertyChangeSupport propertyChangeSupport;
   private ArrayList<BookingHistory> list;
-  private BookingHistoryDAO bookingHistoryDAO;
+  private BookingDAO bookingDAO;
 
 
-  public BookingHistoryModelManager(BookingHistoryDAO bookingHistoryDAO)
+  public BookingHistoryModelManager(BookingDAO bookingDAO)
   {
-    this.bookingHistoryDAO = bookingHistoryDAO;
+    this.bookingDAO = bookingDAO;
     list = new ArrayList<>();
     propertyChangeSupport = new PropertyChangeSupport(this);
   }
@@ -26,16 +27,54 @@ public class BookingHistoryModelManager implements BookingHistoryModel
     propertyChangeSupport.addPropertyChangeListener(listener);
   }
 
-  public void getBookingHistory(String username)
+  public void getPastBookings(String username)
   {
     try
     {
-      list = bookingHistoryDAO.getBookingHistory(username);
+      list = bookingDAO.readPastBookings(username);
     }
     catch (Exception e)
     {
       e.printStackTrace();
     }
     propertyChangeSupport.firePropertyChange("bookingHistory", null, list);
+  }
+
+  public void getCurrentBookings(String username)
+  {
+    try
+    {
+      list = bookingDAO.readCurrentBookings(username);
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
+    }
+    propertyChangeSupport.firePropertyChange("bookingHistory", null, list);
+  }
+
+  public void getFutureBookings(String username)
+  {
+    try
+    {
+      list = bookingDAO.readFutureBookings(username);
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
+    }
+    propertyChangeSupport.firePropertyChange("bookingHistory", null, list);
+  }
+
+  @Override public void cancelBooking(BookingHistory booking)
+  {
+    try
+    {
+      bookingDAO.delete(booking.getStartDate(), booking.getPropertyId(), booking.getUsername());
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
+    }
   }
 }

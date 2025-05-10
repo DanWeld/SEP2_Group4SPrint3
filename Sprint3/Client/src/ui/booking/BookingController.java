@@ -1,23 +1,18 @@
 package ui.booking;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import startup.viewHandler.ViewHandler;
 
+import java.time.LocalDate;
+
 /**
- * The BookingController class is responsible for handling the user interface
- * interactions related to booking a property. It binds the UI components to the
- * ViewModel and manages the actions performed by the user.
- *
- * @author Group 4
- * @version 1.0
+ * Controller for the Booking view.
  */
 public class BookingController
 {
-  //I want to add an image to the property
   @FXML private TextArea locationTextArea;
   @FXML private TextArea pricePerNightField;
   @FXML private TextArea facilitiesTextField;
@@ -30,19 +25,8 @@ public class BookingController
   private BookingVM bookingVM;
   private ViewHandler viewHandler;
 
-  /**
-   * Default constructor for BookingController.
-   */
-  public BookingController()
-  {
-  }
+  public BookingController() {}
 
-  /**
-   * Initializes the BookingController with the provided BookingVM and ViewHandler.
-   *
-   * @param bookingVM  The ViewModel for booking.
-   * @param viewHandler The ViewHandler for managing views.
-   */
   public void initialize(BookingVM bookingVM, ViewHandler viewHandler)
   {
     this.bookingVM = bookingVM;
@@ -53,34 +37,35 @@ public class BookingController
     facilitiesTextField.textProperty().bind(bookingVM.getFacilitiesProperty());
     newEndDateAvailabilityField.setEditable(false);
     errorMsg.textProperty().bind(bookingVM.getErrorMsgProperty());
-    bookingDateField.setValue(bookingVM.getEndDate().toLocalDate());
-  }
+    submitButton.disableProperty().bind(bookingVM.getSubmitButtonDisabledProperty());
 
-  /**
-   * Sets the booking date in the ViewModel when the user selects a new date.
-   * Called when the user changes the date in the DatePicker.
-   */
-  public void changeEndDate()
-  {
-    bookingVM.onChangeEndDate(bookingDateField.getValue());
+    // Setup DatePicker value to match ViewModel's end date
+    bookingDateField.setValue(bookingVM.getEndDateProperty().get().toLocalDate());
+
+    bookingDateField.valueProperty().addListener((obs, oldVal, newVal) -> {
+      if (newVal != null) {
+        bookingVM.onChangeEndDate(newVal);
+      }
+    });
+
+    // Update DatePicker when ViewModel's endDate changes
+    bookingVM.getEndDateProperty().addListener((obs, oldVal, newVal) -> {
+      if (newVal != null && !bookingDateField.getValue().equals(newVal.toLocalDate())) {
+        bookingDateField.setValue(newVal.toLocalDate());
+      }
+    });
+
+    // Availability text
     newEndDateAvailabilityField.textProperty().bind(bookingVM.getAvailabilityProperty());
   }
 
-  /**
-   * Back button action handler.
-   * From the BookingController, returns to the PropertyListView.
-   * Called when the user changes the date in the DatePicker.
-   */
+  @FXML
   public void onBackButtonClicked()
   {
     viewHandler.showView(ViewHandler.ViewType.PROPERTY_LIST);
   }
 
-  /**
-   * Submit button action handler.
-   * From the BookingController, creates a booking.
-   * Called when the user clicks the submit button.
-   */
+  @FXML
   public void onSubmitButtonClicked()
   {
     bookingVM.createBooking();

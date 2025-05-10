@@ -58,7 +58,7 @@ public class JsonParser
    * @param user The user to convert
    * @return JSON string representation of the user
    */
-  public static String toJson(User user)
+  public static String toJson(Object user)
   {
     Gson gson = new Gson();
     return gson.toJson(user);
@@ -143,5 +143,11 @@ public class JsonParser
       }
     }
     return bookingHistoryList;
+  }
+
+  public static Object jsonToObject(String json, Class<?> clazz)
+  {
+    Gson gson = new Gson();
+    return gson.fromJson(json, clazz);
   }
 }

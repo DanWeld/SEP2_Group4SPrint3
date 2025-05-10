@@ -1,6 +1,7 @@
 package persistence.daos.bookings;
 
 import dtos.Booking;
+import dtos.BookingHistory;
 import dtos.Property;
 
 import java.sql.*;
@@ -32,8 +33,8 @@ public class BookingDAOImpl implements BookingDAO
         "postgres", "viaviavia");
   }
 
-  @Override public Booking create(Date startDate, Date endDate,
-      int propertyId, String username) throws SQLException
+  @Override public Booking create(Date startDate, Date endDate, int propertyId,
+      String username) throws SQLException
   {
     try (Connection connection = getConnection())
     {
@@ -112,80 +113,6 @@ public class BookingDAOImpl implements BookingDAO
       {
         throw new SQLException("Booking not found.");
       }
-    }
-    catch (SQLException e)
-    {
-      e.printStackTrace();
-      throw e;
-    }
-  }
-
-  @Override public List<Booking> readByUsername(String username)
-      throws SQLException
-  {
-    try (Connection connection = getConnection())
-    {
-      //Check if the connection is established
-      if (connection == null || connection.isClosed())
-      {
-        throw new SQLException(
-            "Failed to establish a connection to the database.");
-      }
-      // Prepare the SQL statement
-      PreparedStatement statement = connection.prepareStatement(
-          "SELECT * FROM booking WHERE username = ?");
-      statement.setString(1, username);
-      ResultSet resultSet = statement.executeQuery();
-
-      ArrayList<Booking> bookings = new ArrayList<>();
-
-      while (resultSet.next())
-      {
-        Date createDate = resultSet.getDate("booking_date");
-        Date startDate = resultSet.getDate("start_date");
-        Date endDate = resultSet.getDate("end_date");
-        int propertyId = resultSet.getInt("propertyID");
-        Booking booking = new Booking(createDate, startDate, endDate,
-            propertyId, username);
-        bookings.add(booking);
-      }
-      return bookings;
-    }
-    catch (SQLException e)
-    {
-      e.printStackTrace();
-      throw e;
-    }
-  }
-
-  @Override public List<Booking> readByPropertyId(int propertyId)
-      throws SQLException
-  {
-    try (Connection connection = getConnection())
-    {
-      //Check if the connection is established
-      if (connection == null || connection.isClosed())
-      {
-        throw new SQLException(
-            "Failed to establish a connection to the database.");
-      }
-      // Prepare the SQL statement
-      PreparedStatement statement = connection.prepareStatement(
-          "SELECT * FROM booking WHERE propertyID = ?");
-      statement.setInt(1, propertyId);
-      ResultSet resultSet = statement.executeQuery();
-      ArrayList<Booking> bookings = new ArrayList<>();
-      while (resultSet.next())
-      {
-        Date createDate = resultSet.getDate("booking_date");
-        Date startDate = resultSet.getDate("start_date");
-        Date endDate = resultSet.getDate("end_date");
-        String username = resultSet.getString("username");
-        Booking booking = new Booking(createDate, startDate, endDate,
-            propertyId, username);
-        bookings.add(booking);
-      }
-      return bookings;
     }
     catch (SQLException e)
     {
@@ -347,6 +274,116 @@ public class BookingDAOImpl implements BookingDAO
       ResultSet resultSet = statement.executeQuery();
       // If the result set is empty, the property is available
       return !resultSet.next();
+    }
+  }
+
+  public ArrayList<BookingHistory> readPastBookings(String username)
+      throws SQLException
+  {
+    try (Connection connection = getConnection())
+    {
+      //Check if the connection is established
+      if (connection == null || connection.isClosed())
+      {
+        throw new SQLException(
+            "Failed to establish a connection to the database.");
+      }
+
+      // Implement the logic to retrieve booking history from the database
+      PreparedStatement statement = connection.prepareStatement(
+          "select * from booking b, property p\n"
+              + "where p.propertyid = b.propertyid and end_date < current_date and b.username = ?;");
+      statement.setString(1, username);
+      ResultSet resultSet = statement.executeQuery();
+
+      ArrayList<BookingHistory> bookingHistoryList = new ArrayList<>();
+      while (resultSet.next())
+      {
+        String location = resultSet.getString("location");
+        Date startDate = resultSet.getDate("start_date");
+        Date endDate = resultSet.getDate("end_date");
+        int propertyId = resultSet.getInt("propertyid");
+
+        double pricePerNight = resultSet.getDouble("pricepernight");
+
+        BookingHistory bookingHistory = new BookingHistory(username, location,
+            startDate, endDate, pricePerNight, propertyId);
+        bookingHistoryList.add(bookingHistory);
+      }
+      return bookingHistoryList;
+    }
+  }
+
+  public ArrayList<BookingHistory> readCurrentBookings(String username)
+      throws SQLException
+  {
+    try (Connection connection = getConnection())
+    {
+      //Check if the connection is established
+      if (connection == null || connection.isClosed())
+      {
+        throw new SQLException(
+            "Failed to establish a connection to the database.");
+      }
+
+      // Implement the logic to retrieve booking history from the database
+      PreparedStatement statement = connection.prepareStatement(
+          "select * from booking b, property p "
+              + "where p.propertyid = b.propertyid and start_date <= current_date\n"
+              + "and end_date >= current_date and b.username = ?;");
+      statement.setString(1, username);
+      ResultSet resultSet = statement.executeQuery();
+
+      ArrayList<BookingHistory> bookingHistoryList = new ArrayList<>();
+      while (resultSet.next())
+      {
+        String location = resultSet.getString("location");
+        Date startDate = resultSet.getDate("start_date");
+        Date endDate = resultSet.getDate("end_date");
+        int propertyId = resultSet.getInt("propertyid");
+        double pricePerNight = resultSet.getDouble("pricepernight");
+
+        BookingHistory bookingHistory = new BookingHistory(username, location,
+            startDate, endDate, pricePerNight, propertyId);
+        bookingHistoryList.add(bookingHistory);
+      }
+      return bookingHistoryList;
+    }
+  }
+
+  public ArrayList<BookingHistory> readFutureBookings(String username)
+      throws SQLException
+  {
+    try (Connection connection = getConnection())
+    {
+      //Check if the connection is established
+      if (connection == null || connection.isClosed())
+      {
+        throw new SQLException(
+            "Failed to establish a connection to the database.");
+      }
+
+      // Implement the logic to retrieve booking history from the database
+      PreparedStatement statement = connection.prepareStatement(
+          "select * from booking b, property p\n"
+              + "where p.propertyid = b.propertyid and start_date > current_date and b.username = ?;");
+      statement.setString(1, username);
+      ResultSet resultSet = statement.executeQuery();
+
+      ArrayList<BookingHistory> bookingHistoryList = new ArrayList<>();
+      while (resultSet.next())
+      {
+        String location = resultSet.getString("location");
+        Date startDate = resultSet.getDate("start_date");
+        Date endDate = resultSet.getDate("end_date");
+        double pricePerNight = resultSet.getDouble("pricepernight");
+        int propertyId = resultSet.getInt("propertyid");
+
+        BookingHistory bookingHistory = new BookingHistory(username, location,
+            startDate, endDate, pricePerNight, propertyId);
+        bookingHistoryList.add(bookingHistory);
+      }
+      return bookingHistoryList;
     }
   }
 }

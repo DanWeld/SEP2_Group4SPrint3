@@ -1,5 +1,6 @@
 package networking.bookingHistoryClient;
 
+import dtos.Booking;
 import dtos.BookingHistory;
 import networking.Client;
 
@@ -16,9 +17,26 @@ public class BookingHistoryClientImpl implements BookingHistoryClient
     this.client = client;
   }
 
-  @Override public List<BookingHistory> getBookingHistory(String username)
+  @Override public List<BookingHistory> getPastBookings(String username)
       throws IOException
   {
     return client.getBookingHistory(username);
+  }
+
+  @Override public List<BookingHistory> getCurrentBookings(String username)
+      throws IOException
+  {
+    return client.getCurrentBookings(username);
+  }
+
+  @Override public List<BookingHistory> getFutureBookings(String username)
+      throws IOException
+  {
+    return client.getFutureBookings(username);
+  }
+
+  @Override public void cancelBooking(BookingHistory booking) throws IOException
+  {
+    client.cancelBooking(booking);
   }
 }

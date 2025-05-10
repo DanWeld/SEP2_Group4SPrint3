@@ -1,4 +1,4 @@
-package ui.bookingHistory;
+package ui.pastBookingList;
 
 import dtos.BookingHistory;
 import dtos.User;
@@ -11,13 +11,13 @@ import networking.bookingHistoryClient.BookingHistoryClientImpl;
 import java.io.IOException;
 import java.util.List;
 
-public class BookingHistoryVM
+public class PastBookingListVM
 {
   private ObservableList<BookingHistory> bookings;
   private User user;
   private BookingHistoryClient bookingHistoryClient;
 
-  public BookingHistoryVM()
+  public PastBookingListVM()
   {
     this.bookings = FXCollections.observableArrayList();
     try
@@ -35,7 +35,7 @@ public class BookingHistoryVM
   {
     try
     {
-      List<BookingHistory> bookingHistoryList = bookingHistoryClient.getBookingHistory(user.getUsername());
+      List<BookingHistory> bookingHistoryList = bookingHistoryClient.getPastBookings(user.getUsername());
       bookings = FXCollections.observableArrayList(bookingHistoryList);
     }
     catch (IOException e)
