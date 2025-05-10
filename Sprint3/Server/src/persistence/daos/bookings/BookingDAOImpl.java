@@ -205,7 +205,6 @@ public class BookingDAOImpl implements BookingDAO
       statement.setString(3, username);
 
       statement.executeUpdate();
-      System.out.println("Booking deleted successfully.");
     }
     catch (SQLException e)
     {

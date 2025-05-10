@@ -80,31 +80,6 @@ public class Client
         properties);
   }
 
-  public void getPropertyByID(int id)
-  {
-    //Send the request to the server
-    out.println("getPropertyByID");
-    out.println(id);
-    out.flush();
-
-    // Read the response from the server
-    String jsonResponse = null;
-    try
-    {
-      jsonResponse = in.readLine();
-    }
-    catch (IOException e)
-    {
-      throw new RuntimeException(e);
-    }
-
-    // Parse the JSON response
-    Property property = JsonParser.parseProperty(jsonResponse);
-
-    // Notify the listeners about the new property
-    propertyChangeSupport.firePropertyChange("getPropertyByID", null, property);
-  }
-
   public void getIsAvailable(Date startDate, Date endDate, int propertyId)
   {
     //Send the request to the server
@@ -300,8 +275,6 @@ public class Client
   {
     // Send request to the server
     out.println("cancelBooking");
-    System.out.println("Cancel booking request sent");
-    System.out.println("Booking ID: " + booking);
     out.println(JsonParser.toJson(booking));
     out.flush();
   }

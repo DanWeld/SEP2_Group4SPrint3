@@ -61,6 +61,7 @@ public class BookingHistoryHandlerImpl
     if (name.equals("bookingHistory"))
     {
       // Convert the list of properties to PropertyList DTO
+      @SuppressWarnings("unchecked")
       ArrayList<BookingHistory> bookingHistory = (ArrayList<BookingHistory>) evt.getNewValue();
 
       // Convert the list of properties to JSON
