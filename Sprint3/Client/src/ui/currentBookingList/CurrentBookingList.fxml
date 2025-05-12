@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="399.0" prefWidth="600.0"
+            xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ui.currentBookingList.CurrentBookingListCtrl">
+    <children>
+        <Label layoutX="207.0" layoutY="14.0" text="Current Bookings">
+            <font>
+                <Font size="28.0"/>
+            </font>
+        </Label>
+        <TableView fx:id="table" layoutX="47.0" layoutY="64.0"
+                   prefHeight="271.0" prefWidth="505.0">
+            <columns>
+                <TableColumn fx:id="locationColumn"
+                             prefWidth="135.60004425048828" text="Location"/>
+                <TableColumn fx:id="startDateColumn"
+                             prefWidth="129.5999755859375" text="Start Date"/>
+                <TableColumn fx:id="endDateColumn"
+                             prefWidth="127.60003662109375" text="End date"/>
+                <TableColumn fx:id="pricePerNightColumn"
+                             prefWidth="110.39998168945311" text="Price"/>
+            </columns>
+        </TableView>
+        <Button fx:id="backButton" layoutX="294.0" layoutY="349.0"
+                mnemonicParsing="false" text="Back" onAction="#onBackButton"/>
+    </children>
+</AnchorPane>
