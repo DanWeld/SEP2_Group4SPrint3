@@ -48,7 +48,7 @@ public class UserDAOImpl implements UserDAO {
         ensureTableExists();
         try(Connection connection = getConnection()){
             // Check the availability of the email
-            PreparedStatement checkEmailStatement = connection.prepareStatement("SELECT * FROM u WHERE email = ?");
+            PreparedStatement checkEmailStatement = connection.prepareStatement("SELECT * FROM \"user\" WHERE email = ?");
             checkEmailStatement.setString(1, email);
             ResultSet checkingResultSetEmail = checkEmailStatement.executeQuery();
             if (checkingResultSetEmail.next())
@@ -57,7 +57,7 @@ public class UserDAOImpl implements UserDAO {
             }
 
             // Check the availability of the username
-            PreparedStatement checkUsernameStatement = connection.prepareStatement("SELECT * FROM u WHERE username = ?");
+            PreparedStatement checkUsernameStatement = connection.prepareStatement("SELECT * FROM \"user\" WHERE username = ?");
             checkUsernameStatement.setString(1, username);
             ResultSet checkingResultSetUsername = checkUsernameStatement.executeQuery();
             if (checkingResultSetUsername.next())
@@ -67,7 +67,7 @@ public class UserDAOImpl implements UserDAO {
 
             // Create the user
             PreparedStatement statement =
-                    connection.prepareStatement("INSERT INTO u(username, email, password, isAdmin) Values(?,?,?,?);");
+                    connection.prepareStatement("INSERT INTO \"user\"(username, email, password, isAdmin) Values(?,?,?,?);");
             statement.setString(1, username);
             statement.setString(2, email);
             statement.setString(3, password);
@@ -90,7 +90,7 @@ public class UserDAOImpl implements UserDAO {
     public User read(String email, String password) throws SQLException {
         try(Connection connection = getConnection()) {
             // Check if the email exists
-            PreparedStatement checkingStatement = connection.prepareStatement("SELECT * FROM u WHERE email = ?");
+            PreparedStatement checkingStatement = connection.prepareStatement("SELECT * FROM \"user\" WHERE email = ?");
             checkingStatement.setString(1, email);
             ResultSet checkingResultSet = checkingStatement.executeQuery();
             if (!checkingResultSet.next())
@@ -100,7 +100,7 @@ public class UserDAOImpl implements UserDAO {
 
             // Check email and password together
             PreparedStatement statement =
-                    connection.prepareStatement("SELECT * FROM u WHERE email = ? AND password = ?");
+                    connection.prepareStatement("SELECT * FROM \"user\" WHERE email = ? AND password = ?");
             statement.setString(1, email);
             statement.setString(2, password);
             ResultSet resultSet = statement.executeQuery();
@@ -120,7 +120,7 @@ public class UserDAOImpl implements UserDAO {
     public User readByUsername(String username, String password) throws SQLException {
         try(Connection connection = getConnection()) {
             // Check if the username exists
-            PreparedStatement checkingStatement = connection.prepareStatement("SELECT * FROM u WHERE username = ?");
+            PreparedStatement checkingStatement = connection.prepareStatement("SELECT * FROM \"user\" WHERE username = ?");
             checkingStatement.setString(1, username);
             ResultSet checkingResultSet = checkingStatement.executeQuery();
             if (!checkingResultSet.next())
@@ -130,7 +130,7 @@ public class UserDAOImpl implements UserDAO {
 
             // Check username and password together
             PreparedStatement statement =
-                    connection.prepareStatement("SELECT * FROM u WHERE username = ? AND password = ?");
+                    connection.prepareStatement("SELECT * FROM \"user\" WHERE username = ? AND password = ?");
             statement.setString(1, username);
             statement.setString(2, password);
             ResultSet resultSet = statement.executeQuery();
@@ -149,7 +149,7 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public User getUserByEmail(String email) throws SQLException {
         try(Connection connection = getConnection()){
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM u WHERE email = ?");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM \"user\" WHERE email = ?");
             statement.setString(1, email);
             ResultSet resultSet = statement.executeQuery();
             if(resultSet.next()){
@@ -166,7 +166,7 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public User getUserByUsername(String username) throws SQLException {
         try(Connection connection = getConnection()){
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM u WHERE username = ?");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM \"user\" WHERE username = ?");
             statement.setString(1, username);
             ResultSet resultSet = statement.executeQuery();
             if(resultSet.next()){
@@ -181,7 +181,7 @@ public class UserDAOImpl implements UserDAO {
     }@Override
     public void update(User user) throws SQLException {
         try(Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("UPDATE u SET username = ?, password = ? WHERE email = ?");
+            PreparedStatement statement = connection.prepareStatement("UPDATE \"user\" SET username = ?, password = ? WHERE email = ?");
             statement.setString(1, user.getUsername());
             statement.setString(2, user.getPassword());
             statement.setString(3, user.getEmail());
