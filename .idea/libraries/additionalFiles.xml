@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="additionalFiles">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/additionalFiles/gson-2.11.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/additionalFiles/XmlJsonParser-1.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/additionalFiles/postgresql-42.7.5.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

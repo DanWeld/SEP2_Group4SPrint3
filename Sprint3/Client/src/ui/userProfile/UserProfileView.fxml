@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="474.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.userProfile.UserProfileController">
+   <children>
+      <Text layoutX="152.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="User Profile">
+         <font>
+            <Font size="46.0" />
+         </font>
+      </Text>
+      
+      <VBox fx:id="profileViewBox" layoutX="40.0" layoutY="70.0" prefHeight="270.0" prefWidth="520.0" visible="true">
+         <children>
+            <Label style="-fx-font-weight: bold" text="Name:" />
+            <Label fx:id="nameLabel" text="User's Name" />
+            <Label style="-fx-font-weight: bold" text="Username:" />
+            <Label fx:id="usernameLabel" text="username" />
+            <Label style="-fx-font-weight: bold" text="Email:" />
+            <Label fx:id="emailLabel" text="email@example.com" />
+            <Label style="-fx-font-weight: bold" text="Password:" />
+            <Label fx:id="passwordLabel" text="********" />
+            <Label style="-fx-font-weight: bold" text="Phone:" />
+            <Label fx:id="phoneLabel" text="Phone Number" />            <Label style="-fx-font-weight: bold" text="Address:" />
+            <Label fx:id="addressLabel" text="User's Address" />
+            <Button fx:id="extendBookingButton" onAction="#onExtendBookingClick" style="-fx-background-color: #2196F3; -fx-text-fill: white;" text="Extend Current Booking" />
+         </children>
+      </VBox>
+      
+      <VBox fx:id="editProfileBox" layoutX="40.0" layoutY="70.0" prefHeight="270.0" prefWidth="520.0" visible="false">
+         <children>
+            <Label style="-fx-font-weight: bold" text="Name:" />
+            <TextField fx:id="nameTextField" prefWidth="300.0" />
+            <Label style="-fx-font-weight: bold" text="Phone:" />
+            <TextField fx:id="phoneTextField" prefWidth="300.0" />            <Label style="-fx-font-weight: bold" text="Address:" />
+            <TextField fx:id="addressTextField" prefWidth="300.0" />
+            <Button fx:id="saveButton" onAction="#onSaveClick" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Save" />
+            <Button fx:id="cancelButton" onAction="#onCancelClick" style="-fx-background-color: #f44336; -fx-text-fill: white;" text="Cancel" />
+            <Button fx:id="changePasswordButton" onAction="#onChangePasswordClick" style="-fx-background-color: #2196F3; -fx-text-fill: white;" text="Change Password" />
+         </children>
+      </VBox>
+      
+      <VBox fx:id="changePasswordBox" layoutX="40.0" layoutY="70.0" prefHeight="270.0" prefWidth="520.0" visible="false">
+         <children>
+            <Label style="-fx-font-weight: bold" text="Current Password:" />
+            <PasswordField fx:id="currentPasswordField" prefWidth="300.0" />
+            <Label style="-fx-font-weight: bold" text="New Password:" />
+            <PasswordField fx:id="newPasswordField" prefWidth="300.0" />
+            <Label style="-fx-font-weight: bold" text="Confirm New Password:" />
+            <PasswordField fx:id="confirmPasswordField" prefWidth="300.0" />
+            <Button fx:id="submitPasswordButton" onAction="#onSubmitPasswordClick" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Submit" />
+            <Button fx:id="cancelPasswordButton" onAction="#onCancelPasswordClick" style="-fx-background-color: #f44336; -fx-text-fill: white;" text="Cancel" />
+         </children>
+      </VBox>
+      
+      <Label fx:id="errorLabel" layoutX="40.0" layoutY="330.0" text="" textFill="#e40c0c" visible="false" />
+      
+      <Button fx:id="editButton" layoutX="40.0" layoutY="356.0" mnemonicParsing="false" onAction="#onEditClick" prefWidth="150.0" style="-fx-background-color: #3498db;" text="UpdateProfile" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Button>
+      
+      <Button fx:id="deleteAccountButton" layoutX="410.0" layoutY="356.0" mnemonicParsing="false" onAction="#onDeleteAccountClick" prefWidth="150.0" style="-fx-background-color: #e74c3c;" text="Delete Account" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>
