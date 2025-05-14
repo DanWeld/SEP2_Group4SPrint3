@@ -57,7 +57,7 @@ public class ViewHandler
 
   public void start()
   {
-    showView(ViewType.USER_DASHBOARD);
+    showView(ViewType.WELCOME);
     mainStage.show();
   }
 

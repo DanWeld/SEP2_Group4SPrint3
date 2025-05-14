@@ -54,17 +54,7 @@ public class LoginVM {
         
         if(resultMsg.equals("Ok")){
             // Create a mock user for testing (in a real app, we'd get this from the server)
-            User user;
-            if (credential.contains("@")) {
-                user = new User("User", credential, "", false);
-            } else {
-                user = new User(credential, "user@example.com", "", false);
-            }
-            
-            // Handle demo mode
-            if (resultMsg.contains("demo mode")) {
-                user = new User("TestUser", "test@test.com", "", false);
-            }
+            User user = null;
             
             // Set the user in the session
             UserSession.getInstance().setCurrentUser(user);

@@ -20,9 +20,6 @@ public class PropertyListClientImpl implements PropertyListClient
   @Override
   public void getAvailableProperties(Date startDate, Date endDate) throws IOException
   {
-    this.startDate = startDate;
-    this.endDate = endDate;
-
     // Convert the dates to JSON
     String datesJson = new Gson().toJson(new Date[]{startDate, endDate});
 

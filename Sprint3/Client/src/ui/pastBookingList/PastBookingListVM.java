@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import networking.Client;
 import networking.bookingHistoryClient.BookingHistoryClient;
 import networking.bookingHistoryClient.BookingHistoryClientImpl;
+import services.UserSession;
 
 import java.io.IOException;
 import java.util.List;
@@ -28,7 +29,7 @@ public class PastBookingListVM
     {
       throw new RuntimeException(e);
     }
-    this.user = new User("YoussefTopaji", "email", "password");
+    this.user = UserSession.getInstance().getCurrentUser();
   }
 
   public ObservableList<BookingHistory> getBookingHistory()

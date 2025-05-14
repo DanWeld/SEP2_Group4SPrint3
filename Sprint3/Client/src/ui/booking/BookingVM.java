@@ -2,12 +2,14 @@ package ui.booking;
 
 import dtos.Booking;
 import dtos.Property;
+import dtos.User;
 import javafx.beans.property.*;
 import networking.Client;
 import networking.bookingClient.BookingClient;
 import networking.bookingClient.BookingClientImpl;
 import networking.propertyListClient.PropertyListClient;
 import networking.propertyListClient.PropertyListClientImpl;
+import services.UserSession;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -37,6 +39,7 @@ public class BookingVM implements PropertyChangeListener
       false);
 
   private final BookingClient bookingClient;
+  private User user;
 
   public BookingVM()
   {
@@ -61,6 +64,9 @@ public class BookingVM implements PropertyChangeListener
 
     // Initially disable submit button
     submitButtonDisabled.set(false);
+
+    // set user from session
+    user = UserSession.getInstance().getCurrentUser();
   }
 
   public void updateProperty(Property property)
@@ -117,7 +123,7 @@ public class BookingVM implements PropertyChangeListener
     try
     {
       bookingClient.createBooking(propertyID.get(), startDate.get(),
-          endDate.get(), "YoussefTopaji");
+          endDate.get(), user.getUsername());
       errorMsg.set("Booking successful from " + startDate.get() + " to "
           + endDate.get());
     }

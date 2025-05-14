@@ -12,6 +12,8 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class BookingHandlerImpl
     implements BookingHandler, PropertyChangeListener
@@ -19,6 +21,7 @@ public class BookingHandlerImpl
   private Socket socket;
   private PrintWriter out;
   private final BookingModel bookingModel;
+  private ReadWriteLock lock = new ReentrantReadWriteLock();
 
   public BookingHandlerImpl(Socket socket, BookingModel bookingModel)
   {
@@ -40,7 +43,16 @@ public class BookingHandlerImpl
   @Override public void createBooking(int propertyID, Date startDate,
       Date endDate, String username) throws SQLException
   {
-    bookingModel.createBooking(propertyID, startDate, endDate, username);
+    // Acquire the write lock before creating a booking
+    lock.writeLock().lock();
+    try
+    {
+      bookingModel.createBooking(propertyID, startDate, endDate, username);
+    }
+    finally
+    {
+      lock.writeLock().unlock();
+    }
   }
 
   @Override
