@@ -6,6 +6,7 @@ import ui.login.LoginVM;
 import ui.propertyList.PropertyListVM;
 import ui.register.RegisterVM;
 import ui.specifyDates.SpecifyDatesVM;
+import ui.userToAdminUi.UserGuiVM;
 
 /**
  * Factory class for creating view models
@@ -16,6 +17,7 @@ public class ViewModelFactory {
     private final SpecifyDatesVM specifyDatesVM;
     private final PropertyListVM propertyListVM;
     private final BookingVM bookingVM;
+    private final UserGuiVM userGuiVM;
     
     public ViewModelFactory(Authentication authService) {
         loginVM = new LoginVM(authService);
@@ -23,6 +25,7 @@ public class ViewModelFactory {
         specifyDatesVM = new SpecifyDatesVM();
         propertyListVM = new PropertyListVM();
         bookingVM = new BookingVM();
+        userGuiVM = new UserGuiVM();
     }
     
     public LoginVM getLoginVM() {
@@ -44,4 +47,6 @@ public class ViewModelFactory {
     public BookingVM getBookingVM() {
         return bookingVM;
     }
+
+    public UserGuiVM getUserGuiVM(){return userGuiVM;}
 }

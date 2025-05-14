@@ -243,4 +243,31 @@ public class Client
     String response = in.readLine();
     return Boolean.parseBoolean(response);
   }
+
+  public void sendToServer(String searchUsers, String username, String email)
+  {
+    // Send the request to the server
+    out.println(searchUsers);
+    out.println(username);
+    out.println(email);
+    out.flush();
+
+    // Read the response from the server
+    String jsonResponse = null;
+    try
+    {
+      jsonResponse = in.readLine();
+    }
+    catch (IOException e)
+    {
+      throw new RuntimeException(e);
+    }
+
+    // Parse the JSON response
+    PropertyList properties = JsonParser.jsonToProperties(jsonResponse);
+
+    // Notify the listeners about the new properties
+    propertyChangeSupport.firePropertyChange("getAllProperties", null,
+        properties);
+  }
 }

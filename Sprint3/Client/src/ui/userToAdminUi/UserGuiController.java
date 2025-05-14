@@ -1,4 +1,4 @@
-package ui.user;
+package ui.userToAdminUi;
 
 import dtos.User;
 import javafx.beans.property.ObjectProperty;
@@ -6,6 +6,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import startup.viewHandler.ViewHandler;
+
+import java.io.IOException;
 
 public class UserGuiController
 {
@@ -26,14 +28,16 @@ public class UserGuiController
   public UserGuiController(){
 
   }
-
-  public void initialize(ViewHandler viewHandler, UserGuiVM userGuiVM){
+@FXML
+  public void initialize(ViewHandler viewHandler, UserGuiVM userGuiVM)
+    throws IOException
+{
     this.userGuiVM=userGuiVM;
     this.viewHandler=viewHandler;
     // Bind the TableView to the ViewModel
     try
     {
-      table.setItems(UserGuiVM.getUserList());
+      table.setItems(userGuiVM.getUserList());
     }
     catch (Exception e)
     {
@@ -47,13 +51,20 @@ public class UserGuiController
         data.getValue().getEmail()));
 
     // Bind the selected property to the ViewModel
-    UserGuiVM.bindSelectedProperty(
+    userGuiVM.bindSelectedUser(
         table.getSelectionModel().selectedItemProperty());
 
     // Bind isAdmin message to the ViewModel
-    isAdmin.textProperty().bind(UserGuiVM.getIsAdmin());
-
+  try
+  {
+    isAdmin.textProperty().bind(userGuiVM.getIsAdmin());
   }
+  catch (IOException e)
+  {
+    throw new RuntimeException(e);
+  }
+
+}
 @FXML
   public void onSearch(){
     String usernameInput = userName.getText();

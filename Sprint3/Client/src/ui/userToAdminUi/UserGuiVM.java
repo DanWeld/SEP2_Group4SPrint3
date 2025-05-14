@@ -1,5 +1,6 @@
-package ui.user;
+package ui.userToAdminUi;
 
+import dtos.Property;
 import dtos.User;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -8,10 +9,13 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import networking.User.CustomerListClientImpl;
+import networking.Client;
+import networking.userListToAdmin.CustomerListClient;
+import networking.userListToAdmin.CustomerListClientImpl;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 
 public class UserGuiVM implements PropertyChangeListener
 {
@@ -21,41 +25,61 @@ public class UserGuiVM implements PropertyChangeListener
   private StringProperty email;
   private SimpleObjectProperty<User> selectedUser;
   private  StringProperty isAdmin;
-  private CustomerListClientImpl userClient;
+  private CustomerListClient userClient;
+  private StringProperty errorMsg;
+  private Client client;
 
-  public UserGuiVM(CustomerListClientImpl userClient)
+  public UserGuiVM()
   {
-    this.userClient = userClient;
     this.users = FXCollections.observableArrayList();
     this.username = new SimpleStringProperty();
     this.email = new SimpleStringProperty();
     this.selectedUser = new SimpleObjectProperty<>();
     this.isAdmin = new SimpleStringProperty();
+    try
+    {
+      Client client = new Client();
+      this.userClient = new CustomerListClientImpl(client);
+      client.addPropertyChangeListener(this);
+    }
+    catch (IOException e)
+    {
+      throw new RuntimeException(e);
+    }
+    catch (Exception e)
+    {
+      throw new RuntimeException(e);
+    }
   }
   public ObservableList<User> getUserList()
   {
-    return users ;
+   return users;
   }
 
-  public void bindSelectedProperty(ReadOnlyObjectProperty<User> userReadOnlyObjectProperty)
+  public SimpleObjectProperty<User> getSelectedUser()
   {
-    selectedUser.bind(userReadOnlyObjectProperty);
-    selectedUser.addListener((obs, oldUser, newUser) -> {
-      if (newUser != null)
-      {
-        isAdmin.set(newUser.isAdmin() ? "Yes" : "No");
-      }
-      else
-      {
-        isAdmin.set("");
-      }
-    });
+
+    if (selectedUser.getValue() == null)
+    {
+      errorMsg.set("No User selected");
+    }
+    return selectedUser;
   }
 
-  public  ObservableValue<String> getIsAdmin()
+  public void bindSelectedUser(ReadOnlyObjectProperty<User> selectedUserFromTable)
   {
+    selectedUser.bind(selectedUserFromTable);
+  }
 
-
+  public  ObservableValue<String> getIsAdmin() throws IOException
+  {
+      if (client.isAdmin(email.toString())){
+        isAdmin.set("Yes, user is admin");
+      }
+      else{
+        isAdmin.set("No user is not admin");
+      }
+    return null;
   }
 
   @Override public void propertyChange(PropertyChangeEvent evt)

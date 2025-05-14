@@ -18,6 +18,7 @@ import ui.register.RegisterCtrl;
 import ui.register.RegisterVM;
 import ui.specifyDates.SpecifyDatesController;
 import ui.specifyDates.SpecifyDatesVM;
+import ui.userToAdminUi.UserGuiVM;
 import ui.welcome.FrontViewCtrl;
 
 import java.sql.Date;
@@ -30,6 +31,7 @@ public class ViewHandler
   private final RegisterVM registerVM;
   private final LoginVM loginVM;
   private final Stage mainStage;
+  private UserGuiVM userGuiVM;
 
 
   public ViewHandler(ViewModelFactory viewModelFactory)
@@ -39,6 +41,7 @@ public class ViewHandler
     bookingVM = viewModelFactory.getBookingVM();
     registerVM = viewModelFactory.getRegisterVM();
     loginVM = viewModelFactory.getLoginVM();
+    userGuiVM = viewModelFactory.getUserGuiVM();
     mainStage = new Stage();
   }
 
@@ -225,6 +228,23 @@ public class ViewHandler
     mainStage.setTitle("Admin Dashboard");
     mainStage.setScene(adminDashboardScene);
   }
+  private Scene manageUsersScene;
+  public void showManageUsersView() throws Exception
+  {
+
+    if (manageUsersScene == null)
+    {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getClassLoader().getResource(
+          "ui/userToAdminUi/UserGui.fxml"));
+      Parent root = loader.load();
+      AdminDashboardCtrl controller = loader.getController();
+      controller.initialize(this);
+      manageUsersScene = new Scene(root);
+    }
+    mainStage.setTitle("Manage Users");
+    mainStage.setScene(manageUsersScene);
+  }
 
   public enum ViewType {
     WELCOME,
@@ -234,6 +254,7 @@ public class ViewHandler
     BOOKING,
     SPECIFY_DATES,
     USER_DASHBOARD,
-    ADMIN_DASHBOARD
+    ADMIN_DASHBOARD,
+    Manage_Users
   }
 }
