@@ -27,22 +27,29 @@ public class RegisterCtrl
   {
     this.viewModel = vm;
     this.viewHandler = vh;
+
+    // Bind UI components to ViewModel properties
     emailField.textProperty().bindBidirectional(viewModel.emailProperty());
     passwordField.textProperty()
         .bindBidirectional(viewModel.passwordProperty());
     repeatField.textProperty().bindBidirectional(viewModel.repeatProperty());
-    usernameField.textProperty().bindBidirectional(viewModel.usernameProperty());
+    usernameField.textProperty()
+        .bindBidirectional(viewModel.usernameProperty());
     messageLabel.textProperty().bind(viewModel.messageProperty());
+
+    // Disable the register button if the ViewModel indicates it's not ready
     buttonRegister.disableProperty()
         .bind(viewModel.enableRegisterButtonProperty());
-        
-    // Listen for registration success and navigate to appropriate view
-    viewModel.registrationSuccessfulProperty().addListener((observable, oldValue, newValue) -> {
-      if (newValue) {
-        // Navigate to user dashboard after successful registration
-        viewHandler.showView(ViewHandler.ViewType.USER_DASHBOARD);
-      }
-    });
+
+    // Listen for registration success and navigate to the appropriate view
+    viewModel.registrationSuccessfulProperty()
+        .addListener((observable, oldValue, newValue) -> {
+          if (newValue)
+          {
+            // Navigate to user dashboard after successful registration
+            viewHandler.showView(ViewHandler.ViewType.USER_DASHBOARD);
+          }
+        });
   }
 
   public void onBack()

@@ -9,21 +9,13 @@ public class Property
   private Facilities facilities;
   private String newLocation;
 
-  public Property(int id, String location, double pricePerNight, boolean b,
+  public Property(int id, String location, double pricePerNight,
       Facilities facilities)
   {
     this.id = id;
     this.location = location;
     this.pricePerNight = pricePerNight;
     this.facilities = facilities;
-  }
-
-  public Property(int id, String testLocation, double pricePerNight, Facilities mockFacilities)
-  {
-    this.id = id;
-    this.location = testLocation;
-    this.pricePerNight = pricePerNight;
-    this.facilities = mockFacilities;
   }
 
   public int id()
@@ -49,11 +41,9 @@ public class Property
   public String toString()
   {
     StringBuilder sb = new StringBuilder();
-    sb.append("id: ").append(id)
-        .append(", Location: ").append(location)
+    sb.append("id: ").append(id).append(", Location: ").append(location)
         .append(", Price per night: ").append(pricePerNight)
-        .append(", Facilities: ")
-        .append(facilities);
+        .append(", Facilities: ").append(facilities);
     return sb.toString();
   }
 

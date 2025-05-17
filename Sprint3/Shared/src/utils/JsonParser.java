@@ -11,34 +11,43 @@ import java.util.List;
 
 public class JsonParser
 {
-  public static PropertyList jsonToProperties(String jsonResponse)
-  {
-    Gson gson = new Gson();
-    return gson.fromJson(jsonResponse, PropertyList.class);
+  private static final Gson gson = new Gson();
+
+  public static <T> T jsonToObject(String json, Type type) {
+    return gson.fromJson(json, type);
   }
 
-  public static String propertiesToJson(PropertyList propertyList)
+  /**
+   * Converts a User object to JSON
+   * @param object The user to convert
+   * @return JSON string representation of the user
+   */
+  public static String toJson(Object object)
   {
-    Gson gson = new Gson();
-    return gson.toJson(propertyList.getProperties());
+    return gson.toJson(object);
   }
 
-  public static Property parseProperty(String jsonResponse)
-  {
-    Gson gson = new Gson();
-    return gson.fromJson(jsonResponse, Property.class);
+  public static <T> T convertPayload(Object payload, Class<T> clazz) {
+    String json = toJson(payload);
+    return gson.fromJson(json, clazz);
   }
 
-  public static String datesToJson(Date startDate, Date endDate)
+  public static <T> List<T> jsonToList(String json, Class<T[]> clazz)
   {
     Gson gson = new Gson();
-    return gson.toJson(new Date[] {startDate, endDate});
+    T[] array = gson.fromJson(json, clazz);
+    List<T> list = new ArrayList<>();
+    if (array != null) {
+      for (T item : array) {
+        list.add(item);
+      }
+    }
+    return list;
   }
 
-  public static Date[] jsonToDates(String json)
-  {
-    Gson gson = new Gson();
-    return gson.fromJson(json, Date[].class);
+  public static <T> List<T> toList(Object payload, Class<T[]> arrayClass) {
+    String json = toJson(payload);
+    return jsonToList(json, arrayClass);
   }
 
   public static String bookingToJson(Booking booking)
@@ -53,16 +62,7 @@ public class JsonParser
     return gson.fromJson(jsonResponse, Booking.class);
   }
 
-  /**
-   * Converts a User object to JSON
-   * @param user The user to convert
-   * @return JSON string representation of the user
-   */
-  public static String toJson(Object user)
-  {
-    Gson gson = new Gson();
-    return gson.toJson(user);
-  }
+
 
   /**
    * Converts JSON to a User object

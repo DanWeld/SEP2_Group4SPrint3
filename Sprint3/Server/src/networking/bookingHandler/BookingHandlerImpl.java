@@ -18,24 +18,10 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class BookingHandlerImpl
     implements BookingHandler, PropertyChangeListener
 {
-  private Socket socket;
-  private PrintWriter out;
   private final BookingModel bookingModel;
-  private ReadWriteLock lock = new ReentrantReadWriteLock();
 
   public BookingHandlerImpl(Socket socket, BookingModel bookingModel)
   {
-    // Initialize the socket and reader/writer
-    this.socket = socket;
-    try
-    {
-      out = new PrintWriter(socket.getOutputStream(), true);
-    }
-    catch (IOException e)
-    {
-      throw new RuntimeException(e);
-    }
-
     this.bookingModel = bookingModel;
     bookingModel.addPropertyChangeListener(this);
   }
@@ -43,22 +29,13 @@ public class BookingHandlerImpl
   @Override public void createBooking(int propertyID, Date startDate,
       Date endDate, String username) throws SQLException
   {
-    // Acquire the write lock before creating a booking
-    lock.writeLock().lock();
-    try
-    {
-      bookingModel.createBooking(propertyID, startDate, endDate, username);
-    }
-    finally
-    {
-      lock.writeLock().unlock();
-    }
+    bookingModel.createBooking(propertyID, startDate, endDate, username);
   }
 
-  @Override
-  public void isAvailable(Date startDate, Date endDate, int propertyId)
+  @Override public void isAvailable(Date startDate, Date endDate,
+      int propertyId)
   {
-    bookingModel.isAvailable(startDate,endDate,propertyId);
+    bookingModel.isAvailable(startDate, endDate, propertyId);
   }
 
   @Override public void propertyChange(PropertyChangeEvent evt)

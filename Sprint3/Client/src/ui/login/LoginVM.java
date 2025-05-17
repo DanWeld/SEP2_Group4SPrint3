@@ -1,5 +1,7 @@
 package ui.login;
 
+import dtos.ErrorResponse;
+import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -10,90 +12,100 @@ import dtos.User;
 import networking.auth.Authentication;
 import services.UserSession;
 
-public class LoginVM {
-    private final StringProperty credentialProp = new SimpleStringProperty(); // Can be email or username
-    private final StringProperty pwProp = new SimpleStringProperty();
-    private final StringProperty msgProp = new SimpleStringProperty();
-    private final BooleanProperty loginBtnEnabledProp = new SimpleBooleanProperty();
-    private final BooleanProperty loginSuccessfulProp = new SimpleBooleanProperty(false);
-    private final Authentication authService;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
-    public LoginVM(Authentication authService){
-        this.authService = authService;
-        credentialProp.addListener(this::updateLoginButtonState);
-        pwProp.addListener(this::updateLoginButtonState);
-    }
+public class LoginVM implements PropertyChangeListener
+{
+  private final StringProperty emailProp = new SimpleStringProperty(); // Can be email or username
+  private final StringProperty pwProp = new SimpleStringProperty();
+  private final StringProperty msgProp = new SimpleStringProperty();
+  private final BooleanProperty loginBtnEnabledProp = new SimpleBooleanProperty();
+  private final BooleanProperty loginSuccessfulProp = new SimpleBooleanProperty(
+      false);
+  private final Authentication authService;
 
-    private void updateLoginButtonState(Observable observable) {
-        boolean shouldDisable = credentialProp.get() == null || credentialProp.get().isEmpty() || pwProp.get() == null || pwProp.get().isEmpty();
-        loginBtnEnabledProp.set(!shouldDisable);
-    }
+  public LoginVM(Authentication authService)
+  {
+    this.authService = authService;
 
-    public void login(){
-        String credential = credentialProp.get();
-        String password = pwProp.get();
+    authService.addPropertyChangeListener(this);
 
-        if (credential == null || credential.isEmpty()) {
-            msgProp.set("Email or Username cannot be empty");
-            return;
-        }
-        if (password == null || password.isEmpty()) {
-            msgProp.set("Password cannot be empty");
-            return;
-        }
-        
-        // Determine if it's an email or username login
-        String resultMsg;
-        if (credential.contains("@")) {
-            // It's an email login
-            resultMsg = authService.loginUser(credential, password);
-        } else {
-            // It's a username login
-            resultMsg = authService.loginUserByUsername(credential, password);
-        }
-        
-        if(resultMsg.equals("Ok")){
-            // Create a mock user for testing (in a real app, we'd get this from the server)
-            User user = null;
-            
-            // Set the user in the session
-            UserSession.getInstance().setCurrentUser(user);
-            
-            // Set login as successful
-            loginSuccessfulProp.set(true);
-            
-            msgProp.set("Login successful");
-            // Clear fields
-            credentialProp.set("");
-            pwProp.set("");
-        } else {
-            loginSuccessfulProp.set(false);
-            msgProp.set(resultMsg);
-        }
-    }
-    
-    public StringProperty credentialProperty() {
-        return credentialProp;
-    }
-    
-    // For backward compatibility with existing views
-    public StringProperty emailProperty() {
-        return credentialProp;
-    }
-    
-    public StringProperty passwordProperty(){
-        return pwProp;
-    }
-    
-    public StringProperty messageProperty(){
-        return msgProp;
-    }
-    
-    public BooleanProperty getLoginBtnEnabledProp() {
-        return loginBtnEnabledProp;
-    }
-    
-    public BooleanProperty loginSuccessfulProperty() {
-        return loginSuccessfulProp;
-    }
+    emailProp.addListener(this::updateLoginButtonState);
+    pwProp.addListener(this::updateLoginButtonState);
+  }
+
+  public StringProperty emailProperty()
+  {
+    return emailProp;
+  }
+
+  public StringProperty passwordProperty()
+  {
+    return pwProp;
+  }
+
+  public StringProperty messageProperty()
+  {
+    return msgProp;
+  }
+
+  public BooleanProperty getLoginBtnEnabledProp()
+  {
+    return loginBtnEnabledProp;
+  }
+
+  public BooleanProperty loginSuccessfulProperty()
+  {
+    return loginSuccessfulProp;
+  }
+
+  public void updateLoginButtonState(Observable observable)
+  {
+    boolean shouldDisable = emailProp.get() == null || emailProp.get().isEmpty()
+        || pwProp.get() == null || pwProp.get().isEmpty();
+    loginBtnEnabledProp.set(!shouldDisable);
+  }
+
+  public void login()
+  {
+    String email = emailProp.get();
+    String password = pwProp.get();
+
+    new Thread(() -> {
+      // Send login request to server through the authService
+      authService.loginUser(new LoginRequest(email, password));
+    }).start();
+  }
+
+  @Override public void propertyChange(PropertyChangeEvent evt)
+  {
+    Platform.runLater(() -> {
+      if (evt.getPropertyName().equals("login")
+          && evt.getNewValue() instanceof User)
+      {
+        handleLoginResponse((User) evt.getNewValue());
+      }
+      else if (evt.getPropertyName().equals("error")
+          && evt.getNewValue() instanceof ErrorResponse)
+      {
+        handleErrorResponse((ErrorResponse) evt.getNewValue());
+      }
+    });
+  }
+
+  private void handleLoginResponse(User newValue)
+  {
+    // Set the user in the session
+    UserSession.getInstance().setCurrentUser(newValue);
+    loginSuccessfulProp.set(true);
+    msgProp.set("Login successful");
+  }
+
+  private void handleErrorResponse(ErrorResponse errorResponse)
+  {
+    // Handle the error response
+    msgProp.set(errorResponse.errorMessage());
+    loginSuccessfulProp.set(false);
+  }
 }

@@ -1,6 +1,5 @@
 package ui.propertyList;
 
-import dtos.PropertyList;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

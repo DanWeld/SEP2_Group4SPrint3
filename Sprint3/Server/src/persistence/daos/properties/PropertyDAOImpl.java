@@ -58,9 +58,8 @@ public class PropertyDAOImpl implements PropertyDAO
       ResultSet keys = statement.getGeneratedKeys();
       if (keys.next())
       {
-        System.out.println("id: " + keys.getInt("propertyid"));
         return new Property(keys.getInt("propertyid"), location, pricePerNight,
-            true, facilities);
+            facilities);
       }
       else
       {
@@ -91,7 +90,7 @@ public class PropertyDAOImpl implements PropertyDAO
         boolean swimmingPool = resultSet.getBoolean("swimmingPool");
         boolean dishWasher = resultSet.getBoolean("dishWasher");
         boolean laundryMachine = resultSet.getBoolean("laundryMachine");
-        Property property = new Property(id, location, pricePerNight, true,
+        Property property = new Property(id, location, pricePerNight,
             new Facilities(kitchen, internet, dishWasher, laundryMachine,
                 swimmingPool));
         return property;
@@ -103,16 +102,16 @@ public class PropertyDAOImpl implements PropertyDAO
     }
   }
 
-  @Override public List<Property> readByLocation(String location)
+  @Override public List<Property> readAll()
       throws SQLException
   {
     try (Connection connection = getConnection())
     {
       PreparedStatement statement = connection.prepareStatement(
-          "SELECT * FROM property WHERE location ILIKE ?");
-      statement.setString(1, "%" + location + "%");
+          "SELECT * FROM property");
+
       ResultSet resultSet = statement.executeQuery();
-      ArrayList<Property> properties = new ArrayList<>();
+      List<Property> properties = new ArrayList<>();
       while (resultSet.next())
       {
         int id = resultSet.getInt("propertyid");
@@ -123,12 +122,19 @@ public class PropertyDAOImpl implements PropertyDAO
         boolean swimmingPool = resultSet.getBoolean("swimmingPool");
         boolean dishWasher = resultSet.getBoolean("dishWasher");
         boolean laundryMachine = resultSet.getBoolean("laundryMachine");
-        Property property = new Property(id, loc, pricePerNight, true,
+        Property property = new Property(id, loc, pricePerNight,
             new Facilities(kitchen, internet, dishWasher, laundryMachine,
                 swimmingPool));
         properties.add(property);
       }
-      return properties;
+      if (properties.size() > 0)
+      {
+        return properties;
+      }
+      else
+      {
+        throw new SQLException("No properties found in the database.");
+      }
     }
   }
 
@@ -136,6 +142,21 @@ public class PropertyDAOImpl implements PropertyDAO
   {
     try (Connection connection = getConnection())
     {
+      // Check if the connection is established
+      if (connection == null || connection.isClosed())
+      {
+        throw new SQLException(
+            "Failed to establish a connection to the database.");
+      }
+
+      // Check if the property exists
+      Property existingProperty = readByID(property.id());
+      if (existingProperty == null)
+      {
+        throw new SQLException("Property with ID " + property.id() + " does not exist.");
+      }
+
+      // Update the property in the database
       PreparedStatement statement = connection.prepareStatement(
           "UPDATE property SET location = ?, pricePerNight = ?, kitchen = ?, internet = ?, swimmingPool = ?, dishwasher = ?, laundryMachine = ? WHERE propertyid = ?");
       statement.setString(1, property.location());
@@ -146,7 +167,12 @@ public class PropertyDAOImpl implements PropertyDAO
       statement.setBoolean(6, property.facilities().dishwasher());
       statement.setBoolean(7, property.facilities().laundryMachine());
       statement.setInt(8, property.id());
-      statement.executeUpdate();
+      int rowsUpdated = statement.executeUpdate();
+
+      if (rowsUpdated == 0)
+      {
+        throw new SQLException("Failed to update property with ID " + property.id());
+      }
     }
   }
 
@@ -163,7 +189,7 @@ public class PropertyDAOImpl implements PropertyDAO
       }
       else
       {
-        System.out.println("Property with id " + id + " does not exist.");
+        throw new SQLException("Property with ID: " + id + " does not exist.");
       }
     }
   }
@@ -190,7 +216,7 @@ public class PropertyDAOImpl implements PropertyDAO
         boolean swimmingPool = resultSet.getBoolean("swimmingPool");
         boolean dishWasher = resultSet.getBoolean("dishWasher");
         boolean laundryMachine = resultSet.getBoolean("laundryMachine");
-        Property property = new Property(id, location, pricePerNight, true,
+        Property property = new Property(id, location, pricePerNight,
             new Facilities(kitchen, internet, dishWasher, laundryMachine,
                 swimmingPool));
         properties.add(property);

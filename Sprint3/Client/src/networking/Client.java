@@ -1,6 +1,7 @@
 package networking;
 
 import dtos.*;
+import observer.PropertyChangeSubject;
 import utils.JsonParser;
 
 import java.beans.PropertyChangeListener;
@@ -13,13 +14,14 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Client
+public class Client implements PropertyChangeSubject
 {
   private Socket socket;
   private BufferedReader in;
   private PrintWriter out;
   private PropertyChangeSupport propertyChangeSupport;
   private boolean connected;
+  private User currentUser;
 
   public Client() throws IOException
   {
@@ -44,14 +46,65 @@ public class Client
     }
   }
 
-  public boolean isConnected()
+  public void sendRequest(Request request)
   {
-    return connected;
+    if (!connected)
+    {
+      throw new IllegalStateException("Not connected to server");
+    }
+
+    try
+    {
+      // Send the handler name
+      out.println(request.handler());
+
+      // Send the action name
+      out.println(request.action());
+
+      System.out.println("Client: Request has been sent: "+ request.handler() + " " + request.action());
+
+      User user = (request.handler().equals("auth") ? null : this.currentUser);
+
+      // Send the parameters as JSON
+      String paramsJson = JsonParser.toJson(request.payload());
+      out.println(paramsJson);
+      out.flush();
+
+      // Read the response
+      String response = in.readLine();
+
+
+      // Parse the response
+      Response parsedResponse = (Response) JsonParser.jsonToObject(response, Response.class);
+      if  (parsedResponse.status().equals("ERROR"))
+      {
+        // Handle error response
+        ErrorResponse errorResponse = JsonParser.convertPayload(parsedResponse.payload(), ErrorResponse.class);
+        propertyChangeSupport.firePropertyChange("error", null, errorResponse);
+      }
+      else if (parsedResponse.status().equals("SUCCESS"))
+      {
+        // Handle success response
+        propertyChangeSupport.firePropertyChange(request.action(), null, parsedResponse.payload());
+      }
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
+    }
   }
 
+  @Override
   public void addPropertyChangeListener(PropertyChangeListener listener)
   {
     propertyChangeSupport.addPropertyChangeListener(listener);
+  }
+
+  @Override
+  public void removePropertyChangeListener(
+      PropertyChangeListener listener)
+  {
+    propertyChangeSupport.removePropertyChangeListener(listener);
   }
 
   public void requestAvailableProperties(String datesJson)
@@ -73,7 +126,7 @@ public class Client
     }
 
     // Parse the JSON response
-    PropertyList properties = JsonParser.jsonToProperties(jsonResponse);
+    List<Property> properties = JsonParser.toList(jsonResponse, Property[].class);
 
     // Notify the listeners about the new properties
     propertyChangeSupport.firePropertyChange("getAllProperties", null,
@@ -85,7 +138,14 @@ public class Client
     //Send the request to the server
     out.println("isAvailable");
     out.println(propertyId);
-    String datesJson = JsonParser.datesToJson(startDate, endDate);
+
+    // Convert the dates to JSON
+    Date[] dates = new Date[2];
+    dates[0] = startDate;
+    dates[1] = endDate;
+    String datesJson = JsonParser.toJson(dates);
+
+    // Send the dates JSON to the server
     out.println(datesJson);
     out.flush();
 
@@ -111,7 +171,14 @@ public class Client
     out.println("createBooking");
     out.println(propertyID);
     out.println(username);
-    String datesJson = JsonParser.datesToJson(startDate, endDate);
+
+    // Convert the dates to JSON
+    Date[] dates = new Date[2];
+    dates[0] = startDate;
+    dates[1] = endDate;
+    String datesJson = JsonParser.toJson(dates);
+
+    // Send the dates JSON to the server
     out.println(datesJson);
     out.flush();
 
@@ -175,8 +242,8 @@ public class Client
       throws IOException
   {
     // Create a login request with username
-    LoginRequest loginRequest = new LoginRequest(username, password,
-        true); // true indicates username login
+    LoginRequest loginRequest = new LoginRequest(username,
+        password); // true indicates username login
     String loginRequestJson = JsonParser.toJson(loginRequest);
 
     // Send the request to the server
