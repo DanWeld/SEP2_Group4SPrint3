@@ -1,11 +1,8 @@
 package networking;
 
-import dtos.Booking;
-import dtos.LoginRequest;
+import dtos.*;
+import ui.userList.UserListVM;
 import utils.JsonParser;
-import dtos.Property;
-import dtos.PropertyList;
-import dtos.User;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -14,6 +11,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.sql.Date;
+import java.util.List;
 
 public class Client
 {
@@ -294,5 +292,58 @@ public class Client
 
     // Notify the listeners about the new property
     propertyChangeSupport.firePropertyChange("getUser", null, user);
+  }
+
+  public void updateUser(User selectedItem)
+  {
+    // Send the request to the server
+    out.println("updateUser");
+    String userJson = JsonParser.toJson(selectedItem);
+    out.println(userJson);
+    out.flush();
+
+    // Read the response from the server
+    String jsonResponse = null;
+    try
+    {
+      jsonResponse = in.readLine();
+    }
+    catch (IOException e)
+    {
+      throw new RuntimeException(e);
+    }
+
+    // Parse the JSON response
+    User user = JsonParser.parseUser(jsonResponse);
+
+    // Notify the listeners about the new property
+    propertyChangeSupport.firePropertyChange("getUser", null, user);
+  }
+  public UserList getAllUsers()
+  {
+    // Send the request to the server
+    out.println("getAllUsers");
+    out.flush();
+
+    // Read the response from the server
+    String jsonResponse = null;
+    try
+    {
+      jsonResponse = in.readLine();
+    }
+    catch (IOException e)
+    {
+      throw new RuntimeException(e);
+    }
+
+    // Parse the JSON response
+    UserList users = JsonParser.jsonToUserList(jsonResponse);
+
+
+
+
+    // Notify the listeners about the new properties
+    propertyChangeSupport.firePropertyChange("getAllUsers", null, users);
+  return users ;
   }
 }

@@ -18,6 +18,7 @@ import ui.register.RegisterCtrl;
 import ui.register.RegisterVM;
 import ui.specifyDates.SpecifyDatesController;
 import ui.specifyDates.SpecifyDatesVM;
+import ui.userList.UserListCtrl;
 import ui.userList.UserListVM;
 import ui.welcome.FrontViewCtrl;
 
@@ -47,7 +48,7 @@ public class ViewHandler
 
   public void start()
   {
-    showView(ViewType.WELCOME);
+    showView(ViewType.Manage_Users);
     mainStage.show();
   }
 
@@ -62,6 +63,7 @@ public class ViewHandler
         case SPECIFY_DATES -> openSpecifyDatesView();
         case USER_DASHBOARD -> showUserDashboardView();
         case ADMIN_DASHBOARD -> showAdminDashboardView();
+        case Manage_Users -> showManageUsersView();
       }
     } catch (Exception e) {
       e.printStackTrace();
@@ -74,7 +76,7 @@ public class ViewHandler
     if (frontScene == null)
     {
       FXMLLoader loader = new FXMLLoader();
-      loader.setLocation(ViewHandler.class.getResource("/ui/welcome/welcomeView.fxml"));
+      loader.setLocation(ViewHandler.class.getResource("/ui/userList/UserList.fxml"));
       Parent root = loader.load();
       FrontViewCtrl frontViewController = loader.getController();
       frontViewController.initialize(this);
@@ -238,8 +240,8 @@ public class ViewHandler
       loader.setLocation(getClass().getClassLoader().getResource(
           "ui/userList/UserList.fxml"));
       Parent root = loader.load();
-      AdminDashboardCtrl controller = loader.getController();
-      controller.initialize(this);
+      UserListCtrl controller = loader.getController();
+      controller.initialize(this,userListVM);
       manageUsersScene = new Scene(root);
     }
     mainStage.setTitle("Manage Users");

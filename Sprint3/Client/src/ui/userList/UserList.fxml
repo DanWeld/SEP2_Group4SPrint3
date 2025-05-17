@@ -1,22 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="668.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.userList.UserListCtrl">
+<AnchorPane prefHeight="400.0" prefWidth="668.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.userList.UserListCtrl">
    <children>
       <TableView fx:id="table" layoutX="16.0" layoutY="92.0" prefHeight="222.0" prefWidth="635.0">
         <columns>
           <TableColumn fx:id="usernameColumn" prefWidth="160.19998741149902" text="Username" />
-          <TableColumn fx:id="emailCollum" prefWidth="351.0" text="Email" />
+          <TableColumn fx:id="emailColumn" prefWidth="351.0" text="Email" />
             <TableColumn fx:id="isAdminColumn" prefWidth="123.39996337890625" text="is Admin" />
         </columns>
       </TableView>
       <TextField fx:id="userName" layoutX="140.0" layoutY="46.0" promptText="Username" />
       <TextField fx:id="email" layoutX="310.0" layoutY="46.0" promptText="Email" />
       <Button fx:id="search" layoutX="476.0" layoutY="46.0" mnemonicParsing="false" onAction="#onSearch" text="Search" />
-      <Button fx:id="upgradeToAdmin" layoutX="433.0" layoutY="340.0" mnemonicParsing="false" text="Upgrade to Admin" />
+      <Button fx:id="upgradeToAdmin" layoutX="433.0" layoutY="340.0" mnemonicParsing="false" onAction="#onUpgradeToAdmin" text="Upgrade to Admin" />
       <Label fx:id="isAdmin" layoutX="133.0" layoutY="14.0" text="Search by Username or Email" />
       <Button fx:id="back" layoutX="107.0" layoutY="340.0" mnemonicParsing="false" onAction="#onReturn" text="Retrun" />
+      <Label fx:id="messageLabel" layoutX="310.0" layoutY="14.0" prefHeight="18.0" prefWidth="60.0" text="Error" />
    </children>
 </AnchorPane>

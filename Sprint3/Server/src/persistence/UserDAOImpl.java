@@ -86,7 +86,14 @@ public class UserDAOImpl implements UserDAO {
             System.out.println("Error saving user: " + e.getMessage());
             return false;
         }
-    }    @Override
+    }
+
+    @Override public void updatetoAdmin(String userName) throws SQLException
+    {
+
+    }
+
+    @Override
     public User read(String email, String password) throws SQLException {
         try(Connection connection = getConnection()) {
             // Check if the email exists

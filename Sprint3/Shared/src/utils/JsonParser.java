@@ -2,11 +2,7 @@ package utils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import dtos.Booking;
-import dtos.LoginRequest;
-import dtos.Property;
-import dtos.PropertyList;
-import dtos.User;
+import dtos.*;
 
 import java.lang.reflect.Type;
 import java.sql.Date;
@@ -117,14 +113,14 @@ public class JsonParser
    * @param json The JSON string
    * @return List of User objects
    */
-  public static List<User> jsonToUserList(String json)
+  public static UserList jsonToUserList(String json)
   {
     Gson gson = new Gson();
     User[] userArray = gson.fromJson(json, User[].class);
-    List<User> userList = new ArrayList<>();
+    UserList userList = new UserList();
     if (userArray != null) {
       for (User user : userArray) {
-        userList.add(user);
+        userList.addUser(user);
       }
     }
     return userList;

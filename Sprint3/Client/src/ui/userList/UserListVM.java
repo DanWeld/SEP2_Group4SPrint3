@@ -15,6 +15,7 @@ import networking.userListToAdmin.CustomerListClientImpl;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
+import java.util.List;
 
 public class UserListVM implements PropertyChangeListener
 {
@@ -35,24 +36,24 @@ public class UserListVM implements PropertyChangeListener
     this.email = new SimpleStringProperty();
     this.selectedUser = new SimpleObjectProperty<>();
     this.isAdmin = new SimpleStringProperty();
+    this.errorMsg= new SimpleStringProperty();
     try
     {
       Client client = new Client();
       this.userClient = new CustomerListClientImpl(client);
       client.addPropertyChangeListener(this);
     }
-    catch (IOException e)
-    {
-      throw new RuntimeException(e);
-    }
     catch (Exception e)
     {
       throw new RuntimeException(e);
     }
   }
-  public ObservableList<User> getUserList()
+
+  public ObservableList<User>
+  getUserList()
   {
-   return users;
+
+    return users;
   }
 
   public SimpleObjectProperty<User> getSelectedUser()
@@ -141,6 +142,29 @@ public class UserListVM implements PropertyChangeListener
         throw new RuntimeException(e);
       }
     }
+ public void updateUser(User selectedItem){
 
+      try
+      {
+        userClient.updateUser(selectedItem);
+      }
+      catch (Exception e)
+      {
+        throw new RuntimeException(e);
+      }
+    }
+
+  public ObservableValue<String> messageProperty()
+  {
+    return errorMsg;
   }
+
+  public void loadUsers()
+  {
+    users.clear();
+    users.add(new User("user1", "user1@example.com", "password", false));
+    users.add(new User("user2", "user2@example.com", "password", false));
+    users.add(new User("admin1", "admin1@example.com", "password", true));
+  }
+}
 

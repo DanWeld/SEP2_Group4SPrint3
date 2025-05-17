@@ -1,13 +1,7 @@
-package networking.userListToAdmin;
+package networking.userListHandler;
 
-import com.google.gson.Gson;
-import dtos.User;
-
-import java.util.List;
-
-public interface CustomerListClient
+public interface UserListHandler
 {
-
   /**
    * Upgrades a user to admin based on their ID.
    *
@@ -15,6 +9,6 @@ public interface CustomerListClient
    * @throws Exception If an error occurs during the upgrade.
    */
   void upgradeToAdmin(String userName) throws Exception;
-  void updateUser(User selectedItem);
-  void getAllUsers() throws Exception;
+
+
 }
