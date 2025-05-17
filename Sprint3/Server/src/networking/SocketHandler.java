@@ -55,7 +55,6 @@ public class SocketHandler implements Runnable
 
         Request request = new Request(handler, action, payloadJson);
         logger.log("Received request: " + request, LogLevel.INFO);
-        System.out.println("SocketHandler: Received request: " + payloadJson);
 
         // Find the appropriate request handler
         for (RequestHandler requestHandler : serviceProvider.getAllHandlers())
@@ -63,8 +62,7 @@ public class SocketHandler implements Runnable
           if (requestHandler.canHandle(handler, action))
           {
             requestHandler.handle(action, payloadJson, out);
-            System.out.println(
-                "SocketHandler: Request handler: " + requestHandler.getClass());
+            logger.log("Handled request: " + request, LogLevel.INFO);
           }
         }
       }

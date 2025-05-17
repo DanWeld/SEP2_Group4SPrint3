@@ -6,6 +6,9 @@ import dtos.Response;
 import dtos.User;
 import model.property.PropertyModel;
 import model.property.PropertyModelManager;
+import services.ServiceProvider;
+import utilities.logging.LogLevel;
+import utilities.logging.Logger;
 import utils.JsonParser;
 
 import java.beans.PropertyChangeEvent;
@@ -19,11 +22,12 @@ public class PropertyRequestHandler
 {
   private final PropertyModel propertyModel;
   private PrintWriter out;
-
-  public PropertyRequestHandler(PropertyModel propertyModel)
+  private Logger logger;
+  public PropertyRequestHandler(PropertyModel propertyModel, Logger logger)
   {
     this.propertyModel = propertyModel;
     propertyModel.addPropertyChangeListener(this);
+    this.logger = logger;
   }
 
   @Override public boolean canHandle(String handler, String action)
@@ -75,72 +79,69 @@ public class PropertyRequestHandler
     {
       case "propertyCreationSuccess" ->
       {
+        logger.log("Property creation success: " + ((Property) response.payload()).id(), LogLevel.INFO);
         out.println(JsonParser.toJson(response));
         out.flush();
-        System.out.println("Property creation success: "
-            + ((Property) response.payload()).id());
       }
       case "propertyCreationFailure" ->
       {
+        logger.log("Property creation failure: "
+            + ((ErrorResponse) response.payload()).errorMessage(), LogLevel.ERROR);
         out.println(JsonParser.toJson(response));
         out.flush();
-        System.out.println("Property creation failure: "
-            + ((ErrorResponse) response.payload()).errorMessage());
       }
       case "propertyUpdateSuccess" ->
       {
+        logger.log("Property update success: " + ((Property) response.payload()).id(), LogLevel.INFO);
         out.println(JsonParser.toJson(response));
         out.flush();
-        System.out.println(
-            "Property update success: " + ((Property) response.payload()).id());
-      }
+       }
       case "propertyUpdateFailure" ->
       {
+        logger.log("Property update failure: "
+            + ((ErrorResponse) response.payload()).errorMessage(), LogLevel.ERROR);
         out.println(JsonParser.toJson(response));
         out.flush();
-        System.out.println("Property update failure: "
-            + ((ErrorResponse) response.payload()).errorMessage());
       }
       case "propertyDeletionSuccess" ->
       {
+        logger.log("Property deletion success: " + ((Property) response.payload()).id(), LogLevel.INFO);
         out.println(JsonParser.toJson(response));
         out.flush();
-        System.out.println("Property deletion success: " + response.payload());
       }
       case "propertyDeletionFailure" ->
       {
+        logger.log("Property deletion failure: "
+            + ((ErrorResponse) response.payload()).errorMessage(), LogLevel.ERROR);
         out.println(JsonParser.toJson(response));
         out.flush();
-        System.out.println("Property deletion failure: "
-            + ((ErrorResponse) response.payload()).errorMessage());
       }
       case "propertyListSuccess" ->
       {
+        logger.log("Property list success, count: " + ((List<Property>) response.payload()).size(), LogLevel.INFO);
         out.println(JsonParser.toJson(response));
         out.flush();
-        System.out.println("Property list success, count: "
-            + ((List<Property>) response.payload()).size());
       }
       case "propertyListFailure" ->
       {
+        logger.log("Property list failure: "
+            + ((ErrorResponse) response.payload()).errorMessage(), LogLevel.ERROR);
         out.println(JsonParser.toJson(response));
         out.flush();
-        System.out.println("Property list failure: "
-            + ((ErrorResponse) response.payload()).errorMessage());
       }
       case "availablePropertiesSuccess" ->
       {
+        logger.log("Available properties success, count: "
+            + ((List<Property>) response.payload()).size(), LogLevel.INFO);
         out.println(JsonParser.toJson(response));
         out.flush();
-        System.out.println("Available properties success, count: "
-            + ((List<Property>) response.payload()).size());
       }
       case "availablePropertiesFailure" ->
       {
+        logger.log("Available properties failure: "
+            + ((ErrorResponse) response.payload()).errorMessage(), LogLevel.ERROR);
         out.println(JsonParser.toJson(response));
         out.flush();
-        System.out.println("Available properties failure: "
-            + ((ErrorResponse) response.payload()).errorMessage());
       }
     }
   }

@@ -60,7 +60,7 @@ public class ServiceProvider
     if (authenticationRequestHandler == null)
     {
       authenticationRequestHandler = new AuthenticationRequestHandler(
-          getAuthenticationService());
+          getAuthenticationService(), getLogger());
     }
     return authenticationRequestHandler;
   }
@@ -69,7 +69,7 @@ public class ServiceProvider
   {
     if (propertyRequestHandler == null)
     {
-      propertyRequestHandler = new PropertyRequestHandler(getPropertyModel(user));
+      propertyRequestHandler = new PropertyRequestHandler(getPropertyModel(user), getLogger());
     }
     return propertyRequestHandler;
   }

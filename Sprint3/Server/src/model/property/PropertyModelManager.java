@@ -3,6 +3,8 @@ package model.property;
 import dtos.Property;
 import services.property.PropertyReader;
 import services.property.PropertyWriter;
+import util.ReaderWriterLock;
+import util.ReaderWriterLockImpl;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -14,7 +16,7 @@ public class PropertyModelManager implements PropertyModel, PropertyChangeListen
   private final PropertyReader reader;
   private final PropertyWriter writer;
   private final PropertyChangeSupport support = new PropertyChangeSupport(this);
-
+  private final ReaderWriterLock lock = new ReaderWriterLockImpl();
 
   public PropertyModelManager(PropertyReader reader, PropertyWriter writer)
   {
@@ -25,27 +27,62 @@ public class PropertyModelManager implements PropertyModel, PropertyChangeListen
 
   public void createProperty(Property p)
   {
-    writer.createProperty(p);
+    try {
+      lock.lockWrite();
+      writer.createProperty(p);
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+    } finally {
+      lock.unlockWrite();
+    }
   }
 
   public void updateProperty(Property p)
   {
-    writer.updateProperty(p);
+    try {
+      lock.lockWrite();
+      writer.updateProperty(p);
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+    } finally {
+      lock.unlockWrite();
+    }
   }
 
   public void deleteProperty(int id)
   {
-    writer.deleteProperty(id);
+    try {
+      lock.lockWrite();
+      writer.deleteProperty(id);
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+    } finally {
+      lock.unlockWrite();
+    }
   }
 
   public void getAllProperties()
   {
-    writer.getAllProperties();
+    try {
+      lock.lockRead();
+      writer.getAllProperties();
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+    } finally {
+      lock.unlockRead();
+    }
   }
 
   public void getAvailableProperties(Date start, Date end)
   {
-    reader.getAvailableProperties(start, end);
+    try {
+      lock.lockRead();
+      reader.getAvailableProperties(start, end);
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+    } finally {
+      lock.unlockRead();
+    }
   }
 
   @Override public void addPropertyChangeListener(
