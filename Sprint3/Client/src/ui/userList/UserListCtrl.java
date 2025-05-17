@@ -1,4 +1,4 @@
-package ui.userToAdminUi;
+package ui.userList;
 
 import dtos.User;
 import javafx.beans.property.ObjectProperty;
@@ -9,35 +9,35 @@ import startup.viewHandler.ViewHandler;
 
 import java.io.IOException;
 
-public class UserGuiController
+public class UserListCtrl
 {
   @FXML private TableView<User> table;
-  @FXML private TableColumn<User, String> userNameCollum;
-  @FXML private TableColumn<User, String> emailCollum;
+  @FXML private TableColumn<User, String> usernameColumn;
+  @FXML private TableColumn<User, String> emailColumn;
+  @FXML private TableColumn<User, String> isAdminColumn;
   @FXML private Button search;
   @FXML private Button upgradeToAdmin;
   @FXML private Button back;
   @FXML private TextField userName;
   @FXML private TextField email;
-  @FXML private Label isAdmin;
 
   private ViewHandler viewHandler;
-  private UserGuiVM userGuiVM;
+  private UserListVM userListVM;
   private ObjectProperty<User> selectedUser;
 
-  public UserGuiController(){
+  public UserListCtrl(){
 
   }
 @FXML
-  public void initialize(ViewHandler viewHandler, UserGuiVM userGuiVM)
+  public void initialize(ViewHandler viewHandler, UserListVM userListVM)
     throws IOException
 {
-    this.userGuiVM=userGuiVM;
+    this.userListVM = userListVM;
     this.viewHandler=viewHandler;
     // Bind the TableView to the ViewModel
     try
     {
-      table.setItems(userGuiVM.getUserList());
+      table.setItems(userListVM.getUserList());
     }
     catch (Exception e)
     {
@@ -45,31 +45,34 @@ public class UserGuiController
     }
 
     // Set up the columns
-    userNameCollum.setCellValueFactory(
+    usernameColumn.setCellValueFactory(
         data -> new SimpleStringProperty(data.getValue().getUsername()));
-    emailCollum.setCellValueFactory(data -> new SimpleStringProperty(
+    emailColumn.setCellValueFactory(data -> new SimpleStringProperty(
         data.getValue().getEmail()));
+    isAdminColumn.setCellValueFactory(data -> new SimpleStringProperty(
+        data.getValue().isAdmin() ? "Yes" : "No"));
 
     // Bind the selected property to the ViewModel
-    userGuiVM.bindSelectedUser(
+    userListVM.bindSelectedUser(
         table.getSelectionModel().selectedItemProperty());
 
-    // Bind isAdmin message to the ViewModel
-  try
-  {
-    isAdmin.textProperty().bind(userGuiVM.getIsAdmin());
-  }
-  catch (IOException e)
-  {
-    throw new RuntimeException(e);
-  }
 
 }
 @FXML
   public void onSearch(){
     String usernameInput = userName.getText();
     String emailInput = email.getText();
-    userGuiVM.searchUsers(usernameInput, emailInput);
+    userListVM.searchUsers(usernameInput);
+    // If username is empty, search by email
+    if (usernameInput.isEmpty())
+    {
+      userListVM.searchUsersByEmail(emailInput);
+    }
+    // If both username and email are empty, show all users
+    else if (usernameInput.isEmpty() && emailInput.isEmpty())
+    {
+      userListVM.getUserList();
+    }
   }
 
   @FXML
@@ -77,7 +80,7 @@ public class UserGuiController
   {
     if (table.getSelectionModel().getSelectedItem() != null)
     {
-      userGuiVM.upgradeUserToAdmin(table.getSelectionModel().getSelectedItem());
+      userListVM.upgradeUserToAdmin(table.getSelectionModel().getSelectedItem());
     }
   }
 

@@ -1,6 +1,5 @@
-package ui.userToAdminUi;
+package ui.userList;
 
-import dtos.Property;
 import dtos.User;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -17,7 +16,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 
-public class UserGuiVM implements PropertyChangeListener
+public class UserListVM implements PropertyChangeListener
 {
 
   private  ObservableList<User> users;
@@ -29,7 +28,7 @@ public class UserGuiVM implements PropertyChangeListener
   private StringProperty errorMsg;
   private Client client;
 
-  public UserGuiVM()
+  public UserListVM()
   {
     this.users = FXCollections.observableArrayList();
     this.username = new SimpleStringProperty();
@@ -73,25 +72,75 @@ public class UserGuiVM implements PropertyChangeListener
 
   public  ObservableValue<String> getIsAdmin() throws IOException
   {
-      if (client.isAdmin(email.toString())){
-        isAdmin.set("Yes, user is admin");
-      }
-      else{
-        isAdmin.set("No user is not admin");
-      }
-    return null;
+    if (getSelectedUser().getValue().isAdmin())
+    {
+      isAdmin.set("yes");
+    }
+
+     return isAdmin;
+
   }
 
   @Override public void propertyChange(PropertyChangeEvent evt)
   {
-
+    if (evt.getPropertyName().equals("userList"))
+    {
+      users.clear();
+      users.addAll((ObservableList<User>) evt.getNewValue());
+    }
+    else if (evt.getPropertyName().equals("isAdmin"))
+    {
+      isAdmin.set((String) evt.getNewValue());
+    }
   }
 
-  public void searchUsers(String usernameInput, String emailInput)
+  public void searchUsers(String usernameInput)
   {
+    for (User user:users)
+    {
+      if (user.getUsername().equals(usernameInput))
+      {
+        users.clear();
+        users.add(user);
+      }
+      else
+      {
+        errorMsg.set("No user found");
+      }
+    }
+  }
+  public void searchUsersByEmail(String emailInput)
+  {
+    for (User user:users)
+    {
+      if (user.getEmail().equals(emailInput))
+      {
+        users.clear();
+        users.add(user);
+      }
+      else
+      {
+        errorMsg.set("No user found");
+      }
+    }
   }
 
   public void upgradeUserToAdmin(User selectedItem)
   {
+
+      try
+      {
+        userClient.upgradeToAdmin(selectedItem.getUsername());
+      }
+      catch (IOException e)
+      {
+        throw new RuntimeException(e);
+      }
+      catch (Exception e)
+      {
+        throw new RuntimeException(e);
+      }
+    }
+
   }
-}
+

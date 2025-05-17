@@ -18,7 +18,7 @@ import ui.register.RegisterCtrl;
 import ui.register.RegisterVM;
 import ui.specifyDates.SpecifyDatesController;
 import ui.specifyDates.SpecifyDatesVM;
-import ui.userToAdminUi.UserGuiVM;
+import ui.userList.UserListVM;
 import ui.welcome.FrontViewCtrl;
 
 import java.sql.Date;
@@ -31,7 +31,7 @@ public class ViewHandler
   private final RegisterVM registerVM;
   private final LoginVM loginVM;
   private final Stage mainStage;
-  private UserGuiVM userGuiVM;
+  private UserListVM userListVM;
 
 
   public ViewHandler(ViewModelFactory viewModelFactory)
@@ -41,7 +41,7 @@ public class ViewHandler
     bookingVM = viewModelFactory.getBookingVM();
     registerVM = viewModelFactory.getRegisterVM();
     loginVM = viewModelFactory.getLoginVM();
-    userGuiVM = viewModelFactory.getUserGuiVM();
+    userListVM = viewModelFactory.getUserGuiVM();
     mainStage = new Stage();
   }
 
@@ -236,7 +236,7 @@ public class ViewHandler
     {
       FXMLLoader loader = new FXMLLoader();
       loader.setLocation(getClass().getClassLoader().getResource(
-          "ui/userToAdminUi/UserGui.fxml"));
+          "ui/userList/UserList.fxml"));
       Parent root = loader.load();
       AdminDashboardCtrl controller = loader.getController();
       controller.initialize(this);

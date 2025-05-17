@@ -270,4 +270,29 @@ public class Client
     propertyChangeSupport.firePropertyChange("getAllProperties", null,
         properties);
   }
+
+  public void upgradeToAdmin(String userName)
+  {
+    // Send the request to the server
+    out.println("upgradeToAdmin");
+    out.println(userName);
+    out.flush();
+
+    // Read the response from the server
+    String jsonResponse = null;
+    try
+    {
+      jsonResponse = in.readLine();
+    }
+    catch (IOException e)
+    {
+      throw new RuntimeException(e);
+    }
+
+    // Parse the JSON response
+    User user = JsonParser.parseUser(jsonResponse);
+
+    // Notify the listeners about the new property
+    propertyChangeSupport.firePropertyChange("getUser", null, user);
+  }
 }

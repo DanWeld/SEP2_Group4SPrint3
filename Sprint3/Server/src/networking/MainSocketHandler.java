@@ -210,7 +210,7 @@ public class MainSocketHandler implements Runnable
       }
       catch (IOException e)
       {
-        throw new RuntimeException(e);
+        System.out.println("Client disconnected: " + e.getMessage());
       }
     }
     finally

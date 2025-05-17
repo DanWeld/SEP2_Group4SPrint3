@@ -13,14 +13,10 @@ public class CustomerListClientImpl implements CustomerListClient
     this.client=client;
   }
 
-  @Override public List<User> searchUsers(String username, String email)
-      throws Exception
-  {
 
-    return List.of();
-  }
 
   @Override public void upgradeToAdmin(String userName) throws Exception
   {
+      client.upgradeToAdmin(userName);
   }
 }

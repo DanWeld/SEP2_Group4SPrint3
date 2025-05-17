@@ -129,4 +129,10 @@ public class JsonParser
     }
     return userList;
   }
+
+  public static User parseUser(String jsonResponse)
+  {
+    Gson gson = new Gson();
+    return gson.fromJson(jsonResponse, User.class);
+  }
 }
