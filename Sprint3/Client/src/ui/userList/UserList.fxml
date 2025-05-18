@@ -22,6 +22,6 @@
       <Button fx:id="upgradeToAdmin" layoutX="433.0" layoutY="340.0" mnemonicParsing="false" onAction="#onUpgradeToAdmin" text="Upgrade to Admin" />
       <Label fx:id="isAdmin" layoutX="133.0" layoutY="14.0" text="Search by Username or Email" />
       <Button fx:id="back" layoutX="107.0" layoutY="340.0" mnemonicParsing="false" onAction="#onReturn" text="Retrun" />
-      <Label fx:id="messageLabel" layoutX="310.0" layoutY="14.0" prefHeight="18.0" prefWidth="60.0" text="Error" />
+      <Label fx:id="messageLabel" layoutX="310.0" layoutY="14.0" prefHeight="18.0" prefWidth="60.0" />
    </children>
 </AnchorPane>

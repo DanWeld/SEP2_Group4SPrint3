@@ -133,10 +133,6 @@ public class UserListVM implements PropertyChangeListener
       {
         userClient.upgradeToAdmin(selectedItem.getUsername());
       }
-      catch (IOException e)
-      {
-        throw new RuntimeException(e);
-      }
       catch (Exception e)
       {
         throw new RuntimeException(e);

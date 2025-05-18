@@ -86,6 +86,7 @@ public class UserListCtrl
     {
       userListVM.getUserList();
     }
+    System.out.println("Search button clicked");
   }
 
   @FXML public void onUpgradeToAdmin()
@@ -96,11 +97,17 @@ public class UserListCtrl
       userListVM.upgradeUserToAdmin(selectedUser);
       table.refresh();
     }
+    System.out.println("Upgrade to admin button clicked");
   }
     @FXML public void onReturn () {
     viewHandler.showView(ViewHandler.ViewType.ADMIN_DASHBOARD);
+      System.out.println("Return button clicked");
   }
   @FXML public void errorMsg()
+  {
+    messageLabel.setText(userListVM.messageProperty().toString());
+  }
+  @FXML public void errorMsg(String msg)
   {
     messageLabel.setText(userListVM.messageProperty().toString());
   }
