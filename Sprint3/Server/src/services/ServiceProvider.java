@@ -1,25 +1,41 @@
 package services;
 
 import dtos.User;
+import model.booking.BookingModel;
+import model.booking.BookingModelManager;
+import model.bookingHistory.BookingHistoryModel;
+import model.bookingHistory.BookingHistoryModelManager;
 import model.property.PropertyModel;
 import model.property.PropertyModelManager;
-import networking.requestHandlers.PropertyRequestHandler;
-import networking.requestHandlers.AuthenticationRequestHandler;
-import networking.requestHandlers.RequestHandler;
+import model.user.UserModel;
+import model.user.UserModelManager;
+import networking.requestHandlers.*;
+import persistence.daos.bookings.BookingDAO;
+import persistence.daos.bookings.BookingDAOImpl;
 import persistence.daos.properties.PropertyDAO;
 import persistence.daos.properties.PropertyDAOImpl;
 import persistence.daos.user.UserDAO;
 import persistence.daos.user.UserDAOImpl;
-import services.property.PropertyReader;
+import services.bookingHistory.BookingHistoryAdminPrivileges;
+import services.bookingHistory.BookingHistoryCustomerPrivileges;
+import services.bookingHistory.BookingHistoryService;
+import services.bookingHistory.BookingHistoryServiceImpl;
+import services.bookingHistory.security.AdminBookingHistoryProxy;
+import services.property.PropertyCustomerPrivileges;
 import services.property.PropertyService;
 import services.property.PropertyServiceImpl;
-import services.property.PropertyWriter;
-import services.property.security.AdminPropertyWriterProxy;
-import utilities.logging.FileLogger;
+import services.property.PropertyAdminPrivileges;
+import services.property.security.AdminPropertyProxy;
+import services.user.UserAdminPrivileges;
+import services.user.UserCustomerPrivileges;
+import services.user.UserService;
+import services.user.UserServiceImpl;
+import services.user.security.AdminUserProxy;
+import utilities.logging.ConsoleLogger;
 import utilities.logging.LogLevel;
 import utilities.logging.Logger;
-import model.authentication.AuthenticationService;
-import model.authentication.AuthenticationServiceImpl;
+import services.authentication.AuthenticationService;
+import services.authentication.AuthenticationServiceImpl;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -27,21 +43,7 @@ import java.util.List;
 
 public class ServiceProvider
 {
-
-  // Logging
   private Logger logger;
-
-  // DAOs
-  private PropertyDAO propertyDAO;
-  private UserDAO userDAO;
-
-  // Services
-  private PropertyService propertyService;
-  private AuthenticationService authenticationService;
-
-  // Request Handlers
-  private PropertyRequestHandler propertyRequestHandler;
-  private AuthenticationRequestHandler authenticationRequestHandler;
   private User user;
 
   public List<RequestHandler> getAllHandlers()
@@ -49,7 +51,9 @@ public class ServiceProvider
     List<RequestHandler> handlers = new ArrayList<>();
     handlers.add(getAuthenticationRequestHandler());
     handlers.add(getPropertyRequestHandler(user));
-    // Add more handlers here in future
+    handlers.add(getBookingRequestHandler());
+    handlers.add(getBookingHistoryRequestHandler(user));
+    handlers.add(getUserRequestHandler());
     return handlers;
   }
 
@@ -57,86 +61,134 @@ public class ServiceProvider
 
   public RequestHandler getAuthenticationRequestHandler()
   {
-    if (authenticationRequestHandler == null)
-    {
-      authenticationRequestHandler = new AuthenticationRequestHandler(
-          getAuthenticationService(), getLogger());
-    }
-    return authenticationRequestHandler;
+    return new AuthenticationRequestHandler(getAuthenticationService(),
+        getLogger());
   }
 
   public RequestHandler getPropertyRequestHandler(User user)
   {
-    if (propertyRequestHandler == null)
-    {
-      propertyRequestHandler = new PropertyRequestHandler(getPropertyModel(user), getLogger());
-    }
-    return propertyRequestHandler;
+    return new PropertyRequestHandler(getPropertyModel(user), getLogger());
+  }
+
+  public RequestHandler getBookingRequestHandler()
+  {
+    return new BookingRequestHandler(getBookingModel(), getLogger());
+  }
+
+  public RequestHandler getBookingHistoryRequestHandler(User user)
+  {
+    return new BookingHistoryRequestHandler(getBookingHistoryModel(user),
+        getLogger());
+  }
+
+  public RequestHandler getUserRequestHandler()
+  {
+    return new UserRequestHandler(getUserModel(), getLogger());
+  }
+
+  // ------------------ Models ------------------
+
+  private PropertyModel getPropertyModel(User user)
+  {
+    return new PropertyModelManager((PropertyCustomerPrivileges) getPropertyService(),
+        getAdminPropertyWriter(user));
+  }
+
+  private BookingModel getBookingModel()
+  {
+    return new BookingModelManager(gettBookingDAO());
+  }
+
+  private BookingHistoryModel getBookingHistoryModel(User user)
+  {
+    return new BookingHistoryModelManager(getAdminBookingHistoryService(user),
+        (BookingHistoryCustomerPrivileges) getBookingHistoryService());
+  }
+
+  private UserModel getUserModel()
+  {
+    return new UserModelManager((UserCustomerPrivileges) getUserService(),
+        getAdminUserService(user));
   }
 
   // ------------------ Services ------------------
 
-  private PropertyModel getPropertyModel(User user)
+  private PropertyService getPropertyService()
   {
-    return new PropertyModelManager((PropertyReader) getPropertyService(), getAdminWriter(user));
+    return new PropertyServiceImpl(getPropertyDAO());
   }
 
-  public PropertyService getPropertyService()
+  private PropertyAdminPrivileges getAdminPropertyWriter(User user)
   {
-    if (propertyService == null)
-    {
-      propertyService = new PropertyServiceImpl(getPropertyDAO());
-    }
-    return propertyService;
-  }
-
-  public AuthenticationService getAuthenticationService()
-  {
-    if (authenticationService == null)
-    {
-      authenticationService = new AuthenticationServiceImpl(getUserDAO());
-    }
-    return authenticationService;
-  }
-
-  public PropertyWriter getAdminWriter(User user)
-  {
-    return new AdminPropertyWriterProxy((PropertyWriter) getPropertyService(),
+    return new AdminPropertyProxy((PropertyAdminPrivileges) getPropertyService(),
         user);
+  }
+
+  private AuthenticationService getAuthenticationService()
+  {
+    return new AuthenticationServiceImpl(getUserDAO());
+  }
+
+  private BookingHistoryAdminPrivileges getAdminBookingHistoryService(User user)
+  {
+    return new AdminBookingHistoryProxy(
+        (BookingHistoryAdminPrivileges) getBookingHistoryService(), user);
+  }
+
+  private BookingHistoryService getBookingHistoryService()
+  {
+    return new BookingHistoryServiceImpl(gettBookingDAO());
+  }
+
+  private UserService getUserService()
+  {
+    return new UserServiceImpl(getUserDAO());
+  }
+
+  private UserAdminPrivileges getAdminUserService(User user)
+  {
+    return new AdminUserProxy((UserAdminPrivileges) getUserService(), user);
   }
 
   // ------------------ DAOs ------------------
 
   private PropertyDAO getPropertyDAO()
   {
-    if (propertyDAO == null)
+    try
     {
-      try
-      {
-        propertyDAO = PropertyDAOImpl.getInstance();
-      }
-      catch (SQLException e)
-      {
-        throw new RuntimeException("Failed to create PropertyDAO", e);
-      }
+      PropertyDAO propertyDAO = PropertyDAOImpl.getInstance();
+      return propertyDAO;
     }
-    return propertyDAO;
+    catch (SQLException e)
+    {
+      throw new RuntimeException(e);
+    }
   }
 
   private UserDAO getUserDAO()
   {
-    if (userDAO == null)
+    try
     {
-      try
-      {
-        userDAO = UserDAOImpl.getInstance();
-      }
-      catch (SQLException e)
-      {
-        throw new RuntimeException("Failed to create UserDAO", e);
-      }
+      UserDAO userDAO = UserDAOImpl.getInstance();
+      return userDAO;
     }
-    return userDAO;
+    catch (SQLException e)
+    {
+      throw new RuntimeException(e);
+    }
+  }
+
+  private BookingDAO gettBookingDAO()
+  {
+    try
+    {
+      BookingDAO bookingDAO = BookingDAOImpl.getInstance();
+      return bookingDAO;
+    }
+    catch (SQLException e)
+    {
+      throw new RuntimeException(e);
+    }
   }
 
   // ------------------ Logging ------------------
@@ -145,14 +197,14 @@ public class ServiceProvider
   {
     if (logger == null)
     {
-      logger = new FileLogger(LogLevel.INFO, "logs.txt");
+      logger = new ConsoleLogger(LogLevel.INFO);
     }
     return logger;
   }
 
-
   // ------------------ User ------------------
-  public void setUser(User user) {
+  public void setUser(User user)
+  {
     this.user = user;
   }
 }

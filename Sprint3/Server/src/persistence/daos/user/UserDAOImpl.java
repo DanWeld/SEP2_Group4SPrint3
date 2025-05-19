@@ -134,4 +134,75 @@ public class UserDAOImpl implements UserDAO
       }
     }
   }
+
+  public void update(User user) throws SQLException
+  {
+    try (Connection connection = getConnection())
+    {
+      PreparedStatement statement = connection.prepareStatement(
+          "UPDATE \"user\" SET password = ? WHERE username = ?;");
+      statement.setString(1, user.getPassword());
+      statement.setString(2, user.getUsername());
+
+      int affectedRows = statement.executeUpdate();
+      if (affectedRows == 0)
+      {
+        throw new SQLException("Failed to update user");
+      }
+    }
+  }
+
+  public void delete(String username) throws SQLException
+  {
+    try (Connection connection = getConnection())
+    {
+      PreparedStatement statement = connection.prepareStatement(
+          "DELETE FROM \"user\" WHERE username = ?;");
+      statement.setString(1, username);
+
+      int affectedRows = statement.executeUpdate();
+      if (affectedRows == 0)
+      {
+        throw new SQLException("Failed to delete user");
+      }
+    }
+  }
+
+  public void promoteToAdmin(String username) throws SQLException
+  {
+    try (Connection connection = getConnection())
+    {
+      PreparedStatement statement = connection.prepareStatement(
+          "UPDATE \"user\" SET isAdmin = ? WHERE username = ?;");
+      statement.setBoolean(1, true);
+      statement.setString(2, username);
+
+      int affectedRows = statement.executeUpdate();
+      if (affectedRows == 0)
+      {
+        throw new SQLException("Failed to promote user to admin");
+      }
+    }
+  }
+
+  public List<User> getAllUsers() throws SQLException
+  {
+    try (Connection connection = getConnection())
+    {
+      PreparedStatement statement = connection.prepareStatement(
+          "SELECT * FROM \"user\";");
+      ResultSet resultSet = statement.executeQuery();
+
+      List<User> users = new ArrayList<>();
+      while (resultSet.next())
+      {
+        String username = resultSet.getString("username");
+        String email = resultSet.getString("email");
+        String password = resultSet.getString("password");
+        boolean isAdmin = resultSet.getBoolean("isAdmin");
+        users.add(new User(username, email, password, isAdmin));
+      }
+      return users;
+    }
+  }
 }

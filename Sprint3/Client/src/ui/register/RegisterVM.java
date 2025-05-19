@@ -5,7 +5,7 @@ import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.beans.property.*;
 import dtos.User;
-import networking.auth.Authentication;
+import networking.authClient.Authentication;
 import services.UserSession;
 
 import java.beans.PropertyChangeEvent;

@@ -76,8 +76,7 @@ public class BookingDAOImpl implements BookingDAO
 
     catch (SQLException e)
     {
-      e.printStackTrace();
-      throw e;
+      throw new SQLException(e.getMessage());
     }
   }
 
@@ -116,8 +115,7 @@ public class BookingDAOImpl implements BookingDAO
     }
     catch (SQLException e)
     {
-      e.printStackTrace();
-      throw e;
+      throw new SQLException(e.getMessage());
     }
   }
 
@@ -173,8 +171,7 @@ public class BookingDAOImpl implements BookingDAO
     }
     catch (SQLException e)
     {
-      e.printStackTrace();
-      throw e;
+      throw new SQLException(e.getMessage());
     }
   }
 
@@ -213,8 +210,10 @@ public class BookingDAOImpl implements BookingDAO
     }
   }
 
-  @Override public List<Booking> getAllBookings() throws SQLException
+  @Override public List<BookingHistory> getAllBookingsByProperty(int propertyId)
+      throws SQLException
   {
+    ArrayList<BookingHistory> bookingHistoryArrayList = new ArrayList<>();
     try (Connection connection = getConnection())
     {
       //Check if the connection is established
@@ -223,31 +222,27 @@ public class BookingDAOImpl implements BookingDAO
         throw new SQLException(
             "Failed to establish a connection to the database.");
       }
-      // Prepare the SQL statement
       PreparedStatement statement = connection.prepareStatement(
-          "SELECT * FROM booking");
+          "SELECT b.username, u.email, b.start_date, b.end_date, b.booking_date FROM booking b, \"user\" u, property p WHERE b.propertyID = p.propertyID AND u.username = b.username AND b.propertyID=?");
+      statement.setInt(1, propertyId);
       ResultSet resultSet = statement.executeQuery();
-
-      ArrayList<Booking> bookings = new ArrayList<>();
-
       while (resultSet.next())
       {
-        Date createDate = resultSet.getDate("booking_date");
-        Date startDate = resultSet.getDate("start_date");
-        Date endDate = resultSet.getDate("end_date");
-        int propertyId = resultSet.getInt("propertyID");
         String username = resultSet.getString("username");
-        Booking booking = new Booking(createDate, startDate, endDate,
-            propertyId, username);
-        bookings.add(booking);
+        String email = resultSet.getString("email");
+        Date startdate = resultSet.getDate("start_date");
+        Date enddate = resultSet.getDate("end_date");
+        Date bookingdate = resultSet.getDate("booking_date");
+        BookingHistory bookingHistory = new BookingHistory(username, email,
+            startdate, enddate, bookingdate);
+        bookingHistoryArrayList.add(bookingHistory);
       }
-      return bookings;
+      //  support.firePropertyChange("getAllBookingHistory", null, bookingHistoryArrayList);
+      System.out.println(
+          "Database query returned " + bookingHistoryArrayList.size()
+              + " booking histories for propertyId: " + propertyId);
     }
-    catch (SQLException e)
-    {
-      e.printStackTrace();
-      throw e;
-    }
+    return bookingHistoryArrayList;
   }
 
   @Override public boolean isAvailable(Date startDate, Date endDate, int id)

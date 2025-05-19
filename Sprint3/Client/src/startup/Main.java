@@ -2,7 +2,7 @@ package startup;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import networking.auth.Authentication;
+import networking.authClient.Authentication;
 import startup.viewHandler.ViewHandler;
 
 public class Main extends Application {

@@ -22,8 +22,8 @@ public class Server
     while (true)
     {
       Socket socket = serverSocket.accept();
-      SocketHandler socketHandler = new SocketHandler(socket, serviceProvider);
-      Thread socketThread = new Thread(socketHandler);
+      MainSocketHandler mainSocketHandler = new MainSocketHandler(socket, serviceProvider);
+      Thread socketThread = new Thread(mainSocketHandler);
       socketThread.start();
       System.out.println("Client connected.");
     }

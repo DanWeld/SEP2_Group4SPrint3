@@ -9,5 +9,5 @@ public interface BookingHistoryModel extends PropertyChangeSubject
   void getPastBookings(String username);
   void getCurrentBookings(String username);
   void getFutureBookings(String username);
-  void cancelBooking(BookingHistory booking);
+  void getAllBookings(int propertyId);
 }

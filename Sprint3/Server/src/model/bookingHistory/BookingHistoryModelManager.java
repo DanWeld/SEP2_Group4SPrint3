@@ -2,79 +2,66 @@ package model.bookingHistory;
 
 import dtos.Booking;
 import dtos.BookingHistory;
+import dtos.ErrorResponse;
+import dtos.Response;
 import persistence.daos.bookings.BookingDAO;
+import services.bookingHistory.BookingHistoryAdminPrivileges;
+import services.bookingHistory.BookingHistoryCustomerPrivileges;
 
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
+import java.util.List;
 
-public class BookingHistoryModelManager implements BookingHistoryModel
+public class BookingHistoryModelManager implements BookingHistoryModel,
+    PropertyChangeListener
 {
-  private PropertyChangeSupport propertyChangeSupport;
-  private ArrayList<BookingHistory> list;
-  private BookingDAO bookingDAO;
+  private BookingHistoryAdminPrivileges admin;
+  private BookingHistoryCustomerPrivileges customer;
+  private final PropertyChangeSupport support = new PropertyChangeSupport(this);
 
-
-  public BookingHistoryModelManager(BookingDAO bookingDAO)
+  public BookingHistoryModelManager(BookingHistoryAdminPrivileges admin,
+      BookingHistoryCustomerPrivileges customer)
   {
-    this.bookingDAO = bookingDAO;
-    list = new ArrayList<>();
-    propertyChangeSupport = new PropertyChangeSupport(this);
+    this.admin = admin;
+    this.customer = customer;
+    this.admin.addPropertyChangeListener(this);
   }
 
-  public void addPropertyChangeListener(PropertyChangeListener listener)
-  {
-    propertyChangeSupport.addPropertyChangeListener(listener);
-  }
-
+  @Override
   public void getPastBookings(String username)
   {
-    try
-    {
-      list = bookingDAO.readPastBookings(username);
-    }
-    catch (Exception e)
-    {
-      e.printStackTrace();
-    }
-    propertyChangeSupport.firePropertyChange("bookingHistory", null, list);
+    customer.getPastBookings(username);
   }
 
+  @Override
   public void getCurrentBookings(String username)
   {
-    try
-    {
-      list = bookingDAO.readCurrentBookings(username);
-    }
-    catch (Exception e)
-    {
-      e.printStackTrace();
-    }
-    propertyChangeSupport.firePropertyChange("bookingHistory", null, list);
+    customer.getCurrentBookings(username);
   }
 
+  @Override
   public void getFutureBookings(String username)
   {
-    try
-    {
-      list = bookingDAO.readFutureBookings(username);
-    }
-    catch (Exception e)
-    {
-      e.printStackTrace();
-    }
-    propertyChangeSupport.firePropertyChange("bookingHistory", null, list);
+    customer.getFutureBookings(username);
   }
 
-  @Override public void cancelBooking(BookingHistory booking)
+  @Override
+  public void getAllBookings(int propertyId)
   {
-    try
-    {
-      bookingDAO.delete(booking.getStartDate(), booking.getPropertyId(), booking.getUsername());
-    }
-    catch (Exception e)
-    {
-      e.printStackTrace();
-    }
+    admin.getAllBookings(propertyId);
+  }
+
+  @Override
+  public void addPropertyChangeListener(PropertyChangeListener listener)
+  {
+    support.addPropertyChangeListener(listener);
+  }
+
+  @Override
+  public void propertyChange(PropertyChangeEvent evt)
+  {
+    support.firePropertyChange(evt);
   }
 }

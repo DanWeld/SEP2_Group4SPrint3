@@ -85,10 +85,7 @@ public class PropertyListController
    */
   public void onSelectProperty() throws Exception
   {
-    if (propertyListVM.getSelectedProperty().get() != null)
-    {
-      viewHandler.showView(ViewHandler.ViewType.BOOKING);
-    }
+    viewHandler.showView(ViewHandler.ViewType.BOOKING);
   }
 
   /**

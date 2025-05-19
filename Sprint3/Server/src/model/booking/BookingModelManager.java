@@ -1,8 +1,12 @@
 package model.booking;
 
 import dtos.Booking;
+import dtos.ErrorResponse;
+import dtos.Response;
 import persistence.daos.bookings.BookingDAO;
 import observer.PropertyChangeSubject;
+import utilities.readerWriterLock.PriorityWriterLockImpl;
+import utilities.readerWriterLock.ReaderWriterLock;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -13,7 +17,7 @@ public class BookingModelManager implements BookingModel, PropertyChangeSubject
 {
   private final PropertyChangeSupport support;
   BookingDAO bookingDAO;
-  private int propertyId;
+  private ReaderWriterLock lock = new PriorityWriterLockImpl();
 
   public BookingModelManager(BookingDAO bookingDAO)
   {
@@ -26,28 +30,89 @@ public class BookingModelManager implements BookingModel, PropertyChangeSubject
   {
     try
     {
+      lock.lockWrite();
       Booking newBooking = bookingDAO.create(startDate, endDate, propertyID,
           username);
-      support.firePropertyChange("bookingCreated", null, newBooking);
+      Response response = new Response("SUCCESS", newBooking);
+      support.firePropertyChange("bookingCreationSuccess", null, response);
     }
-    catch (SQLException e)
+    catch (SQLException | InterruptedException e)
     {
-      throw new RuntimeException(e);
+      ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
+      Response response = new Response("ERROR", errorResponse);
+      support.firePropertyChange("bookingCreationFailure", null, response);
+    }
+    finally
+    {
+      lock.unlockWrite();
     }
   }
 
-  @Override
-  public void isAvailable(Date startDate, Date endDate,
+  @Override public void isAvailable(Date startDate, Date endDate,
       int propertyId)
   {
     try
     {
-      boolean isAvailable = bookingDAO.isAvailable(startDate, endDate, propertyId);
-      support.firePropertyChange("isAvailable", null, isAvailable);
+      lock.lockRead();
+      boolean isAvailable = bookingDAO.isAvailable(startDate, endDate,
+          propertyId);
+      Response response = new Response("SUCCESS", isAvailable);
+      support.firePropertyChange("isAvailableSuccess", null, response);
     }
-    catch (SQLException e)
+    catch (SQLException | InterruptedException e)
     {
-      throw new RuntimeException(e);
+      ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
+      Response response = new Response("ERROR", errorResponse);
+      support.firePropertyChange("isAvailableFailure", null, response);
+    }
+    finally
+    {
+      lock.unlockRead();
+    }
+  }
+
+  @Override public void extendBooking(int propertyId, Date startDate,
+      Date newEndDate, String username)
+  {
+    try
+    {
+      lock.lockWrite();
+      Booking updatedBooking = bookingDAO.update(startDate, newEndDate,
+          propertyId, username);
+      Response response = new Response("SUCCESS", updatedBooking);
+      support.firePropertyChange("bookingExtensionSuccess", null, response);
+    }
+    catch (SQLException | InterruptedException e)
+    {
+      ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
+      Response response = new Response("ERROR", errorResponse);
+      support.firePropertyChange("bookingExtensionFailure", null, response);
+    }
+    finally
+    {
+      lock.unlockWrite();
+    }
+  }
+
+  @Override public void deleteBooking(Date startDate, int propertyId,
+      String username)
+  {
+    try
+    {
+      lock.lockWrite();
+      bookingDAO.delete(startDate, propertyId, username);
+      Response response = new Response("SUCCESS", null);
+      support.firePropertyChange("bookingDeletionSuccess", null, response);
+    }
+    catch (SQLException | InterruptedException e)
+    {
+      ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
+      Response response = new Response("ERROR", errorResponse);
+      support.firePropertyChange("bookingDeletionFailure", null, response);
+    }
+    finally
+    {
+      lock.unlockWrite();
     }
   }
 

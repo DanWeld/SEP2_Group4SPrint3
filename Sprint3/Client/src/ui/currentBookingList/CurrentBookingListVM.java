@@ -15,7 +15,7 @@ import java.util.List;
 public class CurrentBookingListVM
 {
   private ObservableList<BookingHistory> bookings;
-  private User user;
+  private User user ;
   private BookingHistoryClient bookingHistoryClient;
 
   public CurrentBookingListVM()
@@ -35,15 +35,29 @@ public class CurrentBookingListVM
 
   public ObservableList<BookingHistory> getBookingHistory()
   {
-    try
-    {
-      List<BookingHistory> bookingHistoryList = bookingHistoryClient.getCurrentBookings(user.getUsername());
-      bookings = FXCollections.observableArrayList(bookingHistoryList);
-    }
-    catch (IOException e)
-    {
-      throw new RuntimeException(e);
-    }
+    new Thread(() -> {
+      try
+      {
+        List<BookingHistory> list = bookingHistoryClient.getCurrentBookings(getUser());
+        javafx.application.Platform.runLater(() -> {
+          bookings.setAll(list);
+        });
+      }
+      catch (IOException e)
+      {
+        javafx.application.Platform.runLater(() -> {
+          System.out.println("Failed: " + e.getMessage());
+        });
+      }
+    }).start();
     return bookings;
+  }
+
+  private String getUser() {
+    User currentUser = UserSession.getInstance().getCurrentUser();
+    if (currentUser == null) {
+      throw new IllegalStateException("User not logged in");
+    }
+    return currentUser.getUsername();
   }
 }

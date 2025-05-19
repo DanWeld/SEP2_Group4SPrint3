@@ -4,7 +4,7 @@ import dtos.ErrorResponse;
 import dtos.LoginRequest;
 import dtos.Response;
 import dtos.User;
-import model.authentication.AuthenticationService;
+import services.authentication.AuthenticationService;
 import utilities.logging.LogLevel;
 import utilities.logging.Logger;
 import utils.JsonParser;
@@ -41,9 +41,10 @@ public class AuthenticationRequestHandler
     {
       case "login" ->
       {
+        System.out.println(payload);
         LoginRequest request = (LoginRequest) JsonParser.jsonToObject(payload,
             LoginRequest.class);
-        authService.authenticate(request.getEmail(), request.getPassword());
+            authService.authenticate(request.getEmail(), request.getPassword());
       }
       case "register" ->
       {

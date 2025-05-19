@@ -1,8 +1,8 @@
 package startup;
 
 import networking.Client;
-import networking.auth.Authentication;
-import networking.auth.AuthenticationImpl;
+import networking.authClient.Authentication;
+import networking.authClient.AuthenticationImpl;
 
 import java.io.IOException;
 

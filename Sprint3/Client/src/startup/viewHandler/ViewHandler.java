@@ -40,7 +40,6 @@ public class ViewHandler
   private final LoginVM loginVM;
   private final Stage mainStage;
 
-
   public ViewHandler(ViewModelFactory viewModelFactory)
   {
     specifyDatesVM = viewModelFactory.getSpecifyDatesVM();
@@ -61,14 +60,18 @@ public class ViewHandler
     mainStage.show();
   }
 
-  public void showView(ViewType view){
-    try{
-      switch (view){
+  public void showView(ViewType view)
+  {
+    try
+    {
+      switch (view)
+      {
         case WELCOME -> showFrontView();
         case REGISTER -> showRegisterView();
         case LOGIN -> showLoginView();
         case PROPERTY_LIST -> openPropertyListView();
-        case BOOKING -> openBookingView(propertyListVM.getSelectedProperty().get());
+        case BOOKING ->
+            openBookingView(propertyListVM.getSelectedProperty().get());
         case SPECIFY_DATES -> openSpecifyDatesView();
         case USER_DASHBOARD -> showUserDashboardView();
         case ADMIN_DASHBOARD -> showAdminDashboardView();
@@ -76,18 +79,22 @@ public class ViewHandler
         case CURRENT_BOOKINGS -> showCurrentBookingsView();
         case FUTURE_BOOKINGS -> showFutureBookingsView();
       }
-    } catch (Exception e) {
+    }
+    catch (Exception e)
+    {
       e.printStackTrace();
     }
   }
 
   private Scene frontScene;
+
   public void showFrontView() throws Exception
   {
     if (frontScene == null)
     {
       FXMLLoader loader = new FXMLLoader();
-      loader.setLocation(ViewHandler.class.getResource("/ui/welcome/welcomeView.fxml"));
+      loader.setLocation(
+          ViewHandler.class.getResource("/ui/welcome/welcomeView.fxml"));
       Parent root = loader.load();
       FrontViewCtrl frontViewController = loader.getController();
       frontViewController.initialize(this);
@@ -98,13 +105,14 @@ public class ViewHandler
   }
 
   private Scene registerScene;
+
   public void showRegisterView() throws Exception
   {
     if (registerScene == null)
     {
       FXMLLoader loader = new FXMLLoader();
-      loader.setLocation(getClass().getClassLoader().getResource(
-          "ui/register/RegisterView.fxml"));
+      loader.setLocation(getClass().getClassLoader()
+          .getResource("ui/register/RegisterView.fxml"));
       Parent root = loader.load();
       RegisterCtrl registerController = loader.getController();
       registerController.initialize(registerVM, this);
@@ -115,13 +123,14 @@ public class ViewHandler
   }
 
   private Scene loginScene;
+
   public void showLoginView() throws Exception
   {
     if (loginScene == null)
     {
       FXMLLoader loader = new FXMLLoader();
-      loader.setLocation(getClass().getClassLoader().getResource(
-          "ui/login/LoginView.fxml"));
+      loader.setLocation(
+          getClass().getClassLoader().getResource("ui/login/LoginView.fxml"));
       Parent root = loader.load();
       LoginCtrl loginController = loader.getController();
       loginController.initialize(loginVM, this);
@@ -132,15 +141,17 @@ public class ViewHandler
   }
 
   private Scene specifyDatesScene;
+
   public void openSpecifyDatesView()
   {
     try
     {
       if (specifyDatesScene == null)
       {
-        FXMLLoader loader = new FXMLLoader();      loader.setLocation(getClass().getClassLoader().getResource(
-          "ui/specifyDates/SpecifyDates.fxml"));
-      Parent root = loader.load();
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getClassLoader()
+            .getResource("ui/specifyDates/SpecifyDates.fxml"));
+        Parent root = loader.load();
         SpecifyDatesController specifyDatesController = loader.getController();
         specifyDatesController.initialize(specifyDatesVM, this);
         specifyDatesScene = new Scene(root);
@@ -161,15 +172,17 @@ public class ViewHandler
   }
 
   private Scene propertyListScene;
+
   public void openPropertyListView()
   {
     try
     {
       if (propertyListScene == null)
       {
-        FXMLLoader loader = new FXMLLoader();      loader.setLocation(getClass().getClassLoader().getResource(
-          "ui/propertyList/PropertyList.fxml"));
-      Parent root = loader.load();
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getClassLoader()
+            .getResource("ui/propertyList/PropertyList.fxml"));
+        Parent root = loader.load();
         PropertyListController propertyListController = loader.getController();
         propertyListController.initialize(propertyListVM, this);
         propertyListScene = new Scene(root);
@@ -184,6 +197,7 @@ public class ViewHandler
   }
 
   private Scene bookingScene;
+
   public void openBookingView(Property property) throws Exception
   {
     bookingVM.updateProperty(property);
@@ -191,9 +205,10 @@ public class ViewHandler
     {
       if (bookingScene == null)
       {
-        FXMLLoader loader = new FXMLLoader();      loader.setLocation(getClass().getClassLoader().getResource(
-          "ui/booking/Booking.fxml"));
-      Parent root = loader.load();
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(
+            getClass().getClassLoader().getResource("ui/booking/Booking.fxml"));
+        Parent root = loader.load();
         BookingController bookingController = loader.getController();
 
         bookingController.initialize(bookingVM, this);
@@ -209,13 +224,14 @@ public class ViewHandler
   }
 
   private Scene userDashboardScene;
+
   public void showUserDashboardView() throws Exception
   {
     if (userDashboardScene == null)
     {
       FXMLLoader loader = new FXMLLoader();
-      loader.setLocation(getClass().getClassLoader().getResource(
-          "ui/dashboard/userDashboard.fxml"));
+      loader.setLocation(getClass().getClassLoader()
+          .getResource("ui/dashboard/userDashboard.fxml"));
       Parent root = loader.load();
       UserDashboardCtrl controller = loader.getController();
       controller.initialize(this);
@@ -226,13 +242,14 @@ public class ViewHandler
   }
 
   private Scene adminDashboardScene;
+
   public void showAdminDashboardView() throws Exception
   {
     if (adminDashboardScene == null)
     {
       FXMLLoader loader = new FXMLLoader();
-      loader.setLocation(getClass().getClassLoader().getResource(
-          "ui/dashboard/adminDashboard.fxml"));
+      loader.setLocation(getClass().getClassLoader()
+          .getResource("ui/dashboard/adminDashboard.fxml"));
       Parent root = loader.load();
       AdminDashboardCtrl controller = loader.getController();
       controller.initialize(this);
@@ -243,13 +260,14 @@ public class ViewHandler
   }
 
   private Scene pastBookingsScene;
+
   public void showPastBookingsView() throws Exception
   {
     if (pastBookingsScene == null)
     {
       FXMLLoader loader = new FXMLLoader();
-      loader.setLocation(getClass().getClassLoader().getResource(
-          "ui/pastBookingList/PastBookingList.fxml"));
+      loader.setLocation(getClass().getClassLoader()
+          .getResource("ui/pastBookingList/PastBookingList.fxml"));
       Parent root = loader.load();
       PastBookingListCtrl controller = loader.getController();
       controller.initialize(pastBookingListVM, this);
@@ -260,13 +278,14 @@ public class ViewHandler
   }
 
   private Scene currentBookingsScene;
+
   public void showCurrentBookingsView() throws Exception
   {
     if (currentBookingsScene == null)
     {
       FXMLLoader loader = new FXMLLoader();
-      loader.setLocation(getClass().getClassLoader().getResource(
-          "ui/currentBookingList/CurrentBookingList.fxml"));
+      loader.setLocation(getClass().getClassLoader()
+          .getResource("ui/currentBookingList/CurrentBookingList.fxml"));
       Parent root = loader.load();
       CurrentBookingListCtrl controller = loader.getController();
       controller.initialize(currentBookingListVM, this);
@@ -277,13 +296,14 @@ public class ViewHandler
   }
 
   private Scene futureBookingsScene;
+
   public void showFutureBookingsView() throws Exception
   {
     if (futureBookingsScene == null)
     {
       FXMLLoader loader = new FXMLLoader();
-      loader.setLocation(getClass().getClassLoader().getResource(
-          "ui/futureBookingList/FutureBookingList.fxml"));
+      loader.setLocation(getClass().getClassLoader()
+          .getResource("ui/futureBookingList/FutureBookingList.fxml"));
       Parent root = loader.load();
       FutureBookingListCtrl controller = loader.getController();
       controller.initialize(futureBookingListVM, this);
@@ -293,17 +313,8 @@ public class ViewHandler
     mainStage.setScene(futureBookingsScene);
   }
 
-  public enum ViewType {
-    WELCOME,
-    REGISTER,
-    LOGIN,
-    PROPERTY_LIST,
-    BOOKING,
-    SPECIFY_DATES,
-    USER_DASHBOARD,
-    ADMIN_DASHBOARD,
-    PAST_BOOKINGS,
-    CURRENT_BOOKINGS,
-    FUTURE_BOOKINGS
+  public enum ViewType
+  {
+    WELCOME, REGISTER, LOGIN, PROPERTY_LIST, BOOKING, SPECIFY_DATES, USER_DASHBOARD, ADMIN_DASHBOARD, PAST_BOOKINGS, CURRENT_BOOKINGS, FUTURE_BOOKINGS
   }
 }

@@ -1,6 +1,5 @@
-package networking.auth;
+package networking.authClient;
 
-import dtos.ErrorResponse;
 import dtos.LoginRequest;
 import dtos.Request;
 import dtos.User;
@@ -10,7 +9,6 @@ import utils.JsonParser;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.util.regex.Pattern;
 
 public class AuthenticationImpl
     implements Authentication, PropertyChangeListener

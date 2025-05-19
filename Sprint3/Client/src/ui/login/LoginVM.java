@@ -9,7 +9,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import dtos.LoginRequest;
 import dtos.User;
-import networking.auth.Authentication;
+import networking.authClient.Authentication;
 import services.UserSession;
 
 import java.beans.PropertyChangeEvent;
@@ -98,6 +98,7 @@ public class LoginVM implements PropertyChangeListener
   {
     // Set the user in the session
     UserSession.getInstance().setCurrentUser(newValue);
+    System.out.println("Login successful: " + newValue.getUsername());
     loginSuccessfulProp.set(true);
     msgProp.set("Login successful");
   }

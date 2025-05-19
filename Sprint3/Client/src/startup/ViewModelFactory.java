@@ -1,9 +1,8 @@
 package startup;
 
-import networking.auth.Authentication;
+import networking.authClient.Authentication;
 import ui.booking.BookingVM;
 import ui.currentBookingList.CurrentBookingListVM;
-import ui.futureBookingList.FutureBookingListCtrl;
 import ui.futureBookingList.FutureBookingListVM;
 import ui.pastBookingList.PastBookingListVM;
 import ui.login.LoginVM;

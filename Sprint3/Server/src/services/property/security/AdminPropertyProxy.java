@@ -1,19 +1,17 @@
 package services.property.security;
 
-import dtos.ErrorResponse;
 import dtos.Property;
 import dtos.User;
-import services.property.PropertyWriter;
+import services.property.PropertyAdminPrivileges;
 
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 
-public class AdminPropertyWriterProxy implements PropertyWriter
+public class AdminPropertyProxy implements PropertyAdminPrivileges
 {
-  private final PropertyWriter realWriter;
+  private final PropertyAdminPrivileges realWriter;
   private final User user;
 
-  public AdminPropertyWriterProxy(PropertyWriter realWriter, User user)
+  public AdminPropertyProxy(PropertyAdminPrivileges realWriter, User user)
   {
     this.realWriter = realWriter;
     this.user = user;

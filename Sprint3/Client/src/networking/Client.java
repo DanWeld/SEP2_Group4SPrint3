@@ -1,7 +1,9 @@
 package networking;
 
 import dtos.*;
+import networking.userClient.UserClient;
 import observer.PropertyChangeSubject;
+import services.UserSession;
 import utils.JsonParser;
 
 import java.beans.PropertyChangeListener;
@@ -11,7 +13,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Client implements PropertyChangeSubject
@@ -21,7 +22,7 @@ public class Client implements PropertyChangeSubject
   private PrintWriter out;
   private PropertyChangeSupport propertyChangeSupport;
   private boolean connected;
-  private User currentUser;
+  private UserClient currentUser;
 
   public Client() throws IOException
   {
@@ -61,31 +62,49 @@ public class Client implements PropertyChangeSubject
       // Send the action name
       out.println(request.action());
 
-      System.out.println("Client: Request has been sent: "+ request.handler() + " " + request.action());
-
-      User user = (request.handler().equals("auth") ? null : this.currentUser);
-
       // Send the parameters as JSON
       String paramsJson = JsonParser.toJson(request.payload());
       out.println(paramsJson);
+
+      // Send the user object as JSON
+      UserClient user = (request.handler().equals("auth") ? null : this.currentUser);
+      out.println(JsonParser.toJson(user));
+
+      // Flush the output stream
       out.flush();
 
       // Read the response
       String response = in.readLine();
 
-
       // Parse the response
-      Response parsedResponse = (Response) JsonParser.jsonToObject(response, Response.class);
-      if  (parsedResponse.status().equals("ERROR"))
+      Response parsedResponse = (Response) JsonParser.jsonToObject(response,
+          Response.class);
+      if (parsedResponse.status().equals("ERROR"))
       {
         // Handle error response
-        ErrorResponse errorResponse = JsonParser.convertPayload(parsedResponse.payload(), ErrorResponse.class);
+        ErrorResponse errorResponse = JsonParser.convertPayload(
+            parsedResponse.payload(), ErrorResponse.class);
         propertyChangeSupport.firePropertyChange("error", null, errorResponse);
+        System.out.println(
+            "Client: Error response received: " + errorResponse.errorMessage());
       }
       else if (parsedResponse.status().equals("SUCCESS"))
       {
+        // Assign the current user if the request is for authentication
+        if (request.handler().equals("auth"))
+        {
+          UserClient userasd = JsonParser.convertPayload(parsedResponse.payload(), UserClient.class);
+          System.out.println(
+              "Client: User logged in: " + userasd.getUsername());
+          UserSession.getInstance().setCurrentUser(currentUser);
+        }
+
         // Handle success response
-        propertyChangeSupport.firePropertyChange(request.action(), null, parsedResponse.payload());
+        propertyChangeSupport.firePropertyChange(request.action(), null,
+            parsedResponse.payload());
+        System.out.println(
+            "Client: Success response received: " + request.action() + " : "
+                + parsedResponse.payload());
       }
     }
     catch (Exception e)
@@ -94,14 +113,13 @@ public class Client implements PropertyChangeSubject
     }
   }
 
-  @Override
-  public void addPropertyChangeListener(PropertyChangeListener listener)
+  @Override public void addPropertyChangeListener(
+      PropertyChangeListener listener)
   {
     propertyChangeSupport.addPropertyChangeListener(listener);
   }
 
-  @Override
-  public void removePropertyChangeListener(
+  @Override public void removePropertyChangeListener(
       PropertyChangeListener listener)
   {
     propertyChangeSupport.removePropertyChangeListener(listener);
@@ -126,7 +144,8 @@ public class Client implements PropertyChangeSubject
     }
 
     // Parse the JSON response
-    List<Property> properties = JsonParser.toList(jsonResponse, Property[].class);
+    List<Property> properties = JsonParser.toList(jsonResponse,
+        Property[].class);
 
     // Notify the listeners about the new properties
     propertyChangeSupport.firePropertyChange("getAllProperties", null,
@@ -224,7 +243,7 @@ public class Client implements PropertyChangeSubject
     return response;
   }
 
-  public String sendRegisterRequest(User user) throws IOException
+  public String sendRegisterRequest(UserClient user) throws IOException
   {
     // Serialize the user object to JSON
     String userJson = JsonParser.toJson(user);

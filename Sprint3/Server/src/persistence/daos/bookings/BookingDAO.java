@@ -15,7 +15,7 @@ public interface BookingDAO
   Booking read(Date startDate, int propertyId, String username) throws SQLException;
   Booking update(Date startDate,Date endDate, int propertyId, String username) throws SQLException;
   void delete(Date startDate, int propertyId, String username) throws SQLException;
-  List<Booking> getAllBookings() throws SQLException;
+  List<BookingHistory> getAllBookingsByProperty(int propertyId) throws SQLException;
   boolean isAvailable(Date startDate, Date endDate, int id) throws SQLException;
   ArrayList<BookingHistory> readPastBookings(String username) throws
       SQLException;

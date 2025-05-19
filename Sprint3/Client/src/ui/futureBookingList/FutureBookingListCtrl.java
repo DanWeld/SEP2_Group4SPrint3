@@ -18,6 +18,7 @@ public class FutureBookingListCtrl
   @FXML private Label errorLabel;
   @FXML private Button backButton;
   @FXML private Button cancelButton;
+  @FXML private Button extendButton;
   private FutureBookingListVM futureBookingListVM;
   private ViewHandler viewHandler;
 
@@ -49,6 +50,9 @@ public class FutureBookingListCtrl
     pricePerNightColumn.setCellValueFactory(
         data -> new javafx.beans.property.SimpleDoubleProperty(
             data.getValue().getPricePerNight()).asObject());
+
+    // Disable extend button if no booking is selected
+    extendButton.disableProperty().bind(table.getSelectionModel().selectedItemProperty().isNull());
   }
 
   public void onBackButton()
@@ -59,5 +63,27 @@ public class FutureBookingListCtrl
   public void onCancelButton()
   {
     futureBookingListVM.cancelBooking();
+  }
+
+  public void onExtendButton()
+  {
+    try {
+      // Get the selected booking
+      BookingHistory selectedBooking = futureBookingListVM.selectedBookingProperty().get();
+
+      if (selectedBooking != null) {
+        System.out.println("DEBUG: Extending booking with ID " + selectedBooking.getPropertyId() +
+            " for location: " + selectedBooking.getLocation());
+
+        // Navigate to the extend booking view with the selected booking
+        viewHandler.showExtendBookingView(selectedBooking);
+      } else {
+        errorLabel.setText("Please select a booking to extend");
+      }
+    } catch (Exception e) {
+      System.err.println("ERROR: Failed to navigate to extend booking view: " + e.getMessage());
+      e.printStackTrace();
+      errorLabel.setText("Error: " + e.getMessage());
+    }
   }
 }

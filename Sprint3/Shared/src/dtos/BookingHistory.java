@@ -4,12 +4,16 @@ import java.sql.Date;
 
 public class BookingHistory
 {
-  private String username;
-  private String location;
-  private Date startDate;
-  private Date endDate;
+  private final String username;
+  private String email;
+  private final Date startDate;
+  private final Date endDate;
   private double pricePerNight;
+  private Date bookingDate;
+  private Booking booking;
+  private Property property;
   private int propertyId;
+  private String location;
 
   public BookingHistory(String username, String location, Date startDate,
       Date endDate, double pricePerNight, int propertyId)
@@ -20,6 +24,15 @@ public class BookingHistory
     this.endDate = endDate;
     this.pricePerNight = pricePerNight;
     this.propertyId = propertyId;
+  }
+
+  public BookingHistory(String username, String email, Date startDate, Date endDate, Date bookingDate){
+
+    this.username = username;
+    this.email = email;
+    this.startDate = startDate;
+    this.endDate = endDate;
+    this.bookingDate = bookingDate;
   }
 
   public String getUsername()
@@ -52,10 +65,30 @@ public class BookingHistory
     return propertyId;
   }
 
+  public Booking getBooking()
+  {
+    return booking;
+  }
+
+  public String getEmail()
+  {
+    return email;
+  }
+
+  public Date getBookingDate()
+  {
+    return bookingDate;
+  }
+
   public String toString()
   {
-    return "BookingHistory{" + "username='" + username + '\'' + ", location='"
-        + location + '\'' + ", startDate=" + startDate + ", endDate=" + endDate
-        + ", pricePerNight=" + pricePerNight + '}';
+    return "BookingHistory{" +
+        "username='" + username + '\'' +
+        ", location='" + location + '\'' +
+        ", startDate=" + startDate +
+        ", endDate=" + endDate +
+        ", pricePerNight=" + pricePerNight +
+        ", propertyId=" + propertyId +
+        '}';
   }
 }

@@ -1,4 +1,4 @@
-package networking.auth;
+package networking.authClient;
 
 import dtos.LoginRequest;
 import dtos.User;

@@ -1,16 +1,13 @@
-package model.authentication;
+package services.authentication;
 
 import dtos.ErrorResponse;
 import dtos.Response;
 import dtos.User;
-import observer.PropertyChangeSubject;
 import persistence.daos.user.UserDAO;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Implementation of the AuthenticationService interface

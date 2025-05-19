@@ -122,18 +122,12 @@ public class PropertyListVM implements PropertyChangeListener
   {
     if (evt.getPropertyName().equals("getAllProperties"))
     {
-      properties.clear();
-      PropertyList propertyArray = (PropertyList) evt.getNewValue();
-      for (int i = 0; i < propertyArray.size(); i++)
-      {
-        Property property = propertyArray.getProperty(i);
-        properties.add(property);
-      }
+
     }
 
     else if (evt.getPropertyName().equals("getPropertyByID"))
     {
-      selectedProperty.set((Property) evt.getNewValue());
+
     }
   }
 }

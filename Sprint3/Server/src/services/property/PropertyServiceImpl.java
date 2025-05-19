@@ -14,7 +14,8 @@ import java.util.List;
 
 import dtos.Property;
 
-public class PropertyServiceImpl implements PropertyService, PropertyReader, PropertyWriter
+public class PropertyServiceImpl implements PropertyService,
+    PropertyCustomerPrivileges, PropertyAdminPrivileges
 {
   private PropertyDAO propertyDAO;
   private PropertyChangeSupport support;
