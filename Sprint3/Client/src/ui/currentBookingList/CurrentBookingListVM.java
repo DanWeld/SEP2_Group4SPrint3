@@ -75,12 +75,6 @@ public class CurrentBookingListVM implements PropertyChangeListener
       bookings.clear();
       bookings.addAll(bookingHistoryList);
     }
-    else if (evt.getPropertyName().equals("extend"))
-    {
-      BookingHistory bookingHistory = JsonParser.convertPayload(
-          evt.getNewValue(), BookingHistory.class);
-      msgProp.set("Booking extended to: " + bookingHistory.getEndDate());
-    }
     else if (evt.getPropertyName().equals("error"))
     {
       ErrorResponse errorResponse = (ErrorResponse) evt.getNewValue();

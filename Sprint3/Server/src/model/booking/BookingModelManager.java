@@ -101,10 +101,8 @@ public class BookingModelManager implements BookingModel, PropertyChangeSubject
     {
       lock.lockWrite();
       bookingDAO.delete(startDate, propertyId, username);
-      System.out.println("Booking deleted successfully");
       Response response = new Response("SUCCESS", null);
       support.firePropertyChange("bookingDeletionSuccess", null, response);
-      System.out.println("Booking deletion success response sent" + response);
     }
     catch (SQLException | InterruptedException e)
     {

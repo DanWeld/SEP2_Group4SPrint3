@@ -2,6 +2,7 @@ package ui.extendBooking;
 
 import dtos.Booking;
 import dtos.BookingHistory;
+import dtos.ErrorResponse;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -10,6 +11,7 @@ import networking.Client;
 import networking.bookingClient.BookingClient;
 import networking.bookingClient.BookingClientImpl;
 import services.UserSession;
+import utils.JsonParser;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -44,8 +46,10 @@ public class ExtendBookingVM implements PropertyChangeListener
     message = new SimpleStringProperty("");
   }
 
-  public void setBooking(BookingHistory booking) {
-    if (booking == null) {
+  public void setBooking(BookingHistory booking)
+  {
+    if (booking == null)
+    {
       selectedBooking.set(null);
       newEndDate.set(null);
       message.set("No booking selected. Please select a booking to extend.");
@@ -65,20 +69,21 @@ public class ExtendBookingVM implements PropertyChangeListener
     if (newEndDate.get() == null)
     {
       message.set("end date isn't selected");
+      return;
     }
 
     // Validate that new end date is after the current end date
     if (newEndDate.get().before(selectedBooking.get().getEndDate()))
     {
       message.set("New end date must be after current end date");
+      return;
     }
 
     // Call service to extend booking
     int propertyId = selectedBooking.get().getPropertyId();
-    Date currentEndDate = selectedBooking.get().getEndDate();
     String username = selectedBooking.get().getUsername();
 
-    Booking booking = new Booking(currentEndDate, newEndDate.get(), propertyId,
+    Booking booking = new Booking(selectedBooking.get().getStartDate(), newEndDate.get(), propertyId,
         username);
     bookingClient.extendBooking(booking);
   }
@@ -102,11 +107,14 @@ public class ExtendBookingVM implements PropertyChangeListener
   {
     if (evt.getPropertyName().equals("extend"))
     {
-      message.set("Booking extended successfully");
+      BookingHistory bookingHistory = JsonParser.convertPayload(
+          evt.getNewValue(), BookingHistory.class);
+      message.set("Booking extended to: " + bookingHistory.getEndDate());
     }
     else if (evt.getPropertyName().equals("error"))
     {
-      String errorMessage = (String) evt.getNewValue();
+      ErrorResponse errorResponse = (ErrorResponse) evt.getNewValue();
+      String errorMessage = errorResponse.errorMessage();
       message.set(errorMessage);
     }
   }

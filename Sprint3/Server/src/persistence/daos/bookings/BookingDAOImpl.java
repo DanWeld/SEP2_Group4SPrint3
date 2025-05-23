@@ -160,7 +160,11 @@ public class BookingDAOImpl implements BookingDAO
       statement.setDate(4, startDate);
 
       // Execute the update
-      statement.executeUpdate();
+      int rowsUpdated = statement.executeUpdate();
+      if (rowsUpdated == 0)
+      {
+        throw new SQLException("No booking found to update.");
+      }
 
       // Retrieve the updated booking
       Booking booking = read(startDate, propertyId, username);
@@ -237,10 +241,6 @@ public class BookingDAOImpl implements BookingDAO
             startdate, enddate, bookingdate);
         bookingHistoryArrayList.add(bookingHistory);
       }
-      //  support.firePropertyChange("getAllBookingHistory", null, bookingHistoryArrayList);
-      System.out.println(
-          "Database query returned " + bookingHistoryArrayList.size()
-              + " booking histories for propertyId: " + propertyId);
     }
     return bookingHistoryArrayList;
   }

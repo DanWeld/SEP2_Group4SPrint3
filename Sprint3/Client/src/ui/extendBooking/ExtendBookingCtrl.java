@@ -17,7 +17,6 @@ public class ExtendBookingCtrl
   @FXML private Label currentEndDateLabel;
   @FXML private DatePicker newEndDatePicker;
   @FXML private Label messageLabel;
-  private ObjectProperty<BookingHistory> selectedBooking;
 
   private ExtendBookingVM viewModel;
   private ViewHandler viewHandler;
@@ -43,6 +42,11 @@ public class ExtendBookingCtrl
       else
       {
         messageLabel.setText("");
+      }
+    });
+    newEndDatePicker.valueProperty().addListener((obs, oldDate, newDate) -> {
+      if (newDate != null) {
+        viewModel.newEndDateProperty().set(java.sql.Date.valueOf(newDate));
       }
     });
   }

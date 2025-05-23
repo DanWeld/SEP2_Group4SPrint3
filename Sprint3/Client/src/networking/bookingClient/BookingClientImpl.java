@@ -35,7 +35,7 @@ public class BookingClientImpl implements BookingClient, PropertyChangeListener
   @Override public void extendBooking(Booking booking)
   {
      client.sendRequest(
-        new Request("booking", "extendBooking", booking));
+        new Request("booking", "extend", booking));
   }
 
   @Override public void propertyChange(PropertyChangeEvent evt)
