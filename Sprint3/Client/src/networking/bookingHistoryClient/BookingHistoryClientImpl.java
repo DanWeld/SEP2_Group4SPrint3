@@ -33,7 +33,6 @@ public class BookingHistoryClientImpl implements BookingHistoryClient,
   }
 
   @Override public void getFutureBookings(String username)
-
   {
     client.sendRequest(new Request("bookingHistory", "getFutureBookings", username));
   }
@@ -41,11 +40,6 @@ public class BookingHistoryClientImpl implements BookingHistoryClient,
   @Override public void cancelBooking(BookingHistory booking)
   {
     client.sendRequest(new Request("Booking", "delete", booking));
-  }
-
-  @Override public void extendBooking(BookingHistory bookingHistory)
-  {
-    client.sendRequest(new Request("Booking", "extend", bookingHistory));
   }
 
   @Override public void propertyChange(PropertyChangeEvent evt)

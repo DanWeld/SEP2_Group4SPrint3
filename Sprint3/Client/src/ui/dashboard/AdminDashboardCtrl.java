@@ -40,14 +40,7 @@ public class AdminDashboardCtrl {
     public void onViewBookings() {
         // TODO: Implement bookings view
         // For now, just show property list
-        viewHandler.showView(ViewHandler.ViewType.PROPERTY_LIST);
-    }
-    
-    @FXML
-    public void onViewReports() {
-        // TODO: Implement reports view
-        // For now, just show property list
-        viewHandler.showView(ViewHandler.ViewType.PROPERTY_LIST);
+        viewHandler.showView(ViewHandler.ViewType.ADMIN_PROPERTY_LIST);
     }
     
     @FXML

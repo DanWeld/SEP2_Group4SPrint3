@@ -1,6 +1,8 @@
 package startup;
 
 import networking.authClient.Authentication;
+import ui.adminBookingHistory.AdminBookingHistoryVM;
+import ui.adminPropertyList.AdminPropertyListVM;
 import ui.booking.BookingVM;
 import ui.currentBookingList.CurrentBookingListVM;
 import ui.extendBooking.ExtendBookingVM;
@@ -17,76 +19,67 @@ import ui.userList.UserListVM;
  */
 public class ViewModelFactory
 {
-  private final LoginVM loginVM;
-  private final RegisterVM registerVM;
-  private final SpecifyDatesVM specifyDatesVM;
-  private final PropertyListVM propertyListVM;
-  private final BookingVM bookingVM;
-  private final PastBookingListVM pastBookingListVM;
-  private final CurrentBookingListVM currentBookingListVM;
-  private final FutureBookingListVM futureBookingListVM;
-  private final ExtendBookingVM extendBookingVM;
-
-  public ViewModelFactory(Authentication authService)
+  public ViewModelFactory()
   {
-    loginVM = new LoginVM();
-    registerVM = new RegisterVM();
-    specifyDatesVM = new SpecifyDatesVM();
-    propertyListVM = new PropertyListVM();
-    bookingVM = new BookingVM();
-    pastBookingListVM = new PastBookingListVM();
-    currentBookingListVM = new CurrentBookingListVM();
-    futureBookingListVM = new FutureBookingListVM();
-    extendBookingVM = new ExtendBookingVM();
   }
 
   public LoginVM getLoginVM()
   {
-    return loginVM;
+    return new LoginVM();
   }
 
   public RegisterVM getRegisterVM()
   {
-    return registerVM;
+    return new RegisterVM();
   }
 
   public SpecifyDatesVM getSpecifyDatesVM()
   {
-    return specifyDatesVM;
+    return new SpecifyDatesVM();
   }
 
   public PropertyListVM getPropertyListVM()
   {
-    return propertyListVM;
+    return new PropertyListVM();
   }
 
   public BookingVM getBookingVM()
   {
-    return bookingVM;
+    return new BookingVM();
   }
 
   public PastBookingListVM getBookingHistoryVM()
   {
-    return pastBookingListVM;
+    return new PastBookingListVM();
   }
 
   public CurrentBookingListVM getCurrentBookingListVM()
   {
-    return currentBookingListVM;
+    return new CurrentBookingListVM();
   }
 
   public FutureBookingListVM getFutureBookingListVM()
   {
-    return futureBookingListVM;
+    return new FutureBookingListVM();
   }
 
   public ExtendBookingVM getExtendBookingVM()
   {
-    return extendBookingVM;
+    return new ExtendBookingVM();
   }
 
   public UserListVM getUserListVM()
   {
     return new UserListVM();
+  }
+
+  public AdminPropertyListVM getAdminPropertyListVM()
+  {
+    return new AdminPropertyListVM();
+  }
+
+  public AdminBookingHistoryVM getAdminBookingHistoryVM()
+  {
+    return new AdminBookingHistoryVM();
   }
 }

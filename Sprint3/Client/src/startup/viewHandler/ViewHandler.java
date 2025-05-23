@@ -8,6 +8,10 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import dtos.Property;
 import startup.ViewModelFactory;
+import ui.adminBookingHistory.AdminBookingHistoryCtrl;
+import ui.adminBookingHistory.AdminBookingHistoryVM;
+import ui.adminPropertyList.AdminPropertyListCtrl;
+import ui.adminPropertyList.AdminPropertyListVM;
 import ui.booking.BookingController;
 import ui.booking.BookingVM;
 import ui.currentBookingList.CurrentBookingListCtrl;
@@ -34,6 +38,7 @@ public class ViewHandler
   private PropertyListVM propertyListVM;
   private BookingVM bookingVM;
   private ExtendBookingVM extendBookingVM;
+  private AdminBookingHistoryVM adminBookingHistoryVM;
 
   public ViewHandler(ViewModelFactory viewModelFactory)
   {
@@ -41,6 +46,7 @@ public class ViewHandler
     propertyListVM = viewModelFactory.getPropertyListVM();
     bookingVM = viewModelFactory.getBookingVM();
     extendBookingVM = viewModelFactory.getExtendBookingVM();
+    adminBookingHistoryVM = viewModelFactory.getAdminBookingHistoryVM();
     mainStage = new Stage();
   }
 
@@ -69,6 +75,8 @@ public class ViewHandler
         case FUTURE_BOOKINGS -> showFutureBookingsView();
         case EXTEND_BOOKING -> openExtendBookingView();
         case USER_LIST -> showUserListView();
+        case ADMIN_PROPERTY_LIST -> openAdminPropertyListView();
+        case ADMIN_BOOKING_HISTORY -> openAdminBookingView();
       }
     }
     catch (Exception e)
@@ -350,7 +358,39 @@ public class ViewHandler
     mainStage.setScene(userListScene);
   }
 
+  private Scene adminPropertyListScene;
+  public void openAdminPropertyListView() throws Exception
+  {
+    if (adminPropertyListScene == null)
+    {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getClassLoader()
+          .getResource("ui/adminPropertyList/AdminPropertyList.fxml"));
+      Parent root = loader.load();
+      AdminPropertyListCtrl controller = loader.getController();
+      controller.initialize(viewModelFactory.getAdminPropertyListVM(), this);
+      adminPropertyListScene = new Scene(root);
+    }
+    mainStage.setTitle("Admin Property List");
+    mainStage.setScene(adminPropertyListScene);
+  }
 
+  private Scene adminBookingScene;
+  public void openAdminBookingView() throws Exception
+  {
+    if (adminBookingScene == null)
+    {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getClassLoader()
+          .getResource("ui/adminBookingHistory/AdminBookingHistoryView.fxml"));
+      Parent root = loader.load();
+      AdminBookingHistoryCtrl controller = loader.getController();
+      controller.initialize(viewModelFactory.getAdminBookingHistoryVM(), this);
+      adminBookingScene = new Scene(root);
+    }
+    mainStage.setTitle("Admin Booking History");
+    mainStage.setScene(adminBookingScene);
+  }
   // Setters for ViewModels
   public void setDates(Date startDate, Date endDate)
   {
@@ -368,8 +408,13 @@ public class ViewHandler
     extendBookingVM.setBooking(booking);
   }
 
+  public void  setProperty(int propertyId)
+  {
+    adminBookingHistoryVM.setPropertyID(propertyId);
+  }
+
   public enum ViewType
   {
-    WELCOME, REGISTER, LOGIN, PROPERTY_LIST, BOOKING, SPECIFY_DATES, USER_DASHBOARD, ADMIN_DASHBOARD, PAST_BOOKINGS, CURRENT_BOOKINGS, FUTURE_BOOKINGS, EXTEND_BOOKING, USER_LIST
+    WELCOME, REGISTER, LOGIN, PROPERTY_LIST, BOOKING, SPECIFY_DATES, USER_DASHBOARD, ADMIN_DASHBOARD, PAST_BOOKINGS, CURRENT_BOOKINGS, FUTURE_BOOKINGS, EXTEND_BOOKING, USER_LIST, ADMIN_PROPERTY_LIST, ADMIN_BOOKING_HISTORY
   }
 }

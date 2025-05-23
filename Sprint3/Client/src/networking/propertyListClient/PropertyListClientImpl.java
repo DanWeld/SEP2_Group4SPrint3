@@ -19,7 +19,7 @@ public class PropertyListClientImpl implements PropertyListClient,
   private Client client;
   private PropertyChangeSupport support;
 
-  public PropertyListClientImpl(Client client) throws IOException
+  public PropertyListClientImpl(Client client)
   {
     this.client = client;
     support = new PropertyChangeSupport(this);
@@ -27,12 +27,17 @@ public class PropertyListClientImpl implements PropertyListClient,
   }
 
   @Override
-  public void getAvailableProperties(Date startDate, Date endDate) throws IOException
+  public void getAvailableProperties(Date startDate, Date endDate)
   {
     // Dates to a list
     List<Date> dates = List.of(startDate, endDate);
     // Send the request to the server
     client.sendRequest(new Request("property", "readAvailable", dates));
+  }
+
+  @Override public void getAllProperties()
+  {
+    client.sendRequest(new Request("property", "readAll", null));
   }
 
   @Override public void propertyChange(PropertyChangeEvent evt)

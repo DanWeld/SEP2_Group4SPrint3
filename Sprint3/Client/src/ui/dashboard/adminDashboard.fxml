@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.dashboard.AdminDashboardCtrl">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.dashboard.AdminDashboardCtrl">
     <top>
         <VBox alignment="CENTER" prefHeight="100.0" prefWidth="600.0" BorderPane.alignment="CENTER">
             <children>
@@ -34,7 +31,6 @@
                 <Button mnemonicParsing="false" onAction="#onManageProperties" prefHeight="40.0" prefWidth="200.0" text="Manage Properties" />
                 <Button mnemonicParsing="false" onAction="#onManageUsers" prefHeight="40.0" prefWidth="200.0" text="Manage Users" />
                 <Button mnemonicParsing="false" onAction="#onViewBookings" prefHeight="40.0" prefWidth="200.0" text="View All Bookings" />
-                <Button mnemonicParsing="false" onAction="#onViewReports" prefHeight="40.0" prefWidth="200.0" text="View Reports" />
             </children>
             <padding>
                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
