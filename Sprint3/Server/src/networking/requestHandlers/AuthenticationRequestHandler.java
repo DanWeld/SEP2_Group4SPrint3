@@ -41,7 +41,6 @@ public class AuthenticationRequestHandler
     {
       case "login" ->
       {
-        System.out.println(payload);
         LoginRequest request = (LoginRequest) JsonParser.jsonToObject(payload,
             LoginRequest.class);
             authService.authenticate(request.getEmail(), request.getPassword());

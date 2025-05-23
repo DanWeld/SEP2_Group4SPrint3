@@ -33,7 +33,7 @@ public class AdminDashboardCtrl {
     public void onManageUsers() {
         // TODO: Implement user management view
         // For now, just show property list
-        viewHandler.showView(ViewHandler.ViewType.PROPERTY_LIST);
+        viewHandler.showView(ViewHandler.ViewType.USER_LIST);
     }
     
     @FXML

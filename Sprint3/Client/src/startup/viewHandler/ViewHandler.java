@@ -22,6 +22,7 @@ import ui.propertyList.PropertyListController;
 import ui.propertyList.PropertyListVM;
 import ui.register.RegisterCtrl;
 import ui.specifyDates.SpecifyDatesController;
+import ui.userList.UserListCtrl;
 import ui.welcome.FrontViewCtrl;
 
 import java.sql.Date;
@@ -67,6 +68,7 @@ public class ViewHandler
         case CURRENT_BOOKINGS -> showCurrentBookingsView();
         case FUTURE_BOOKINGS -> showFutureBookingsView();
         case EXTEND_BOOKING -> openExtendBookingView();
+        case USER_LIST -> showUserListView();
       }
     }
     catch (Exception e)
@@ -330,6 +332,26 @@ public class ViewHandler
     }
   }
 
+  private Scene userListScene;
+
+  public void showUserListView() throws Exception
+  {
+    if (userListScene == null)
+    {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getClassLoader()
+          .getResource("ui/userList/UserList.fxml"));
+      Parent root = loader.load();
+      UserListCtrl controller = loader.getController();
+      controller.initialize(viewModelFactory.getUserListVM(), this);
+      userListScene = new Scene(root);
+    }
+    mainStage.setTitle("User List");
+    mainStage.setScene(userListScene);
+  }
+
+
+  // Setters for ViewModels
   public void setDates(Date startDate, Date endDate)
   {
     propertyListVM.setDates(startDate, endDate);
@@ -348,6 +370,6 @@ public class ViewHandler
 
   public enum ViewType
   {
-    WELCOME, REGISTER, LOGIN, PROPERTY_LIST, BOOKING, SPECIFY_DATES, USER_DASHBOARD, ADMIN_DASHBOARD, PAST_BOOKINGS, CURRENT_BOOKINGS, FUTURE_BOOKINGS, EXTEND_BOOKING
+    WELCOME, REGISTER, LOGIN, PROPERTY_LIST, BOOKING, SPECIFY_DATES, USER_DASHBOARD, ADMIN_DASHBOARD, PAST_BOOKINGS, CURRENT_BOOKINGS, FUTURE_BOOKINGS, EXTEND_BOOKING, USER_LIST
   }
 }

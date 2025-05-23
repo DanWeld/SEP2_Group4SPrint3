@@ -22,7 +22,7 @@ public class UserRequestHandler
   public UserRequestHandler(UserModel userModel, Logger logger)
   {
     this.userModel = userModel;
-    this.userModel.addPropertyChangeListener(this);
+    userModel.addPropertyChangeListener(this);
     this.logger = logger;
   }
 
@@ -64,8 +64,7 @@ public class UserRequestHandler
   @Override public void propertyChange(PropertyChangeEvent evt)
   {
     String propertyName = evt.getPropertyName();
-    Response response = new Response(evt.getPropertyName(), evt.getNewValue());
-
+    Response response = (Response) evt.getNewValue();
     switch (propertyName)
     {
       case "promoteSuccess":
@@ -107,8 +106,15 @@ public class UserRequestHandler
         out.println(JsonParser.toJson(response));
         out.flush();
         break;
-      case "getAllUsers":
-        logger.log("All users retrieved successfully: ", LogLevel.INFO);
+      case "getAllUsersSuccess":
+        logger.log("All users retrieved successfully: "+ JsonParser.toJson(response), LogLevel.INFO);
+        out.println(JsonParser.toJson(response));
+        out.flush();
+        break;
+      case "getAllUsersFailure":
+        logger.log("Failed to retrieve all users: "
+                + ((ErrorResponse) response.payload()).errorMessage(),
+            LogLevel.ERROR);
         out.println(JsonParser.toJson(response));
         out.flush();
         break;

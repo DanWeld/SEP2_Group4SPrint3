@@ -26,7 +26,7 @@ public class UserServiceImpl
   {
     try
     {
-      userDAO.promoteToAdmin(username);
+      userDAO.promoteToAdmin(username.replace("\"", ""));
       support.firePropertyChange("promoteSuccess", null,
           new Response("SUCCESS", username));
     }
@@ -65,7 +65,7 @@ public class UserServiceImpl
   {
     try
     {
-      userDAO.delete(username);
+      userDAO.delete(username.replace("\"", ""));
       support.firePropertyChange("deleteSuccess", null,
           new Response("SUCCESS", username));
     }

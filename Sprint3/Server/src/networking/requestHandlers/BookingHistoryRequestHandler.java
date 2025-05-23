@@ -51,7 +51,6 @@ public class BookingHistoryRequestHandler
         break;
       case "getFutureBookings":
         bookingHistoryModel.getFutureBookings(payload);
-        System.out.println("Future bookings: " + payload);
         break;
       case "getAllBookings":
         bookingHistoryModel.getAllBookings(Integer.valueOf(payload));
@@ -91,7 +90,6 @@ public class BookingHistoryRequestHandler
       case "futureBookingsSuccess":
         logger.log("Future bookings retrieved successfully", LogLevel.INFO);
         out.println(JsonParser.toJson(response));
-        System.out.println("Future bookings: " + response.payload());
         out.flush();
         break;
       case "futureBookingsFailure":

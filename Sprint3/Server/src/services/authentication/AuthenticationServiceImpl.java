@@ -43,10 +43,8 @@ public class AuthenticationServiceImpl implements AuthenticationService
   {
     // Validate the email
     String emailValidationResult = validateEmail(user.getEmail());
-    System.out.println("emailValidationResult: " + emailValidationResult);
     if (!emailValidationResult.equals("OK"))
     {
-      System.out.println("emailValidationResult: " + emailValidationResult);
       support.firePropertyChange("registerFailure", null,
           new Response("ERROR", new ErrorResponse(emailValidationResult)));
       return;
@@ -54,10 +52,8 @@ public class AuthenticationServiceImpl implements AuthenticationService
 
     // Validate the password
     String passwordValidationResult = validatePassword(user.getPassword());
-    System.out.println("passwordValidationResult: " + passwordValidationResult);
     if (!passwordValidationResult.equals("OK"))
     {
-      System.out.println("passwordValidationResult: " + passwordValidationResult);
       support.firePropertyChange("registerFailure", null,
           new Response("ERROR", new ErrorResponse(passwordValidationResult)));
       return;
@@ -66,20 +62,13 @@ public class AuthenticationServiceImpl implements AuthenticationService
     // take it to the DAO
     try
     {
-      System.out.println(
-          "AuthenticationServiceImpl: User creation: start" + user);
       User newUser = userDAO.create(user.getUsername(), user.getEmail(),
           user.getPassword());
-      System.out.println(
-          "AuthenticationServiceImpl: User created: firing event" + newUser);
       support.firePropertyChange("registerSuccess", null,
           new Response("SUCCESS", newUser));
     }
     catch (SQLException e)
     {
-      System.out.println(
-          "AuthenticationServiceImpl: User creation failed: firing event"
-              + e.getMessage());
       support.firePropertyChange("registerFailure", null,
           new Response("ERROR", new ErrorResponse(e.getMessage())));
     }

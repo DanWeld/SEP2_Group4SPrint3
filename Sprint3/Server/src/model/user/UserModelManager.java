@@ -20,6 +20,7 @@ public class UserModelManager implements UserModel, PropertyChangeListener
     this.customer = customer;
     this.admin = admin;
     this.admin.addPropertyChangeListener(this);
+    this.customer.addPropertyChangeListener(this);
   }
 
   @Override public void promoteToAdmin(String username)

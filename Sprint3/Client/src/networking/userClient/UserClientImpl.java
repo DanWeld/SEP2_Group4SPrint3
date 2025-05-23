@@ -1,6 +1,7 @@
 package networking.userClient;
 
 import dtos.Request;
+import dtos.User;
 import networking.Client;
 
 import java.beans.PropertyChangeEvent;
@@ -17,6 +18,30 @@ public class UserClientImpl implements UserClient, PropertyChangeListener
     this.client = client;
     support = new PropertyChangeSupport(this);
     client.addPropertyChangeListener(this);
+  }
+
+  @Override public void getAllUsers()
+  {
+    Request request = new Request("user", "getAllUsers", null);
+    client.sendRequest(request);
+  }
+
+  @Override public void promoteToAdmin(String username)
+  {
+    Request request = new Request("user", "promote", username);
+    client.sendRequest(request);
+  }
+
+  @Override public void updateUser(User user)
+  {
+    Request request = new Request("user", "update", user);
+    client.sendRequest(request);
+  }
+
+  @Override public void deleteUser(String username)
+  {
+    Request request = new Request("user", "delete", username);
+    client.sendRequest(request);
   }
 
   @Override public void propertyChange(PropertyChangeEvent evt)

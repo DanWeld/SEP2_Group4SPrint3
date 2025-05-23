@@ -4,17 +4,22 @@ import dtos.Property;
 import dtos.User;
 import services.property.PropertyAdminPrivileges;
 
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
-public class AdminPropertyProxy implements PropertyAdminPrivileges
+public class AdminPropertyProxy implements PropertyAdminPrivileges, PropertyChangeListener
 {
   private final PropertyAdminPrivileges realWriter;
   private final User user;
+  private PropertyChangeSupport support;
 
   public AdminPropertyProxy(PropertyAdminPrivileges realWriter, User user)
   {
     this.realWriter = realWriter;
     this.user = user;
+    this.support = new PropertyChangeSupport(this);
+    this.realWriter.addPropertyChangeListener(this);
   }
 
   private void checkAdmin()
@@ -53,5 +58,10 @@ public class AdminPropertyProxy implements PropertyAdminPrivileges
       PropertyChangeListener listener)
   {
     realWriter.addPropertyChangeListener(listener);
+  }
+
+  @Override public void propertyChange(PropertyChangeEvent evt)
+  {
+    support.firePropertyChange(evt);
   }
 }

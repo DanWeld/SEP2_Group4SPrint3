@@ -10,6 +10,7 @@ import ui.login.LoginVM;
 import ui.propertyList.PropertyListVM;
 import ui.register.RegisterVM;
 import ui.specifyDates.SpecifyDatesVM;
+import ui.userList.UserListVM;
 
 /**
  * Factory class for creating view models
@@ -82,5 +83,10 @@ public class ViewModelFactory
   public ExtendBookingVM getExtendBookingVM()
   {
     return extendBookingVM;
+  }
+
+  public UserListVM getUserListVM()
+  {
+    return new UserListVM();
   }
 }
