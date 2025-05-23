@@ -9,7 +9,9 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import dtos.LoginRequest;
 import dtos.User;
+import networking.Client;
 import networking.authClient.Authentication;
+import networking.authClient.AuthenticationImpl;
 import services.UserSession;
 
 import java.beans.PropertyChangeEvent;
@@ -25,9 +27,18 @@ public class LoginVM implements PropertyChangeListener
       false);
   private final Authentication authService;
 
-  public LoginVM(Authentication authService)
+  public LoginVM()
   {
-    this.authService = authService;
+    try
+    {
+      Client client = new Client();
+      authService = new AuthenticationImpl(client);
+      authService.addPropertyChangeListener(this);
+    }
+    catch (Exception e)
+    {
+      throw new RuntimeException(e);
+    }
 
     authService.addPropertyChangeListener(this);
 
@@ -71,42 +82,25 @@ public class LoginVM implements PropertyChangeListener
   {
     String email = emailProp.get();
     String password = pwProp.get();
-
-    new Thread(() -> {
-      // Send login request to server through the authService
-      authService.loginUser(new LoginRequest(email, password));
-    }).start();
+    authService.loginUser(new LoginRequest(email, password));
   }
 
   @Override public void propertyChange(PropertyChangeEvent evt)
   {
-    Platform.runLater(() -> {
-      if (evt.getPropertyName().equals("login")
-          && evt.getNewValue() instanceof User)
+    String eventName = evt.getPropertyName();
+    switch (eventName)
+    {
+      case "login" ->
       {
-        handleLoginResponse((User) evt.getNewValue());
+        loginSuccessfulProp.set(true);
+        msgProp.set("Login successful");
       }
-      else if (evt.getPropertyName().equals("error")
-          && evt.getNewValue() instanceof ErrorResponse)
+      case "error" ->
       {
-        handleErrorResponse((ErrorResponse) evt.getNewValue());
+        ErrorResponse errorResponse = (ErrorResponse) evt.getNewValue();
+        msgProp.set(errorResponse.errorMessage());
+        loginSuccessfulProp.set(false);
       }
-    });
-  }
-
-  private void handleLoginResponse(User newValue)
-  {
-    // Set the user in the session
-    UserSession.getInstance().setCurrentUser(newValue);
-    System.out.println("Login successful: " + newValue.getUsername());
-    loginSuccessfulProp.set(true);
-    msgProp.set("Login successful");
-  }
-
-  private void handleErrorResponse(ErrorResponse errorResponse)
-  {
-    // Handle the error response
-    msgProp.set(errorResponse.errorMessage());
-    loginSuccessfulProp.set(false);
+    }
   }
 }

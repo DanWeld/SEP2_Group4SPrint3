@@ -1,5 +1,7 @@
 package networking.userClient;
 
-public class UserClient
+import observer.PropertyChangeSubject;
+
+public interface UserClient  extends PropertyChangeSubject
 {
 }

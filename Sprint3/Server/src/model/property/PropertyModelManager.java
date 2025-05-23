@@ -25,6 +25,7 @@ public class PropertyModelManager
     this.customer = customer;
     this.admin = admin;
     this.admin.addPropertyChangeListener(this);
+    this.customer.addPropertyChangeListener(this);
   }
 
   public void createProperty(Property p)

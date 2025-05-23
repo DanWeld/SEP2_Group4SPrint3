@@ -2,41 +2,66 @@ package networking.bookingHistoryClient;
 
 import dtos.Booking;
 import dtos.BookingHistory;
+import dtos.Request;
 import networking.Client;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
-public class BookingHistoryClientImpl implements BookingHistoryClient
+public class BookingHistoryClientImpl implements BookingHistoryClient,
+    PropertyChangeListener
 {
   private Client client;
+  private PropertyChangeSupport support;
 
   public BookingHistoryClientImpl(Client client)
   {
     this.client = client;
+    this.client.addPropertyChangeListener(this);
+    support = new PropertyChangeSupport(this);
   }
 
-  @Override public List<BookingHistory> getPastBookings(String username)
-      throws IOException
+  @Override public void getPastBookings(String username)
   {
-    return client.getBookingHistory(username);
+    client.sendRequest(new Request("bookingHistory", "getPastBookings", username));
   }
 
-  @Override public List<BookingHistory> getCurrentBookings(String username)
-      throws IOException
+  @Override public void getCurrentBookings(String username)
   {
-    return client.getCurrentBookings(username);
+    client.sendRequest(new Request("bookingHistory", "getCurrentBookings", username));
   }
 
-  @Override public List<BookingHistory> getFutureBookings(String username)
-      throws IOException
+  @Override public void getFutureBookings(String username)
+
   {
-    return client.getFutureBookings(username);
+    client.sendRequest(new Request("bookingHistory", "getFutureBookings", username));
   }
 
-  @Override public void cancelBooking(BookingHistory booking) throws IOException
+  @Override public void cancelBooking(BookingHistory booking)
   {
-    client.cancelBooking(booking);
+    client.sendRequest(new Request("Booking", "delete", booking));
+  }
+
+  @Override public void extendBooking(BookingHistory bookingHistory)
+  {
+    client.sendRequest(new Request("Booking", "extend", bookingHistory));
+  }
+
+  @Override public void propertyChange(PropertyChangeEvent evt)
+  {
+    support.firePropertyChange(evt);
+  }
+
+  @Override public void addPropertyChangeListener(
+      PropertyChangeListener listener)
+  {
+    support.addPropertyChangeListener(listener);
+  }
+
+  @Override public void removePropertyChangeListener(
+      PropertyChangeListener listener)
+  {
+    support.removePropertyChangeListener(listener);
   }
 }

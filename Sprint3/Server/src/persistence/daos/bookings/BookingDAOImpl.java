@@ -271,7 +271,7 @@ public class BookingDAOImpl implements BookingDAO
     }
   }
 
-  public ArrayList<BookingHistory> readPastBookings(String username)
+  public List<BookingHistory> readPastBookings(String username)
       throws SQLException
   {
     try (Connection connection = getConnection())
@@ -308,7 +308,7 @@ public class BookingDAOImpl implements BookingDAO
     }
   }
 
-  public ArrayList<BookingHistory> readCurrentBookings(String username)
+  public List<BookingHistory> readCurrentBookings(String username)
       throws SQLException
   {
     try (Connection connection = getConnection())
@@ -345,7 +345,7 @@ public class BookingDAOImpl implements BookingDAO
     }
   }
 
-  public ArrayList<BookingHistory> readFutureBookings(String username)
+  public List<BookingHistory> readFutureBookings(String username)
       throws SQLException
   {
     try (Connection connection = getConnection())
@@ -359,12 +359,13 @@ public class BookingDAOImpl implements BookingDAO
 
       // Implement the logic to retrieve booking history from the database
       PreparedStatement statement = connection.prepareStatement(
-          "select * from booking b, property p\n"
-              + "where p.propertyid = b.propertyid and start_date > current_date and b.username = ?;");
+          "SELECT * FROM booking b "
+              + "JOIN property p ON p.propertyid = b.propertyid "
+              + "WHERE b.start_date > CURRENT_DATE AND b.username = ?");
       statement.setString(1, username);
       ResultSet resultSet = statement.executeQuery();
 
-      ArrayList<BookingHistory> bookingHistoryList = new ArrayList<>();
+      List<BookingHistory> bookingHistoryList = new ArrayList<>();
       while (resultSet.next())
       {
         String location = resultSet.getString("location");
@@ -372,11 +373,11 @@ public class BookingDAOImpl implements BookingDAO
         Date endDate = resultSet.getDate("end_date");
         double pricePerNight = resultSet.getDouble("pricepernight");
         int propertyId = resultSet.getInt("propertyid");
-
         BookingHistory bookingHistory = new BookingHistory(username, location,
             startDate, endDate, pricePerNight, propertyId);
         bookingHistoryList.add(bookingHistory);
       }
+
       return bookingHistoryList;
     }
   }

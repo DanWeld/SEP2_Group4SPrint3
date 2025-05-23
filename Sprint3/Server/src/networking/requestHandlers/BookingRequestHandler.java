@@ -135,8 +135,7 @@ public class BookingRequestHandler
       }
       case "bookingDeletionSuccess":
       {
-        logger.log("Booking deleted successfully by: "
-            + ((Booking) response.payload()).getUsername(), LogLevel.INFO);
+        logger.log("Booking deleted successfully" , LogLevel.INFO);
         out.println(JsonParser.toJson(response));
         out.flush();
         break;

@@ -1,35 +1,57 @@
 package networking.bookingClient;
 
+import dtos.Booking;
 import dtos.Request;
 import networking.Client;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.sql.Date;
 
-public class BookingClientImpl implements BookingClient
+public class BookingClientImpl implements BookingClient, PropertyChangeListener
 {
   private Client client;
+  private final PropertyChangeSupport support;
 
   public BookingClientImpl(Client client)
   {
     this.client = client;
+    client.addPropertyChangeListener(this);
+    support = new PropertyChangeSupport(this);
   }
 
-  @Override public void createBooking(int propertyID, Date startDate,
-      Date endDate, String username)
+  @Override public void createBooking(Booking booking)
   {
-    client.createBooking(propertyID, startDate, endDate, username);
+    client.sendRequest(new Request("Booking", "create", booking));
   }
 
-  @Override public void isAvailable(Date startDate, Date endDate, int id)
+  @Override public void isAvailable(Booking booking)
   {
-    client.getIsAvailable(startDate, endDate, id);
+    client.sendRequest(
+        new Request("Booking", "isAvailable", booking));
   }
 
-  @Override public boolean extendBooking(int propertyId, Date currentEndDate,
-      Date date, String username)
+  @Override public void extendBooking(Booking booking)
   {
      client.sendRequest(
-        new Request("booking", "extendBooking", date));
-    return false;
+        new Request("booking", "extendBooking", booking));
+  }
+
+  @Override public void propertyChange(PropertyChangeEvent evt)
+  {
+    support.firePropertyChange(evt);
+  }
+
+  @Override public void addPropertyChangeListener(
+      PropertyChangeListener listener)
+  {
+    support.addPropertyChangeListener(listener);
+  }
+
+  @Override public void removePropertyChangeListener(
+      PropertyChangeListener listener)
+  {
+    support.removePropertyChangeListener(listener);
   }
 }

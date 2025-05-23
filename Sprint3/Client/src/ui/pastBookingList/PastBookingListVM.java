@@ -8,11 +8,14 @@ import networking.Client;
 import networking.bookingHistoryClient.BookingHistoryClient;
 import networking.bookingHistoryClient.BookingHistoryClientImpl;
 import services.UserSession;
+import utils.JsonParser;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.List;
 
-public class PastBookingListVM
+public class PastBookingListVM implements PropertyChangeListener
 {
   private ObservableList<BookingHistory> bookings;
   private User user;
@@ -34,29 +37,32 @@ public class PastBookingListVM
 
   public ObservableList<BookingHistory> getBookingHistory()
   {
-    new Thread(() -> {
-      try
-      {
-        List<BookingHistory> list = bookingHistoryClient.getPastBookings(getUser());
-        javafx.application.Platform.runLater(() -> {
-          bookings.setAll(list);
-        });
-      }
-      catch (IOException e)
-      {
-        javafx.application.Platform.runLater(() -> {
-          System.out.println("Failed: " + e.getMessage());
-        });
-      }
-    }).start();
+    bookingHistoryClient.getPastBookings(getUser());
     return bookings;
   }
 
-  private String getUser() {
+  private String getUser()
+  {
     User currentUser = UserSession.getInstance().getCurrentUser();
-    if (currentUser == null) {
+    if (currentUser == null)
+    {
       throw new IllegalStateException("User not logged in");
     }
     return currentUser.getUsername();
+  }
+
+  @Override public void propertyChange(PropertyChangeEvent evt)
+  {
+    if (evt.getPropertyName().equals("pastBookings"))
+    {
+      List<BookingHistory> bookingHistoryList = JsonParser.toList(
+          evt.getNewValue(), BookingHistory[].class);
+      bookings.clear();
+      bookings.addAll(bookingHistoryList);
+    }
+    else if (evt.getPropertyName().equals("error"))
+    {
+      System.out.println("Error: " + evt.getNewValue());
+    }
   }
 }

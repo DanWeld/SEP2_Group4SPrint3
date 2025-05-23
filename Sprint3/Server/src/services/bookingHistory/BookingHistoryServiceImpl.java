@@ -24,7 +24,7 @@ public class BookingHistoryServiceImpl implements BookingHistoryCustomerPrivileg
   {
     try
     {
-      List<BookingHistory> list = bookingDAO.readPastBookings(username);
+      List<BookingHistory> list = bookingDAO.readPastBookings(username.replace("\"", ""));
       Response response = new Response("SUCCESS", list);
       propertyChangeSupport.firePropertyChange("pastBookingsSuccess", null,
           response);
@@ -42,7 +42,7 @@ public class BookingHistoryServiceImpl implements BookingHistoryCustomerPrivileg
   {
     try
     {
-      List<BookingHistory> list = bookingDAO.readCurrentBookings(username);
+      List<BookingHistory> list = bookingDAO.readCurrentBookings(username.replace("\"", ""));
       Response response = new Response("SUCCESS", list);
       propertyChangeSupport.firePropertyChange("currentBookingsSuccess", null,
           response);
@@ -60,7 +60,7 @@ public class BookingHistoryServiceImpl implements BookingHistoryCustomerPrivileg
   {
     try
     {
-      List<BookingHistory> list = bookingDAO.readFutureBookings(username);
+      List<BookingHistory> list = bookingDAO.readFutureBookings(username.replace("\"", ""));
       Response response = new Response("SUCCESS", list);
       propertyChangeSupport.firePropertyChange("futureBookingsSuccess", null,
           response);

@@ -19,6 +19,21 @@ public class Booking
     this.bookingDate = bookingDate;
   }
 
+  public Booking(Date startDate, Date endDate, int propertyId, String username)
+  {
+    this.startDate = startDate;
+    this.endDate = endDate;
+    this.propertyId = propertyId;
+    this.username = username;
+  }
+
+  public Booking(Date startDate, Date endDate, int propertyId)
+  {
+    this.startDate = startDate;
+    this.endDate = endDate;
+    this.propertyId = propertyId;
+  }
+
   public Date getBookingDate()
   {
     return bookingDate;

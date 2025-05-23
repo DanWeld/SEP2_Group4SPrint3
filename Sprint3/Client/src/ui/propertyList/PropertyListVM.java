@@ -7,11 +7,13 @@ import dtos.Property;
 import networking.Client;
 import networking.propertyListClient.PropertyListClient;
 import networking.propertyListClient.PropertyListClientImpl;
+import utils.JsonParser;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.sql.Date;
+import java.util.List;
 
 /**
  * ViewModel for the PropertyList view.
@@ -57,7 +59,7 @@ public class PropertyListVM implements PropertyChangeListener
    * Sets the start and end dates for the property list.
    *
    * @param startDate The start date for the property list.
-   * @param endDate The end date for the property list.
+   * @param endDate   The end date for the property list.
    */
   public void setDates(Date startDate, Date endDate)
   {
@@ -79,17 +81,8 @@ public class PropertyListVM implements PropertyChangeListener
   }
 
   /**
-   * Gets the property ID.
-   *
-   * @return An IntegerProperty.
-   */
-  public IntegerProperty getSelectedIndexProperty()
-  {
-    return propertyID;
-  }
-
-  /**
    * Binds the selected property from the table to the View.
+   *
    * @param selectedPropertyFromTable The selected property from the table.
    */
   public void bindSelectedProperty(
@@ -105,29 +98,44 @@ public class PropertyListVM implements PropertyChangeListener
    */
   public SimpleObjectProperty<Property> getSelectedProperty()
   {
-    errorMsg.set("");
-    if (selectedProperty.getValue() == null)
-    {
-      errorMsg.set("No property selected");
-    }
     return selectedProperty;
   }
 
-  public StringProperty getErrorMsgProperty()
+  public StringProperty errorMsgProperty()
   {
     return errorMsg;
   }
 
   @Override public void propertyChange(PropertyChangeEvent evt)
   {
-    if (evt.getPropertyName().equals("getAllProperties"))
+    switch (evt.getPropertyName())
     {
+      case "getAllProperties":
+        // Convert the payload to a list of properties
+        List<Property> propertyArray = JsonParser.toList(evt.getNewValue(), Property[].class);
+        properties.clear();
+        for (Property property : propertyArray)
+        {
+          properties.add(property);
+        }
+        break;
+      case "readAvailable":
+        // Convert the payload to a list of properties
+        List<Property> availableProperties = JsonParser.toList(evt.getNewValue(), Property[].class);
+        properties.clear();
+        properties.addAll(availableProperties);
+        break;
 
-    }
+      case "getPropertyByID":
+        // Convert the payload to a property
+        Property property = (Property) evt.getNewValue();
+        properties.clear();
+        properties.add(property);
+        break;
 
-    else if (evt.getPropertyName().equals("getPropertyByID"))
-    {
-
+      case "error":
+        errorMsg.set((String) evt.getNewValue());
+        break;
     }
   }
 }

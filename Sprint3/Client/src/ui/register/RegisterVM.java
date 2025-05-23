@@ -5,7 +5,9 @@ import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.beans.property.*;
 import dtos.User;
+import networking.Client;
 import networking.authClient.Authentication;
+import networking.authClient.AuthenticationImpl;
 import services.UserSession;
 
 import java.beans.PropertyChangeEvent;
@@ -24,10 +26,18 @@ public class RegisterVM implements PropertyChangeListener
       false);
   private final Authentication authService;
 
-  public RegisterVM(Authentication authService)
+  public RegisterVM()
   {
-    this.authService = authService;
-    authService.addPropertyChangeListener(this);
+    try
+    {
+      Client client = new Client();
+      authService = new AuthenticationImpl(client);
+      authService.addPropertyChangeListener(this);
+    }
+    catch (Exception e)
+    {
+      throw new RuntimeException(e);
+    }
 
     usernameProp.addListener(this::updateRegisterButtonState);
     emailProp.addListener(this::updateRegisterButtonState);
@@ -87,44 +97,27 @@ public class RegisterVM implements PropertyChangeListener
     String email = emailProp.get();
     String password = pwProp.get();
 
-    new Thread(() -> authService.registerUser(
-        // Create a new User object with the provided username, email, and password
-        new User(username, email, password))).start();
-    System.out.println(
-        "RegisterVM: register called with username: " + username + ", email: "
-            + email + ", password: " + password);
+    authService.registerUser(new User(username, email, password));
   }
 
   @Override public void propertyChange(PropertyChangeEvent evt)
   {
-    Platform.runLater(() -> {
-      if (evt.getPropertyName().equals("register"))
+    String evtName = evt.getPropertyName();
+    switch (evtName)
+    {
+      case "register":
       {
-        handleRegisterResponse((User) evt.getNewValue());
+        msgProp.set("Registration successful");
+        registrationSuccessfulProp.set(true);
+        break;
       }
-      else if (evt.getPropertyName().equals("error"))
+      case "error":
       {
-        handleErrorResponse((ErrorResponse) evt.getNewValue());
+        ErrorResponse errorResponse = (ErrorResponse) evt.getNewValue();
+        msgProp.set(errorResponse.errorMessage());
+        registrationSuccessfulProp.set(false);
+        break;
       }
-    });
-  }
-
-  private void handleRegisterResponse(User newValue)
-  {
-    // Handle the successful registration response
-    msgProp.set("Registration successful");
-    UserSession.getInstance().setCurrentUser(newValue);
-    registrationSuccessfulProp.set(true);
-  }
-
-  private void handleErrorResponse(ErrorResponse newValue)
-  {
-    Platform.runLater(() -> {
-      // Handle the error response
-      msgProp.set(newValue.errorMessage());
-      System.out.println(
-          "RegisterVM: error event received" + newValue.errorMessage());
-      registrationSuccessfulProp.set(false);
-    });
+    }
   }
 }

@@ -17,10 +17,10 @@ public interface BookingDAO
   void delete(Date startDate, int propertyId, String username) throws SQLException;
   List<BookingHistory> getAllBookingsByProperty(int propertyId) throws SQLException;
   boolean isAvailable(Date startDate, Date endDate, int id) throws SQLException;
-  ArrayList<BookingHistory> readPastBookings(String username) throws
+  List<BookingHistory> readPastBookings(String username) throws
       SQLException;
-  ArrayList<BookingHistory> readCurrentBookings(String username) throws
+  List<BookingHistory> readCurrentBookings(String username) throws
       SQLException;
-  ArrayList<BookingHistory> readFutureBookings(String username) throws
+  List<BookingHistory> readFutureBookings(String username) throws
       SQLException;
 }

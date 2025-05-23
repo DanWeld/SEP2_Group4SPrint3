@@ -27,6 +27,7 @@ public class BookingHistoryModelManager implements BookingHistoryModel,
     this.admin = admin;
     this.customer = customer;
     this.admin.addPropertyChangeListener(this);
+    this.customer.addPropertyChangeListener(this);
   }
 
   @Override

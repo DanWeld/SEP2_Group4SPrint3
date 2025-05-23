@@ -44,7 +44,7 @@ public class PropertyListController
    * This method is called by the JavaFX framework to initialize the controller.
    *
    * @param propertyListVM The ViewModel for the PropertyList view.
-   * @param viewHandler The ViewHandler for handling view changes.
+   * @param viewHandler    The ViewHandler for handling view changes.
    */
   public void initialize(PropertyListVM propertyListVM, ViewHandler viewHandler)
   {
@@ -69,12 +69,19 @@ public class PropertyListController
     facilitiesColumn.setCellValueFactory(data -> new SimpleStringProperty(
         data.getValue().facilities().toString()));
 
-    // Bind the selected property to the ViewModel
+    // Bind the selected property
+    selectedProperty = propertyListVM.getSelectedProperty();
     propertyListVM.bindSelectedProperty(
         table.getSelectionModel().selectedItemProperty());
 
     // Bind the error message to the ViewModel
-    errorMsg.textProperty().bind(propertyListVM.getErrorMsgProperty());
+    errorMsg.textProperty().bind(propertyListVM.errorMsgProperty());
+
+    selectedProperty.addListener((obs, oldVal, newVal) -> {
+      if (newVal != null) {
+        propertyListVM.errorMsgProperty().set("");
+      }
+    });
   }
 
   /**
@@ -85,6 +92,11 @@ public class PropertyListController
    */
   public void onSelectProperty() throws Exception
   {
+    if (selectedProperty.getValue() == null) {
+      propertyListVM.errorMsgProperty().set("No property selected");
+      return;
+    }
+    viewHandler.setProperty(selectedProperty.getValue());
     viewHandler.showView(ViewHandler.ViewType.BOOKING);
   }
 

@@ -27,7 +27,12 @@
                              prefWidth="110.39998168945311" text="Price"/>
             </columns>
         </TableView>
+<!--        message label-->
+        <Label fx:id="messageLabel" layoutX="47.0" layoutY="349.0"
+               text="No current bookings"/>
         <Button fx:id="backButton" layoutX="294.0" layoutY="349.0"
                 mnemonicParsing="false" text="Back" onAction="#onBackButton"/>
+        <Button fx:id="extendBooking" layoutX="394.0" layoutY="349.0"
+                mnemonicParsing="false" text="Extend" onAction="#onExtendBooking"/>
     </children>
 </AnchorPane>

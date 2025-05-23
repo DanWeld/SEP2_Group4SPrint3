@@ -1,10 +1,13 @@
 package networking.bookingClient;
 
+import dtos.Booking;
+import observer.PropertyChangeSubject;
+
 import java.sql.Date;
 
-public interface BookingClient
+public interface BookingClient extends PropertyChangeSubject
 {
-  void createBooking(int propertyID, Date startDate, Date endDate, String username) throws Exception;
-  void isAvailable(Date startDate, Date endDate, int id) throws Exception;
-  boolean extendBooking(int propertyId, Date currentEndDate, Date date, String username);
+  void createBooking(Booking booking);
+  void isAvailable(Booking booking);
+  void extendBooking(Booking booking);
 }

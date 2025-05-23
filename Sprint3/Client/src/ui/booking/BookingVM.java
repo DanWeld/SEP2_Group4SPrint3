@@ -3,6 +3,7 @@ package ui.booking;
 import dtos.Booking;
 import dtos.Property;
 import dtos.User;
+import javafx.beans.WeakListener;
 import javafx.beans.property.*;
 import networking.Client;
 import networking.bookingClient.BookingClient;
@@ -10,6 +11,7 @@ import networking.bookingClient.BookingClientImpl;
 import networking.propertyListClient.PropertyListClient;
 import networking.propertyListClient.PropertyListClientImpl;
 import services.UserSession;
+import utils.JsonParser;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -47,7 +49,7 @@ public class BookingVM implements PropertyChangeListener
     {
       Client client = new Client();
       bookingClient = new BookingClientImpl(client);
-      client.addPropertyChangeListener(this);
+      bookingClient.addPropertyChangeListener(this);
     }
     catch (IOException e)
     {
@@ -64,18 +66,15 @@ public class BookingVM implements PropertyChangeListener
 
     // Initially disable submit button
     submitButtonDisabled.set(false);
-
-    // set user from session
-    user = UserSession.getInstance().getCurrentUser();
   }
 
-  public void updateProperty(Property property)
+  public void setProperty(Property property)
   {
     this.property = property;
-    propertyID.set(property.id());
     location.set(property.location());
-    propertyFacilities.set(property.facilities().toString());
     pricePerNight.set(property.pricePerNight());
+    propertyFacilities.set(property.facilities().toString());
+    propertyID.set(property.id());
   }
 
   public void setDates(Date start, Date end)
@@ -109,8 +108,9 @@ public class BookingVM implements PropertyChangeListener
     // Call server to check availability
     try
     {
-      bookingClient.isAvailable(startDate.get(), changeEndDate.get(),
+      Booking booking = new Booking(startDate.get(), changeEndDate.get(),
           propertyID.get());
+      bookingClient.isAvailable(booking);
     }
     catch (Exception e)
     {
@@ -120,17 +120,17 @@ public class BookingVM implements PropertyChangeListener
 
   public void createBooking()
   {
-    try
-    {
-      bookingClient.createBooking(propertyID.get(), startDate.get(),
-          endDate.get(), user.getUsername());
-      errorMsg.set("Booking successful from " + startDate.get() + " to "
-          + endDate.get());
+    // Get the current user
+    user = UserSession.getInstance().getCurrentUser();
+    if (user == null) {
+      errorMsg.set("Please log in to book a property.");
+      submitButtonDisabled.set(true);
+      return;
     }
-    catch (Exception e)
-    {
-      errorMsg.set("Booking failed: " + e.getMessage());
-    }
+
+    Booking booking = new Booking(startDate.get(), endDate.get(),
+        propertyID.get(), user.getUsername());
+    bookingClient.createBooking(booking);
   }
 
   @Override public void propertyChange(PropertyChangeEvent evt)
@@ -139,8 +139,7 @@ public class BookingVM implements PropertyChangeListener
     {
       case "isAvailable" ->
       {
-        String result = (String) evt.getNewValue();
-        boolean isAvailable = Boolean.parseBoolean(result);
+        boolean isAvailable = (boolean) evt.getNewValue();
         availability.set(isAvailable ? "Available" : "Not Available");
         submitButtonDisabled.set(!isAvailable);
 
@@ -149,14 +148,13 @@ public class BookingVM implements PropertyChangeListener
           endDate.set(changeEndDate.get());
         }
       }
-
-      case "bookingCreated" ->
+      case "create" ->
       {
-        Booking booking = (Booking) evt.getNewValue();
+        Booking booking = JsonParser.convertPayload(evt.getNewValue(),
+            Booking.class);
         errorMsg.set("Booking created from " + booking.getStartDate() + " to "
             + booking.getEndDate());
       }
-
       case "error" ->
       {
         errorMsg.set((String) evt.getNewValue());

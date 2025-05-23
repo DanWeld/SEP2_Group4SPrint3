@@ -3,6 +3,7 @@ package startup;
 import networking.authClient.Authentication;
 import ui.booking.BookingVM;
 import ui.currentBookingList.CurrentBookingListVM;
+import ui.extendBooking.ExtendBookingVM;
 import ui.futureBookingList.FutureBookingListVM;
 import ui.pastBookingList.PastBookingListVM;
 import ui.login.LoginVM;
@@ -23,17 +24,19 @@ public class ViewModelFactory
   private final PastBookingListVM pastBookingListVM;
   private final CurrentBookingListVM currentBookingListVM;
   private final FutureBookingListVM futureBookingListVM;
+  private final ExtendBookingVM extendBookingVM;
 
   public ViewModelFactory(Authentication authService)
   {
-    loginVM = new LoginVM(authService);
-    registerVM = new RegisterVM(authService);
+    loginVM = new LoginVM();
+    registerVM = new RegisterVM();
     specifyDatesVM = new SpecifyDatesVM();
     propertyListVM = new PropertyListVM();
     bookingVM = new BookingVM();
     pastBookingListVM = new PastBookingListVM();
     currentBookingListVM = new CurrentBookingListVM();
     futureBookingListVM = new FutureBookingListVM();
+    extendBookingVM = new ExtendBookingVM();
   }
 
   public LoginVM getLoginVM()
@@ -74,5 +77,10 @@ public class ViewModelFactory
   public FutureBookingListVM getFutureBookingListVM()
   {
     return futureBookingListVM;
+  }
+
+  public ExtendBookingVM getExtendBookingVM()
+  {
+    return extendBookingVM;
   }
 }

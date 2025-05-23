@@ -100,7 +100,7 @@ public class PropertyServiceImpl implements PropertyService,
   @Override public void getAvailableProperties(Date startDate, Date endDate)
   {
     // Fetch available properties from the database
-    List<Property> properties = new ArrayList<>();
+    List<Property> properties;
     try
     {
       properties = propertyDAO.getAvailableProperties(startDate, endDate);
@@ -112,11 +112,7 @@ public class PropertyServiceImpl implements PropertyService,
       ErrorResponse errorResponse = new ErrorResponse(e.getMessage());
       support.firePropertyChange("availablePropertiesFailure", null,
           new Response("ERROR", errorResponse));
-      return;
     }
-
-    // Update the property list with the fetched properties
-    properties = new ArrayList<>(properties);
   }
 
   @Override public void addPropertyChangeListener(

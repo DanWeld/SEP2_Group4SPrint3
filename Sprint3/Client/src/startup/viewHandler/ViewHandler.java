@@ -1,5 +1,7 @@
 package startup.viewHandler;
 
+import dtos.Booking;
+import dtos.BookingHistory;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -9,48 +11,35 @@ import startup.ViewModelFactory;
 import ui.booking.BookingController;
 import ui.booking.BookingVM;
 import ui.currentBookingList.CurrentBookingListCtrl;
-import ui.currentBookingList.CurrentBookingListVM;
+
+import ui.extendBooking.ExtendBookingVM;
 import ui.futureBookingList.FutureBookingListCtrl;
-import ui.futureBookingList.FutureBookingListVM;
 import ui.pastBookingList.PastBookingListCtrl;
-import ui.pastBookingList.PastBookingListVM;
 import ui.dashboard.AdminDashboardCtrl;
 import ui.dashboard.UserDashboardCtrl;
 import ui.login.LoginCtrl;
-import ui.login.LoginVM;
 import ui.propertyList.PropertyListController;
 import ui.propertyList.PropertyListVM;
 import ui.register.RegisterCtrl;
-import ui.register.RegisterVM;
 import ui.specifyDates.SpecifyDatesController;
-import ui.specifyDates.SpecifyDatesVM;
 import ui.welcome.FrontViewCtrl;
 
 import java.sql.Date;
 
 public class ViewHandler
 {
-  private final SpecifyDatesVM specifyDatesVM;
-  private final PropertyListVM propertyListVM;
-  private final BookingVM bookingVM;
-  private final RegisterVM registerVM;
-  private final PastBookingListVM pastBookingListVM;
-  private final CurrentBookingListVM currentBookingListVM;
-  private final FutureBookingListVM futureBookingListVM;
-  private final LoginVM loginVM;
   private final Stage mainStage;
+  private final ViewModelFactory viewModelFactory;
+  private PropertyListVM propertyListVM;
+  private BookingVM bookingVM;
+  private ExtendBookingVM extendBookingVM;
 
   public ViewHandler(ViewModelFactory viewModelFactory)
   {
-    specifyDatesVM = viewModelFactory.getSpecifyDatesVM();
+    this.viewModelFactory = viewModelFactory;
     propertyListVM = viewModelFactory.getPropertyListVM();
     bookingVM = viewModelFactory.getBookingVM();
-    registerVM = viewModelFactory.getRegisterVM();
-    loginVM = viewModelFactory.getLoginVM();
-    pastBookingListVM = viewModelFactory.getBookingHistoryVM();
-    currentBookingListVM = viewModelFactory.getCurrentBookingListVM();
-    futureBookingListVM = viewModelFactory.getFutureBookingListVM();
-
+    extendBookingVM = viewModelFactory.getExtendBookingVM();
     mainStage = new Stage();
   }
 
@@ -70,14 +59,14 @@ public class ViewHandler
         case REGISTER -> showRegisterView();
         case LOGIN -> showLoginView();
         case PROPERTY_LIST -> openPropertyListView();
-        case BOOKING ->
-            openBookingView(propertyListVM.getSelectedProperty().get());
+        case BOOKING -> openBookingView();
         case SPECIFY_DATES -> openSpecifyDatesView();
         case USER_DASHBOARD -> showUserDashboardView();
         case ADMIN_DASHBOARD -> showAdminDashboardView();
         case PAST_BOOKINGS -> showPastBookingsView();
         case CURRENT_BOOKINGS -> showCurrentBookingsView();
         case FUTURE_BOOKINGS -> showFutureBookingsView();
+        case EXTEND_BOOKING -> openExtendBookingView();
       }
     }
     catch (Exception e)
@@ -115,7 +104,7 @@ public class ViewHandler
           .getResource("ui/register/RegisterView.fxml"));
       Parent root = loader.load();
       RegisterCtrl registerController = loader.getController();
-      registerController.initialize(registerVM, this);
+      registerController.initialize(viewModelFactory.getRegisterVM(), this);
       registerScene = new Scene(root);
     }
     mainStage.setTitle("Register");
@@ -133,7 +122,7 @@ public class ViewHandler
           getClass().getClassLoader().getResource("ui/login/LoginView.fxml"));
       Parent root = loader.load();
       LoginCtrl loginController = loader.getController();
-      loginController.initialize(loginVM, this);
+      loginController.initialize(viewModelFactory.getLoginVM(), this);
       loginScene = new Scene(root);
     }
     mainStage.setTitle("Login");
@@ -153,7 +142,8 @@ public class ViewHandler
             .getResource("ui/specifyDates/SpecifyDates.fxml"));
         Parent root = loader.load();
         SpecifyDatesController specifyDatesController = loader.getController();
-        specifyDatesController.initialize(specifyDatesVM, this);
+        specifyDatesController.initialize(viewModelFactory.getSpecifyDatesVM(),
+            this);
         specifyDatesScene = new Scene(root);
       }
       mainStage.setTitle("Specify Dates");
@@ -163,12 +153,6 @@ public class ViewHandler
     {
       e.printStackTrace();
     }
-  }
-
-  public void setDates(Date startDate, Date endDate)
-  {
-    propertyListVM.setDates(startDate, endDate);
-    bookingVM.setDates(startDate, endDate);
   }
 
   private Scene propertyListScene;
@@ -184,7 +168,8 @@ public class ViewHandler
             .getResource("ui/propertyList/PropertyList.fxml"));
         Parent root = loader.load();
         PropertyListController propertyListController = loader.getController();
-        propertyListController.initialize(propertyListVM, this);
+        propertyListController.initialize(viewModelFactory.getPropertyListVM(),
+            this);
         propertyListScene = new Scene(root);
       }
       mainStage.setTitle("Property List");
@@ -198,9 +183,8 @@ public class ViewHandler
 
   private Scene bookingScene;
 
-  public void openBookingView(Property property) throws Exception
+  public void openBookingView() throws Exception
   {
-    bookingVM.updateProperty(property);
     try
     {
       if (bookingScene == null)
@@ -211,7 +195,7 @@ public class ViewHandler
         Parent root = loader.load();
         BookingController bookingController = loader.getController();
 
-        bookingController.initialize(bookingVM, this);
+        bookingController.initialize(viewModelFactory.getBookingVM(), this);
         bookingScene = new Scene(root);
       }
       mainStage.setTitle("Booking");
@@ -270,7 +254,7 @@ public class ViewHandler
           .getResource("ui/pastBookingList/PastBookingList.fxml"));
       Parent root = loader.load();
       PastBookingListCtrl controller = loader.getController();
-      controller.initialize(pastBookingListVM, this);
+      controller.initialize(viewModelFactory.getBookingHistoryVM(), this);
       pastBookingsScene = new Scene(root);
     }
     mainStage.setTitle("Booking History");
@@ -288,7 +272,7 @@ public class ViewHandler
           .getResource("ui/currentBookingList/CurrentBookingList.fxml"));
       Parent root = loader.load();
       CurrentBookingListCtrl controller = loader.getController();
-      controller.initialize(currentBookingListVM, this);
+      controller.initialize(viewModelFactory.getCurrentBookingListVM(), this);
       currentBookingsScene = new Scene(root);
     }
     mainStage.setTitle("Booking History");
@@ -306,15 +290,64 @@ public class ViewHandler
           .getResource("ui/futureBookingList/FutureBookingList.fxml"));
       Parent root = loader.load();
       FutureBookingListCtrl controller = loader.getController();
-      controller.initialize(futureBookingListVM, this);
+      controller.initialize(viewModelFactory.getFutureBookingListVM(), this);
       futureBookingsScene = new Scene(root);
     }
     mainStage.setTitle("Booking History");
     mainStage.setScene(futureBookingsScene);
   }
 
+  private Scene extendBookingScene;
+
+  public void openExtendBookingView() throws Exception
+  {
+    if (extendBookingScene == null)
+    {
+      try
+      {
+        // Create a new scene each time to avoid stale data
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getClassLoader()
+            .getResource("ui/extendBooking/ExtendBooking.fxml"));
+        Parent root = loader.load();
+        ui.extendBooking.ExtendBookingCtrl controller = loader.getController();
+
+        // Pass the booking to the controller
+        controller.initialize(viewModelFactory.getExtendBookingVM(), this);
+
+        extendBookingScene = new Scene(root);
+        mainStage.setTitle("Extend Booking");
+        mainStage.setScene(extendBookingScene);
+      }
+      catch (Exception e)
+      {
+        System.err.println(
+            "Error showing extend booking view: " + e.getMessage());
+        e.printStackTrace();
+        // Show a default view or error message
+        showUserDashboardView(); // Fallback to dashboard
+      }
+    }
+  }
+
+  public void setDates(Date startDate, Date endDate)
+  {
+    propertyListVM.setDates(startDate, endDate);
+    bookingVM.setDates(startDate, endDate);
+  }
+
+  public void setProperty(Property property)
+  {
+    bookingVM.setProperty(property);
+  }
+
+  public void setBooking(BookingHistory booking)
+  {
+    extendBookingVM.setBooking(booking);
+  }
+
   public enum ViewType
   {
-    WELCOME, REGISTER, LOGIN, PROPERTY_LIST, BOOKING, SPECIFY_DATES, USER_DASHBOARD, ADMIN_DASHBOARD, PAST_BOOKINGS, CURRENT_BOOKINGS, FUTURE_BOOKINGS
+    WELCOME, REGISTER, LOGIN, PROPERTY_LIST, BOOKING, SPECIFY_DATES, USER_DASHBOARD, ADMIN_DASHBOARD, PAST_BOOKINGS, CURRENT_BOOKINGS, FUTURE_BOOKINGS, EXTEND_BOOKING
   }
 }
