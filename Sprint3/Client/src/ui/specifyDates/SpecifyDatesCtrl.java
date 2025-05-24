@@ -8,7 +8,7 @@ import startup.viewHandler.ViewHandler;
 
 import java.sql.Date;
 
-public class SpecifyDatesController
+public class SpecifyDatesCtrl
 {
   private @FXML DatePicker startDate;
   private @FXML DatePicker endDate;
@@ -19,7 +19,7 @@ public class SpecifyDatesController
   private SpecifyDatesVM specifyDatesVM;
   private ViewHandler viewHandler;
 
-  public SpecifyDatesController()
+  public SpecifyDatesCtrl()
   {
   }
 

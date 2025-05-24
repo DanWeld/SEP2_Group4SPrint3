@@ -1,6 +1,7 @@
 package startup;
 
 import networking.authClient.Authentication;
+import ui.addProperty.AddPropertyVM;
 import ui.adminBookingHistory.AdminBookingHistoryVM;
 import ui.adminPropertyList.AdminPropertyListVM;
 import ui.booking.BookingVM;
@@ -10,6 +11,7 @@ import ui.futureBookingList.FutureBookingListVM;
 import ui.pastBookingList.PastBookingListVM;
 import ui.login.LoginVM;
 import ui.propertyList.PropertyListVM;
+import ui.propertyManagement.PropertyManagementVM;
 import ui.register.RegisterVM;
 import ui.specifyDates.SpecifyDatesVM;
 import ui.userList.UserListVM;
@@ -81,5 +83,15 @@ public class ViewModelFactory
   public AdminBookingHistoryVM getAdminBookingHistoryVM()
   {
     return new AdminBookingHistoryVM();
+  }
+
+  public PropertyManagementVM getPropertyManagementVM()
+  {
+    return new PropertyManagementVM();
+  }
+
+  public AddPropertyVM getAddPropertyVM()
+  {
+    return new AddPropertyVM();
   }
 }

@@ -23,23 +23,18 @@ public class AdminDashboardCtrl {
     }
     
     @FXML
-    public void onManageProperties() {
-        // TODO: Implement property management view
-        // For now, just show property list
-        viewHandler.showView(ViewHandler.ViewType.PROPERTY_LIST);
+    public void onManageProfile() {
+        //Todo: Implement profile management for admin
+        viewHandler.showView(ViewHandler.ViewType.USER_LIST);
     }
     
     @FXML
     public void onManageUsers() {
-        // TODO: Implement user management view
-        // For now, just show property list
         viewHandler.showView(ViewHandler.ViewType.USER_LIST);
     }
     
     @FXML
     public void onViewBookings() {
-        // TODO: Implement bookings view
-        // For now, just show property list
         viewHandler.showView(ViewHandler.ViewType.ADMIN_PROPERTY_LIST);
     }
     

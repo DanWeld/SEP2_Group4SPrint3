@@ -5,14 +5,8 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import startup.viewHandler.ViewHandler;
-
-import java.sql.SQLException;
-
 
 public class AdminPropertyListCtrl
 {
@@ -22,6 +16,9 @@ public class AdminPropertyListCtrl
   @FXML private TableColumn<Property, String> facilityColumn;
   @FXML private Button backButton;
   @FXML private Button refreshButton;
+  @FXML private Button deletePropertyButton;
+  @FXML private Button addPropertyButton;
+  @FXML private Button updatePropertyButton;
   @FXML private Button viewBookingHistoryButton;
   @FXML private Label errorMsg;
 
@@ -58,8 +55,14 @@ public class AdminPropertyListCtrl
     errorMsg.textProperty().bind(adminPropertyListVM.messageProperty());
 
     //disable the viewBookingHistoryButton if no property is selected
-    viewBookingHistoryButton.disableProperty().bind(
-        adminPropertyListVM.getSelectedProperty().isNull());
+    viewBookingHistoryButton.disableProperty()
+        .bind(adminPropertyListVM.getSelectedProperty().isNull());
+    //disable the deletePropertyButton if no property is selected
+    deletePropertyButton.disableProperty()
+        .bind(adminPropertyListVM.getSelectedProperty().isNull());
+    //disable the updatePropertyButton if no property is selected
+    updatePropertyButton.disableProperty()
+        .bind(adminPropertyListVM.getSelectedProperty().isNull());
   }
 
   public void onSelectProperty()
@@ -67,7 +70,7 @@ public class AdminPropertyListCtrl
     ObjectProperty<Property> selected = adminPropertyListVM.getSelectedProperty();
     if (selected != null)
     {
-      viewHandler.setPropertyToAdminBookingHistoryVM(selected.getValue());
+      viewHandler.setPropertyFromAdminPropertyList(selected.getValue());
       viewHandler.showView(ViewHandler.ViewType.ADMIN_BOOKING_HISTORY);
     }
     else
@@ -79,6 +82,31 @@ public class AdminPropertyListCtrl
   public void onRefreshButtonPressed()
   {
     adminPropertyListVM.Refresh();
+  }
+
+  public void onDeleteProperty()
+  {
+    new Alert(Alert.AlertType.CONFIRMATION,
+        "Are you sure you want to delete the selected property?").showAndWait()
+        .ifPresent(response -> {
+          if (response == ButtonType.OK)
+          {
+            adminPropertyListVM.deleteSelectedProperty();
+          }
+        });
+  }
+
+  public void onAddProperty()
+  {
+    viewHandler.showView(ViewHandler.ViewType.ADD_PROPERTY);
+  }
+
+  public void onUpdateProperty()
+  {
+    ObjectProperty<Property> selected = adminPropertyListVM.getSelectedProperty();
+
+    viewHandler.setPropertyFromAdminPropertyList(selected.get());
+    viewHandler.showView(ViewHandler.ViewType.PROPERTY_MANAGEMENT);
   }
 
   public void onBack()

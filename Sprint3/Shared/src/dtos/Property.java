@@ -5,9 +5,7 @@ public class Property
   private int id;
   private String location;
   private double pricePerNight;
-  private boolean availability;
   private Facilities facilities;
-  private String newLocation;
 
   public Property(int id, String location, double pricePerNight,
       Facilities facilities)
@@ -66,16 +64,6 @@ public class Property
   public void setPricePerNight(double v)
   {
     this.pricePerNight = v;
-  }
-
-  public boolean getAvailability()
-  {
-    return true; // Assuming availability is always true for this example
-  }
-
-  public void setAvailability(boolean b)
-  {
-    // Set availability logic here.
   }
 
   public Facilities getFacilities()

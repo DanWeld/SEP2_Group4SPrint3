@@ -1,5 +1,6 @@
 package ui.propertyList;
 
+import dtos.ErrorResponse;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -134,7 +135,8 @@ public class PropertyListVM implements PropertyChangeListener
         break;
 
       case "error":
-        errorMsg.set((String) evt.getNewValue());
+        ErrorResponse errorResponse = (ErrorResponse) evt.getNewValue();
+        errorMsg.set(errorResponse.errorMessage());
         break;
     }
   }

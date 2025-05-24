@@ -6,6 +6,8 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import networking.Client;
+import networking.propertyClient.PropertyClient;
+import networking.propertyClient.PropertyClientImpl;
 import networking.propertyListClient.PropertyListClient;
 import networking.propertyListClient.PropertyListClientImpl;
 import utils.JsonParser;
@@ -28,6 +30,7 @@ public class AdminPropertyListVM implements PropertyChangeListener
   private DoubleProperty selectedPropertyPricePerNight;
   private StringProperty errorMessage;
   private final PropertyListClient propertyListClient;
+  private final PropertyClient propertyClient;
 
   public AdminPropertyListVM()
   {
@@ -35,6 +38,8 @@ public class AdminPropertyListVM implements PropertyChangeListener
     {
       this.propertyListClient = new PropertyListClientImpl(new Client());
       this.propertyListClient.addPropertyChangeListener(this);
+      this.propertyClient = new PropertyClientImpl(new Client());
+      this.propertyClient.addPropertyChangeListener(this);
     }
     catch (IOException e)
     {
@@ -93,6 +98,16 @@ public class AdminPropertyListVM implements PropertyChangeListener
     propertyListClient.getAllProperties();
   }
 
+  public void deleteSelectedProperty()
+  {
+    propertyClient.deleteProperty(selectedPropertyId.get());
+  }
+
+  public void addNewProperty(Property property)
+  {
+    //TODO implement add new property functionality;
+  }
+
   @Override public void propertyChange(PropertyChangeEvent evt)
   {
     switch (evt.getPropertyName())
@@ -102,6 +117,12 @@ public class AdminPropertyListVM implements PropertyChangeListener
         List<Property> propertyList = JsonParser.toList(evt.getNewValue(),
             Property[].class);
         properties.addAll(propertyList);
+        break;
+
+      case "delete":
+        Integer deletedPropertyId = (Integer) evt.getNewValue();
+        properties.removeIf(property -> property.id() == deletedPropertyId);
+        errorMessage.set("Property with ID " + deletedPropertyId + " has been deleted successfully.");
         break;
 
       case "error":

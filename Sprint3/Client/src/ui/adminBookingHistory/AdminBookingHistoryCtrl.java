@@ -1,6 +1,7 @@
 package ui.adminBookingHistory;
 
 import dtos.BookingHistory;
+import dtos.Property;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -32,10 +33,12 @@ public class AdminBookingHistoryCtrl
   }
 
   public void initialize(AdminBookingHistoryVM viewModel,
-      ViewHandler viewHandler)
+      ViewHandler viewHandler, Property property)
   {
     this.adminBookingHistoryVM = viewModel;
     this.viewHandler = viewHandler;
+
+    viewModel.setProperty(property);
 
     //binding table view
     tableView.setItems(

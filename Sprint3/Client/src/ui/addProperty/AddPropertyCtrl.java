@@ -1,11 +1,11 @@
-package ui.propertyManagement;
+package ui.addProperty;
 
 import dtos.Property;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import startup.viewHandler.ViewHandler;
 
-public class PropertyManagementCtrl
+public class AddPropertyCtrl
 {
   @FXML public TextField locationTextField;
   @FXML public TextField pricePerNightTextField;
@@ -18,13 +18,13 @@ public class PropertyManagementCtrl
   @FXML public Button backButton;
   @FXML public Button saveButton;
 
-  private PropertyManagementVM propertyManagementVM;
+  private AddPropertyVM propertyManagementVM;
   private ViewHandler viewHandler;
 
   /**
    * Constructor for PropertyListController.
    */
-  public PropertyManagementCtrl()
+  public AddPropertyCtrl()
   {
   }
 
@@ -35,8 +35,8 @@ public class PropertyManagementCtrl
    * @param propertyManagementVM The ViewModel for the PropertyList view.
    * @param viewHandler          The ViewHandler for handling view changes.
    */
-  public void initialize(PropertyManagementVM propertyManagementVM,
-      ViewHandler viewHandler, Property property)
+  public void initialize(AddPropertyVM propertyManagementVM,
+      ViewHandler viewHandler)
   {
     this.propertyManagementVM = propertyManagementVM;
     this.viewHandler = viewHandler;
@@ -59,12 +59,6 @@ public class PropertyManagementCtrl
     messageLabel.textProperty().bind(propertyManagementVM.messageProperty());
     saveButton.disableProperty()
         .bind(propertyManagementVM.saveDisabledProperty());
-
-    // Set the property if provided
-    if (property != null)
-    {
-      propertyManagementVM.setProperty(property);
-    }
   }
 
   /**

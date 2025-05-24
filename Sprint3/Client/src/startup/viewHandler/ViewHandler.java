@@ -22,8 +22,9 @@ import ui.dashboard.UserDashboardCtrl;
 import ui.login.LoginCtrl;
 import ui.propertyList.PropertyListController;
 import ui.propertyList.PropertyListVM;
+import ui.propertyManagement.PropertyManagementVM;
 import ui.register.RegisterCtrl;
-import ui.specifyDates.SpecifyDatesController;
+import ui.specifyDates.SpecifyDatesCtrl;
 import ui.userList.UserListCtrl;
 import ui.welcome.FrontViewCtrl;
 
@@ -37,6 +38,8 @@ public class ViewHandler
   private BookingVM bookingVM;
   private ExtendBookingVM extendBookingVM;
   private AdminBookingHistoryVM adminBookingHistoryVM;
+  private Property property;
+  private PropertyManagementVM propertyManagementVM;
 
   public ViewHandler(ViewModelFactory viewModelFactory)
   {
@@ -45,6 +48,7 @@ public class ViewHandler
     bookingVM = viewModelFactory.getBookingVM();
     extendBookingVM = viewModelFactory.getExtendBookingVM();
     adminBookingHistoryVM = viewModelFactory.getAdminBookingHistoryVM();
+    propertyManagementVM = viewModelFactory.getPropertyManagementVM();
     mainStage = new Stage();
   }
 
@@ -75,6 +79,7 @@ public class ViewHandler
         case USER_LIST -> showUserListView();
         case ADMIN_PROPERTY_LIST -> openAdminPropertyListView();
         case ADMIN_BOOKING_HISTORY -> openAdminBookingView();
+        case PROPERTY_MANAGEMENT -> openPropertyManagementView();
       }
     }
     catch (Exception e)
@@ -149,9 +154,8 @@ public class ViewHandler
         loader.setLocation(getClass().getClassLoader()
             .getResource("ui/specifyDates/SpecifyDates.fxml"));
         Parent root = loader.load();
-        SpecifyDatesController specifyDatesController = loader.getController();
-        specifyDatesController.initialize(viewModelFactory.getSpecifyDatesVM(),
-            this);
+        SpecifyDatesCtrl specifyDatesCtrl = loader.getController();
+        specifyDatesCtrl.initialize(viewModelFactory.getSpecifyDatesVM(), this);
         specifyDatesScene = new Scene(root);
       }
       mainStage.setTitle("Specify Dates");
@@ -385,11 +389,60 @@ public class ViewHandler
           .getResource("ui/adminBookingHistory/AdminBookingHistory.fxml"));
       Parent root = loader.load();
       AdminBookingHistoryCtrl controller = loader.getController();
-      controller.initialize(viewModelFactory.getAdminBookingHistoryVM(), this);
+      System.out.println("Property in ViewHandler: " + property);
+      controller.initialize(viewModelFactory.getAdminBookingHistoryVM(), this,
+          property);
       adminBookingScene = new Scene(root);
+    }
+    else
+    {
+      // Always update the property in the ViewModel before showing the scene
+      adminBookingHistoryVM.setProperty(property);
     }
     mainStage.setTitle("Admin Booking History");
     mainStage.setScene(adminBookingScene);
+  }
+
+  private Scene propertyManagementScene;
+
+  public void openPropertyManagementView() throws Exception
+  {
+    if (propertyManagementScene == null)
+    {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getClassLoader()
+          .getResource("ui/propertyManagement/PropertyManagement.fxml"));
+      Parent root = loader.load();
+      ui.propertyManagement.PropertyManagementCtrl controller = loader.getController();
+      controller.initialize(viewModelFactory.getPropertyManagementVM(), this,
+          property);
+      propertyManagementScene = new Scene(root);
+    }
+    else
+    {
+      // Always update the property in the ViewModel before showing the scene
+      propertyManagementVM.setProperty(property);
+    }
+    mainStage.setTitle("Property Management");
+    mainStage.setScene(propertyManagementScene);
+  }
+
+  private Scene addPropertyScene;
+
+  public void openAddPropertyView() throws Exception
+  {
+    if (addPropertyScene == null)
+    {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getClassLoader()
+          .getResource("ui/addProperty/AddProperty.fxml"));
+      Parent root = loader.load();
+      ui.addProperty.AddPropertyCtrl controller = loader.getController();
+      controller.initialize(viewModelFactory.getAddPropertyVM(), this);
+      addPropertyScene = new Scene(root);
+    }
+    mainStage.setTitle("Add Property");
+    mainStage.setScene(addPropertyScene);
   }
 
   // Setters for ViewModels
@@ -409,18 +462,15 @@ public class ViewHandler
     extendBookingVM.setBooking(booking);
   }
 
-  public void setPropertyToAdminBookingHistoryVM(Property property)
+  public void setPropertyFromAdminPropertyList(Property property)
   {
-    if (adminBookingHistoryVM == null)
-    {
-      adminBookingHistoryVM = viewModelFactory.getAdminBookingHistoryVM();
-    }
-
     adminBookingHistoryVM.setProperty(property);
+    propertyManagementVM.setProperty(property);
+    this.property = property;
   }
 
   public enum ViewType
   {
-    WELCOME, REGISTER, LOGIN, PROPERTY_LIST, BOOKING, SPECIFY_DATES, USER_DASHBOARD, ADMIN_DASHBOARD, PAST_BOOKINGS, CURRENT_BOOKINGS, FUTURE_BOOKINGS, EXTEND_BOOKING, USER_LIST, ADMIN_PROPERTY_LIST, ADMIN_BOOKING_HISTORY
+    WELCOME, REGISTER, LOGIN, PROPERTY_LIST, BOOKING, SPECIFY_DATES, USER_DASHBOARD, ADMIN_DASHBOARD, PAST_BOOKINGS, CURRENT_BOOKINGS, FUTURE_BOOKINGS, EXTEND_BOOKING, USER_LIST, ADMIN_PROPERTY_LIST, ADMIN_BOOKING_HISTORY, PROPERTY_MANAGEMENT, ADD_PROPERTY
   }
 }

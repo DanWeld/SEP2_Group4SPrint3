@@ -1,26 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="685.0" prefWidth="890.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.adminPropertyList.AdminPropertyListCtrl">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="685.0" prefWidth="890.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.adminPropertyList.AdminPropertyListCtrl">
    <children>
-      <Button fx:id="refreshButton" layoutX="13.0" layoutY="647.0" mnemonicParsing="false" onAction="#onRefreshButtonPressed" text="Refresh" />
-      <Button fx:id="backButton" layoutX="81.0" layoutY="647.0" mnemonicParsing="false" onAction="#onBack" text="Back" />
+      <Button fx:id="refreshButton" layoutX="37.0" layoutY="634.0" mnemonicParsing="false" onAction="#onRefreshButtonPressed" text="Refresh" />
+      <Button fx:id="backButton" layoutX="140.0" layoutY="634.0" mnemonicParsing="false" onAction="#onBack" text="Back" />
       <Label layoutX="427.0" layoutY="14.0" prefHeight="27.0" prefWidth="114.0" text="Property List">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Label>
-      <TableView fx:id="propertyTableView" layoutX="11.0" layoutY="51.0" prefHeight="586.0" prefWidth="862.0">
+      <TableView fx:id="propertyTableView" layoutX="11.0" layoutY="51.0" prefHeight="541.0" prefWidth="862.0">
         <columns>
           <TableColumn fx:id="locationColumn" prefWidth="210.3999662399292" text="Location" />
           <TableColumn fx:id="pricePerNightColumn" prefWidth="204.7999725341797" text="PricePerNight" />
             <TableColumn fx:id="facilityColumn" prefWidth="451.99993896484375" text="Facility" />
         </columns>
       </TableView>
-      <Label fx:id="errorMsg" layoutX="279.0" layoutY="644.0" prefHeight="34.0" prefWidth="604.0" />
-      <Button fx:id="viewBookingHistoryButton" layoutX="133.0" layoutY="647.0" mnemonicParsing="false" onAction="#onSelectProperty" text="View Booking History" />
+      <Label fx:id="errorMsg" layoutX="140.0" layoutY="600.0" prefHeight="34.0" prefWidth="604.0" textAlignment="CENTER" />
+      <Button fx:id="viewBookingHistoryButton" layoutX="224.0" layoutY="634.0" mnemonicParsing="false" onAction="#onSelectProperty" text="View Booking History" />
+      <Button fx:id="updatePropertyButton" layoutX="411.0" layoutY="634.0" mnemonicParsing="false" onAction="#onUpdateProperty" text="Update Property" />
+      <Button fx:id="deletePropertyButton" layoutX="578.0" layoutY="634.0" mnemonicParsing="false" onAction="#onDeleteProperty" text="Delete Property" />
+      <Button fx:id="addPropertyButton" layoutX="739.0" layoutY="634.0" mnemonicParsing="false" onAction="#onAddProperty" text="Add New Proeprty" />
    </children>
 </AnchorPane>
