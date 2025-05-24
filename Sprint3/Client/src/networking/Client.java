@@ -3,7 +3,6 @@ package networking;
 import dtos.*;
 import observer.PropertyChangeSubject;
 import services.UserSession;
-import ui.userList.UserListVM;
 import utils.JsonParser;
 
 import java.beans.PropertyChangeListener;
@@ -12,8 +11,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.sql.Date;
-import java.util.List;
 
 public class Client implements PropertyChangeSubject
 {
@@ -68,7 +65,7 @@ public class Client implements PropertyChangeSubject
       out.println(paramsJson);
 
       // Send the user object as JSON
-      out.println(JsonParser.toJson(currentUser));
+      out.println(JsonParser.toJson(getCurrentUser()));
       // Flush the output stream
       out.flush();
 
@@ -122,5 +119,10 @@ public class Client implements PropertyChangeSubject
       PropertyChangeListener listener)
   {
     propertyChangeSupport.removePropertyChangeListener(listener);
+  }
+
+  private User getCurrentUser()
+  {
+    return UserSession.getInstance().getCurrentUser();
   }
 }

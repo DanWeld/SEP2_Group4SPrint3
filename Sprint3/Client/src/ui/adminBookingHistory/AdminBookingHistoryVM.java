@@ -1,6 +1,8 @@
 package ui.adminBookingHistory;
 
 import dtos.BookingHistory;
+import dtos.ErrorResponse;
+import dtos.Property;
 import dtos.Response;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -9,19 +11,21 @@ import javafx.collections.ObservableList;
 import networking.Client;
 import networking.bookingHistoryClient.BookingHistoryClient;
 import networking.bookingHistoryClient.BookingHistoryClientImpl;
+import utils.JsonParser;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
+import java.util.List;
 
 public class AdminBookingHistoryVM implements PropertyChangeListener
 {
-  private int propertyID;
+  private Property property;
   private final StringProperty propertyIDProperty;
   private final StringProperty locationProperty;
   private final StringProperty pricePerNightProperty;
 
-  private final ObservableList<BookingHistory> propertyBookingList;
+  private final ObservableList<BookingHistory> bookingHistoryList;
   private final BookingHistoryClient bookingHistoryClient;
   private final StringProperty errorMessage;
 
@@ -37,17 +41,16 @@ public class AdminBookingHistoryVM implements PropertyChangeListener
       throw new RuntimeException(e);
     }
 
-    this.propertyBookingList = FXCollections.observableArrayList();
+    this.bookingHistoryList = FXCollections.observableArrayList();
     this.propertyIDProperty = new SimpleStringProperty("");
     this.locationProperty = new SimpleStringProperty("");
     this.pricePerNightProperty = new SimpleStringProperty("");
     this.errorMessage = new SimpleStringProperty();
-    Refresh();
   }
 
   public ObservableList<BookingHistory> getAllPropertyBookingHistory()
   {
-    return propertyBookingList;
+    return bookingHistoryList;
   }
 
   public StringProperty getPropertyIDProperty()
@@ -65,10 +68,10 @@ public class AdminBookingHistoryVM implements PropertyChangeListener
     return locationProperty;
   }
 
-  public void setPropertyID(int propertyid)
+  public void setProperty(Property property)
   {
-    this.propertyID = propertyid;
-    Refresh();
+    this.property = property;
+    refresh();
   }
 
   public StringProperty getErrorMessage()
@@ -76,20 +79,35 @@ public class AdminBookingHistoryVM implements PropertyChangeListener
     return errorMessage;
   }
 
-  public void Refresh()
+  public void refresh()
   {
-    propertyBookingList.clear();
+    System.out.println("Refreshing booking history for property: " + property);
+    propertyIDProperty.set(String.valueOf(property.id()));
+    locationProperty.set(property.location());
+    pricePerNightProperty.set(String.valueOf(property.pricePerNight()));
+    int propertyId = property.id();
+    bookingHistoryList.clear();
+    bookingHistoryClient.getBookingHistory(propertyId);
   }
 
   @Override public void propertyChange(PropertyChangeEvent evt)
   {
     String propertyName = evt.getPropertyName();
-    Response response = (Response) evt.getNewValue();
 
     switch (propertyName)
     {
-      case "asd":
+      case "getAllBookings":
       {
+        bookingHistoryList.clear();
+        List<BookingHistory> newBookingHistoryList = JsonParser.toList(evt.getNewValue(), BookingHistory[].class);
+
+        bookingHistoryList.addAll(newBookingHistoryList);
+        break;
+      }
+      case "error":
+      {
+        ErrorResponse errorResponse = (ErrorResponse) evt.getNewValue();
+        errorMessage.setValue(errorResponse.errorMessage());
         break;
       }
     }

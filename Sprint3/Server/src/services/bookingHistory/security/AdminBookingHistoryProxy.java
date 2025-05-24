@@ -24,7 +24,7 @@ public class AdminBookingHistoryProxy implements BookingHistoryAdminPrivileges, 
 
   private void checkAdmin()
   {
-    if (!user.isAdmin())
+    if (user == null || !user.isAdmin())
     {
       throw new SecurityException("Admin privileges required");
     }

@@ -1,6 +1,5 @@
 package startup.viewHandler;
 
-import dtos.Booking;
 import dtos.BookingHistory;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,7 +10,6 @@ import startup.ViewModelFactory;
 import ui.adminBookingHistory.AdminBookingHistoryCtrl;
 import ui.adminBookingHistory.AdminBookingHistoryVM;
 import ui.adminPropertyList.AdminPropertyListCtrl;
-import ui.adminPropertyList.AdminPropertyListVM;
 import ui.booking.BookingController;
 import ui.booking.BookingVM;
 import ui.currentBookingList.CurrentBookingListCtrl;
@@ -347,8 +345,8 @@ public class ViewHandler
     if (userListScene == null)
     {
       FXMLLoader loader = new FXMLLoader();
-      loader.setLocation(getClass().getClassLoader()
-          .getResource("ui/userList/UserList.fxml"));
+      loader.setLocation(
+          getClass().getClassLoader().getResource("ui/userList/UserList.fxml"));
       Parent root = loader.load();
       UserListCtrl controller = loader.getController();
       controller.initialize(viewModelFactory.getUserListVM(), this);
@@ -359,6 +357,7 @@ public class ViewHandler
   }
 
   private Scene adminPropertyListScene;
+
   public void openAdminPropertyListView() throws Exception
   {
     if (adminPropertyListScene == null)
@@ -376,13 +375,14 @@ public class ViewHandler
   }
 
   private Scene adminBookingScene;
+
   public void openAdminBookingView() throws Exception
   {
     if (adminBookingScene == null)
     {
       FXMLLoader loader = new FXMLLoader();
       loader.setLocation(getClass().getClassLoader()
-          .getResource("ui/adminBookingHistory/AdminBookingHistoryView.fxml"));
+          .getResource("ui/adminBookingHistory/AdminBookingHistory.fxml"));
       Parent root = loader.load();
       AdminBookingHistoryCtrl controller = loader.getController();
       controller.initialize(viewModelFactory.getAdminBookingHistoryVM(), this);
@@ -391,6 +391,7 @@ public class ViewHandler
     mainStage.setTitle("Admin Booking History");
     mainStage.setScene(adminBookingScene);
   }
+
   // Setters for ViewModels
   public void setDates(Date startDate, Date endDate)
   {
@@ -408,9 +409,14 @@ public class ViewHandler
     extendBookingVM.setBooking(booking);
   }
 
-  public void  setProperty(int propertyId)
+  public void setPropertyToAdminBookingHistoryVM(Property property)
   {
-    adminBookingHistoryVM.setPropertyID(propertyId);
+    if (adminBookingHistoryVM == null)
+    {
+      adminBookingHistoryVM = viewModelFactory.getAdminBookingHistoryVM();
+    }
+
+    adminBookingHistoryVM.setProperty(property);
   }
 
   public enum ViewType

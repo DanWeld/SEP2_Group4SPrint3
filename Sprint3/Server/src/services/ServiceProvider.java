@@ -52,6 +52,7 @@ public class ServiceProvider
     handlers.add(getAuthenticationRequestHandler());
     handlers.add(getPropertyRequestHandler(user));
     handlers.add(getBookingRequestHandler());
+    System.out.println("User: " + user);
     handlers.add(getBookingHistoryRequestHandler(user));
     handlers.add(getUserRequestHandler());
     return handlers;

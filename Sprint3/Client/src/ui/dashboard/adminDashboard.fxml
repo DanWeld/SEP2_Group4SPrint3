@@ -30,7 +30,7 @@
             <children>
                 <Button mnemonicParsing="false" onAction="#onManageProperties" prefHeight="40.0" prefWidth="200.0" text="Manage Properties" />
                 <Button mnemonicParsing="false" onAction="#onManageUsers" prefHeight="40.0" prefWidth="200.0" text="Manage Users" />
-                <Button mnemonicParsing="false" onAction="#onViewBookings" prefHeight="40.0" prefWidth="200.0" text="View All Bookings" />
+                <Button mnemonicParsing="false" onAction="#onViewBookings" prefHeight="40.0" prefWidth="200.0" text="View All Properties" />
             </children>
             <padding>
                 <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />

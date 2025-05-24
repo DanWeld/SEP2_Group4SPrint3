@@ -67,8 +67,8 @@ public class AdminBookingHistoryCtrl
     viewHandler.showView(ViewHandler.ViewType.ADMIN_PROPERTY_LIST);
   }
 
-  @FXML private void onRefreshButtonPressed() throws SQLException
+  @FXML private void onRefreshButtonPressed()
   {
-    adminBookingHistoryVM.Refresh();
+    adminBookingHistoryVM.refresh();
   }
 }

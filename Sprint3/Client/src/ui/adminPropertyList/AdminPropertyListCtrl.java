@@ -56,6 +56,10 @@ public class AdminPropertyListCtrl
         propertyTableView.getSelectionModel().selectedItemProperty());
     //bind error message label.
     errorMsg.textProperty().bind(adminPropertyListVM.messageProperty());
+
+    //disable the viewBookingHistoryButton if no property is selected
+    viewBookingHistoryButton.disableProperty().bind(
+        adminPropertyListVM.getSelectedProperty().isNull());
   }
 
   public void onSelectProperty()
@@ -63,8 +67,8 @@ public class AdminPropertyListCtrl
     ObjectProperty<Property> selected = adminPropertyListVM.getSelectedProperty();
     if (selected != null)
     {
-      viewHandler.setProperty(selected.getValue().id());
-      viewHandler.showView(ViewHandler.ViewType.ADMIN_PROPERTY_LIST);
+      viewHandler.setPropertyToAdminBookingHistoryVM(selected.getValue());
+      viewHandler.showView(ViewHandler.ViewType.ADMIN_BOOKING_HISTORY);
     }
     else
     {

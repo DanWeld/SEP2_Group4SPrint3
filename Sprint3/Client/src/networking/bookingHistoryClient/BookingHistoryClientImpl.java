@@ -42,6 +42,11 @@ public class BookingHistoryClientImpl implements BookingHistoryClient,
     client.sendRequest(new Request("Booking", "delete", booking));
   }
 
+  @Override public void getBookingHistory(int propertyId)
+  {
+    client.sendRequest(new Request("bookingHistory", "getAllBookings", propertyId));
+  }
+
   @Override public void propertyChange(PropertyChangeEvent evt)
   {
     support.firePropertyChange(evt);

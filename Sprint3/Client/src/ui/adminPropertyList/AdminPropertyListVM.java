@@ -67,9 +67,18 @@ public class AdminPropertyListVM implements PropertyChangeListener
     selectedProperty.bind(selectedFromTable);
     // Update selectedPropertyId when selectedProperty changes
     selectedProperty.addListener((obs, oldValue, newValue) -> {
-      selectedPropertyId.set(newValue.id());
-      selectedPropertyLocation.set(newValue.location());
-      selectedPropertyPricePerNight.set(newValue.pricePerNight());
+      if (newValue != null)
+      {
+        selectedPropertyId.set(newValue.id());
+        selectedPropertyLocation.set(newValue.location());
+        selectedPropertyPricePerNight.set(newValue.pricePerNight());
+      }
+      else
+      {
+        selectedPropertyId.set(0);
+        selectedPropertyLocation.set("");
+        selectedPropertyPricePerNight.set(0.00);
+      }
     });
   }
 
@@ -90,7 +99,8 @@ public class AdminPropertyListVM implements PropertyChangeListener
     {
       case "readAll":
         properties.clear();
-        List<Property> propertyList = JsonParser.toList(evt.getNewValue(), Property[].class);
+        List<Property> propertyList = JsonParser.toList(evt.getNewValue(),
+            Property[].class);
         properties.addAll(propertyList);
         break;
 

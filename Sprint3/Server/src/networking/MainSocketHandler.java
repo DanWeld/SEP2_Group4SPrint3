@@ -50,11 +50,9 @@ public class MainSocketHandler implements Runnable
         String userJson = in.readLine();
 
         // Deserialize the user JSON to a User object
-        if (!handler.equals("auth"))
-        {
-          User user = (User) JsonParser.jsonToObject(userJson, User.class);
-          serviceProvider.setUser(user);
-        }
+        User user = (User) JsonParser.jsonToObject(userJson, User.class);
+        System.out.println("User: " + user);
+        serviceProvider.setUser(user);
 
         Request request = new Request(handler, action, payloadJson);
         logger.log("Received request: " + request, LogLevel.INFO);

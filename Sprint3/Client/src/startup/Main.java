@@ -9,6 +9,7 @@ public class Main extends Application
 {
   @Override public void start(Stage primaryStage) throws Exception
   {
+    ClientFactory.getInstance();
     // Create the view model factory
     ViewModelFactory viewModelFactory = new ViewModelFactory();
 
