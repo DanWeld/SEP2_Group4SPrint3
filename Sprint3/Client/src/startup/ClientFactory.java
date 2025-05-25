@@ -16,6 +16,9 @@ public class ClientFactory
   private Authentication authentication;
   private boolean serverConnected;
 
+  /**
+   * Private constructor to initialize the client and authentication service
+   */
   private ClientFactory()
   {
     try
@@ -30,6 +33,11 @@ public class ClientFactory
     }
   }
 
+  /**
+   * Returns the singleton instance of ClientFactory
+   *
+   * @return The ClientFactory instance
+   */
   public static synchronized ClientFactory getInstance()
   {
     if (instance == null)
@@ -39,13 +47,12 @@ public class ClientFactory
     return instance;
   }
 
+  /**
+   * gets the client
+   * @return The Client instance
+   */
   public Client getClient()
   {
     return client;
-  }
-
-  public Authentication getAuthentication()
-  {
-    return authentication;
   }
 }

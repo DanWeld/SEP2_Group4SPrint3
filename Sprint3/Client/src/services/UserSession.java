@@ -12,6 +12,10 @@ public class UserSession
   private User currentUser;
   private boolean isLoggedIn;
 
+  /**
+   * Private constructor to prevent instantiation from outside the class.
+   * Initializes the session with no user logged in.
+   */
   private UserSession()
   {
     // Private constructor to enforce singleton pattern

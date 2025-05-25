@@ -12,6 +12,14 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+/**
+ * Client class for handling communication with the server.
+ * It manages the socket connection, sends requests, and handles responses.
+ * It also implements PropertyChangeSubject to notify listeners of property changes.
+ *
+ * @author Group 4
+ * @version 1.0
+ */
 public class Client implements PropertyChangeSubject
 {
   private Socket socket;
@@ -21,6 +29,12 @@ public class Client implements PropertyChangeSubject
   private boolean connected;
   private User currentUser;
 
+  /**
+   * Constructor for Client
+   * Initializes the socket connection to the server and sets up the user session.
+   *
+   * @throws IOException if an I/O error occurs when creating the socket
+   */
   public Client() throws IOException
   {
     try
@@ -45,6 +59,16 @@ public class Client implements PropertyChangeSubject
     }
   }
 
+  /**
+   * sends a request to the server.
+   * This method sends the handler name, action name,
+   * parameters as JSON,
+   * and the current user object as JSON.
+   * It then reads the response from the server
+   * and handles it accordingly.
+   *
+   * @param request the request to send
+   */
   public void sendRequest(Request request)
   {
     if (!connected)
@@ -83,6 +107,14 @@ public class Client implements PropertyChangeSubject
     }
   }
 
+  /**
+   * Handles the response from the server.
+   * This method checks the status of the response
+   * and notifies listeners of property changes accordingly.
+   *
+   * @param request the request that was sent
+   * @param parsedResponse the parsed response from the server
+   */
   private void handleResponse(Request request, Response parsedResponse)
   {
     if (parsedResponse.status().equals("ERROR"))
@@ -109,18 +141,34 @@ public class Client implements PropertyChangeSubject
     }
   }
 
+  /**
+   * Add a property change listener to this client.
+   *
+   * @param listener the listener to add
+   */
   @Override public void addPropertyChangeListener(
       PropertyChangeListener listener)
   {
     propertyChangeSupport.addPropertyChangeListener(listener);
   }
 
+  /**
+   * Remove a property change listener from this client.
+   *
+   * @param listener the listener to remove
+   */
   @Override public void removePropertyChangeListener(
       PropertyChangeListener listener)
   {
     propertyChangeSupport.removePropertyChangeListener(listener);
   }
 
+  /**
+   * Get the current user from the user session.
+   * This method retrieves the current user from the UserSession singleton.
+   *
+   * @return the current user
+   */
   private User getCurrentUser()
   {
     return UserSession.getInstance().getCurrentUser();

@@ -24,8 +24,7 @@ public class AdminDashboardCtrl {
     
     @FXML
     public void onManageProfile() {
-        //Todo: Implement profile management for admin
-        viewHandler.showView(ViewHandler.ViewType.USER_LIST);
+        viewHandler.showView(ViewHandler.ViewType.USER_PROFILE);
     }
     
     @FXML

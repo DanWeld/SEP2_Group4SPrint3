@@ -1,6 +1,5 @@
 package ui.addProperty;
 
-import dtos.Property;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import startup.viewHandler.ViewHandler;
@@ -77,7 +76,7 @@ public class AddPropertyCtrl
         .ifPresent(response -> {
           if (response == ButtonType.OK)
           {
-            propertyManagementVM.saveUpdatedProperty();
+            propertyManagementVM.addProperty();
           }
         });
   }

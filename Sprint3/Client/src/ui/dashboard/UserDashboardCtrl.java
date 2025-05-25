@@ -51,9 +51,7 @@ public class UserDashboardCtrl
 
   @FXML public void onViewProfile()
   {
-    // TODO: Implement profile view
-    // For now, just show property list
-    viewHandler.showView(ViewHandler.ViewType.PROPERTY_LIST);
+    viewHandler.showView(ViewHandler.ViewType.USER_PROFILE);
   }
 
   @FXML public void onLogout()

@@ -30,6 +30,10 @@ import ui.welcome.FrontViewCtrl;
 
 import java.sql.Date;
 
+/**
+ * ViewHandler is responsible for managing the different views in the application.
+ * It initializes and switches between various scenes based on user actions.
+ */
 public class ViewHandler
 {
   private final Stage mainStage;
@@ -41,6 +45,12 @@ public class ViewHandler
   private Property property;
   private PropertyManagementVM propertyManagementVM;
 
+  /**
+   * Constructor for ViewHandler.
+   * Initializes the ViewModelFactory and sets up the main stage.
+   *
+   * @param viewModelFactory The factory to create ViewModels.
+   */
   public ViewHandler(ViewModelFactory viewModelFactory)
   {
     this.viewModelFactory = viewModelFactory;
@@ -52,12 +62,20 @@ public class ViewHandler
     mainStage = new Stage();
   }
 
+  /**
+   * Starts the application by showing the welcome view.
+   */
   public void start()
   {
     showView(ViewType.WELCOME);
     mainStage.show();
   }
 
+  /**
+   * Shows the specified view based on the ViewType.
+   *
+   * @param view The type of view to show.
+   */
   public void showView(ViewType view)
   {
     try
@@ -80,6 +98,8 @@ public class ViewHandler
         case ADMIN_PROPERTY_LIST -> openAdminPropertyListView();
         case ADMIN_BOOKING_HISTORY -> openAdminBookingView();
         case PROPERTY_MANAGEMENT -> openPropertyManagementView();
+        case ADD_PROPERTY -> openAddPropertyView();
+        case USER_PROFILE -> openUserProfileView();
       }
     }
     catch (Exception e)
@@ -88,8 +108,15 @@ public class ViewHandler
     }
   }
 
+
   private Scene frontScene;
 
+  /**
+   * Displays the front view of the application.
+   * This method initializes the front view if it has not been created yet,
+   * loads the FXML file, and sets up the scene.
+   * @throws Exception
+   */
   public void showFrontView() throws Exception
   {
     if (frontScene == null)
@@ -108,13 +135,20 @@ public class ViewHandler
 
   private Scene registerScene;
 
+  /**
+   * Displays the registration view.
+   * This method initializes the registration view if it has not been created yet,
+   * loads the FXML file, and sets up the scene.
+   *
+   * @throws Exception if there is an error loading the FXML file or initializing the controller.
+   */
   public void showRegisterView() throws Exception
   {
     if (registerScene == null)
     {
       FXMLLoader loader = new FXMLLoader();
-      loader.setLocation(getClass().getClassLoader()
-          .getResource("ui/register/RegisterView.fxml"));
+      loader.setLocation(
+          getClass().getClassLoader().getResource("ui/register/Register.fxml"));
       Parent root = loader.load();
       RegisterCtrl registerController = loader.getController();
       registerController.initialize(viewModelFactory.getRegisterVM(), this);
@@ -126,6 +160,13 @@ public class ViewHandler
 
   private Scene loginScene;
 
+  /**
+   * Displays the login view.
+   * This method initializes the login view if it has not been created yet,
+   * loads the FXML file, and sets up the scene.
+   *
+   * @throws Exception if there is an error loading the FXML file or initializing the controller.
+   */
   public void showLoginView() throws Exception
   {
     if (loginScene == null)
@@ -144,6 +185,11 @@ public class ViewHandler
 
   private Scene specifyDatesScene;
 
+  /**
+   * Opens the Specify Dates view.
+   * This method initializes the Specify Dates view if it has not been created yet,
+   * loads the FXML file, and sets up the scene.
+   */
   public void openSpecifyDatesView()
   {
     try
@@ -169,6 +215,11 @@ public class ViewHandler
 
   private Scene propertyListScene;
 
+  /**
+   * Opens the Property List view.
+   * This method initializes the Property List view if it has not been created yet,
+   * loads the FXML file, and sets up the scene.
+   */
   public void openPropertyListView()
   {
     try
@@ -195,6 +246,13 @@ public class ViewHandler
 
   private Scene bookingScene;
 
+  /**
+   * Opens the Booking view.
+   * This method initializes the Booking view if it has not been created yet,
+   * loads the FXML file, and sets up the scene.
+   *
+   * @throws Exception if there is an error loading the FXML file or initializing the controller.
+   */
   public void openBookingView() throws Exception
   {
     try
@@ -221,6 +279,13 @@ public class ViewHandler
 
   private Scene userDashboardScene;
 
+  /**
+   * Displays the user dashboard view.
+   * This method initializes the user dashboard view if it has not been created yet,
+   * loads the FXML file, and sets up the scene.
+   *
+   * @throws Exception if there is an error loading the FXML file or initializing the controller.
+   */
   public void showUserDashboardView() throws Exception
   {
     if (userDashboardScene == null)
@@ -239,6 +304,13 @@ public class ViewHandler
 
   private Scene adminDashboardScene;
 
+  /**
+   * Displays the admin dashboard view.
+   * This method initializes the admin dashboard view if it has not been created yet,
+   * loads the FXML file, and sets up the scene.
+   *
+   * @throws Exception if there is an error loading the FXML file or initializing the controller.
+   */
   public void showAdminDashboardView() throws Exception
   {
     if (adminDashboardScene == null)
@@ -257,6 +329,13 @@ public class ViewHandler
 
   private Scene pastBookingsScene;
 
+  /**
+   * Displays the past bookings view.
+   * This method initializes the past bookings view if it has not been created yet,
+   * loads the FXML file, and sets up the scene.
+   *
+   * @throws Exception if there is an error loading the FXML file or initializing the controller.
+   */
   public void showPastBookingsView() throws Exception
   {
     if (pastBookingsScene == null)
@@ -275,6 +354,13 @@ public class ViewHandler
 
   private Scene currentBookingsScene;
 
+  /**
+   * Displays the current bookings view.
+   * This method initializes the current bookings view if it has not been created yet,
+   * loads the FXML file, and sets up the scene.
+   * *
+   * @throws Exception if there is an error loading the FXML file or initializing the controller.
+    */
   public void showCurrentBookingsView() throws Exception
   {
     if (currentBookingsScene == null)
@@ -293,6 +379,13 @@ public class ViewHandler
 
   private Scene futureBookingsScene;
 
+  /**
+   * Displays the future bookings view.
+   * This method initializes the future bookings view if it has not been created yet,
+   * loads the FXML file, and sets up the scene.
+   *
+   * @throws Exception if there is an error loading the FXML file or initializing the controller.
+   */
   public void showFutureBookingsView() throws Exception
   {
     if (futureBookingsScene == null)
@@ -311,6 +404,13 @@ public class ViewHandler
 
   private Scene extendBookingScene;
 
+  /**
+   * Opens the Extend Booking view.
+   * This method initializes the Extend Booking view if it has not been created yet,
+   * loads the FXML file, and sets up the scene.
+   *
+   * @throws Exception if there is an error loading the FXML file or initializing the controller.
+   */
   public void openExtendBookingView() throws Exception
   {
     if (extendBookingScene == null)
@@ -344,6 +444,13 @@ public class ViewHandler
 
   private Scene userListScene;
 
+  /**
+   * Displays the user list view.
+   * This method initializes the user list view if it has not been created yet,
+   * loads the FXML file, and sets up the scene.
+   *
+   * @throws Exception if there is an error loading the FXML file or initializing the controller.
+   */
   public void showUserListView() throws Exception
   {
     if (userListScene == null)
@@ -362,6 +469,13 @@ public class ViewHandler
 
   private Scene adminPropertyListScene;
 
+  /**
+   * Opens the Admin Property List view.
+   * This method initializes the Admin Property List view if it has not been created yet,
+   * loads the FXML file, and sets up the scene.
+   *
+   * @throws Exception if there is an error loading the FXML file or initializing the controller.
+   */
   public void openAdminPropertyListView() throws Exception
   {
     if (adminPropertyListScene == null)
@@ -380,6 +494,13 @@ public class ViewHandler
 
   private Scene adminBookingScene;
 
+  /**
+   * Opens the Admin Booking History view.
+   * This method initializes the Admin Booking History view if it has not been created yet,
+   * loads the FXML file, and sets up the scene.
+   *
+   * @throws Exception if there is an error loading the FXML file or initializing the controller.
+   */
   public void openAdminBookingView() throws Exception
   {
     if (adminBookingScene == null)
@@ -405,6 +526,13 @@ public class ViewHandler
 
   private Scene propertyManagementScene;
 
+  /**
+   * Opens the Property Management view.
+   * This method initializes the Property Management view if it has not been created yet,
+   * loads the FXML file, and sets up the scene.
+   *
+   * @throws Exception if there is an error loading the FXML file or initializing the controller.
+   */
   public void openPropertyManagementView() throws Exception
   {
     if (propertyManagementScene == null)
@@ -429,6 +557,13 @@ public class ViewHandler
 
   private Scene addPropertyScene;
 
+  /**
+   * Opens the Add Property view.
+   * This method initializes the Add Property view if it has not been created yet,
+   * loads the FXML file, and sets up the scene.
+   *
+   * @throws Exception if there is an error loading the FXML file or initializing the controller.
+   */
   public void openAddPropertyView() throws Exception
   {
     if (addPropertyScene == null)
@@ -445,23 +580,66 @@ public class ViewHandler
     mainStage.setScene(addPropertyScene);
   }
 
+  private Scene userProfileScene;
+
+  /**
+   * Opens the User Profile view.
+   * This method initializes the User Profile view if it has not been created yet,
+   * loads the FXML file, and sets up the scene.
+   *
+   * @throws Exception if there is an error loading the FXML file or initializing the controller.
+   */
+  public void openUserProfileView() throws Exception
+  {
+    if (userProfileScene == null)
+    {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getClassLoader()
+          .getResource("ui/userProfile/UserProfile.fxml"));
+      Parent root = loader.load();
+      ui.userProfile.UserProfileCtrl controller = loader.getController();
+      controller.initialize(viewModelFactory.getUserProfileVM(), this);
+      userProfileScene = new Scene(root);
+    }
+    mainStage.setTitle("User Profile");
+    mainStage.setScene(userProfileScene);
+  }
+
   // Setters for ViewModels
+
+  /**
+   * Sets the start and end dates for the property list and booking view models.
+   * @param startDate
+   * @param endDate
+   */
   public void setDates(Date startDate, Date endDate)
   {
     propertyListVM.setDates(startDate, endDate);
     bookingVM.setDates(startDate, endDate);
   }
 
+  /**
+   * Sets the property for the booking view model.
+   * @param property The property to set.
+   */
   public void setProperty(Property property)
   {
     bookingVM.setProperty(property);
   }
 
+  /**
+   * Sets the booking for the extend booking view model.
+   * @param booking The booking to set.
+   */
   public void setBooking(BookingHistory booking)
   {
     extendBookingVM.setBooking(booking);
   }
 
+  /**
+   * Sets the property for the admin booking history view model.
+   * @param property The property to set.
+   */
   public void setPropertyFromAdminPropertyList(Property property)
   {
     adminBookingHistoryVM.setProperty(property);
@@ -469,8 +647,12 @@ public class ViewHandler
     this.property = property;
   }
 
+  /**
+   * Gets the main stage of the application.
+   * The main stage.
+   */
   public enum ViewType
   {
-    WELCOME, REGISTER, LOGIN, PROPERTY_LIST, BOOKING, SPECIFY_DATES, USER_DASHBOARD, ADMIN_DASHBOARD, PAST_BOOKINGS, CURRENT_BOOKINGS, FUTURE_BOOKINGS, EXTEND_BOOKING, USER_LIST, ADMIN_PROPERTY_LIST, ADMIN_BOOKING_HISTORY, PROPERTY_MANAGEMENT, ADD_PROPERTY
+    WELCOME, REGISTER, LOGIN, PROPERTY_LIST, BOOKING, SPECIFY_DATES, USER_DASHBOARD, ADMIN_DASHBOARD, PAST_BOOKINGS, CURRENT_BOOKINGS, FUTURE_BOOKINGS, EXTEND_BOOKING, USER_LIST, ADMIN_PROPERTY_LIST, ADMIN_BOOKING_HISTORY, PROPERTY_MANAGEMENT, ADD_PROPERTY, USER_PROFILE
   }
 }
