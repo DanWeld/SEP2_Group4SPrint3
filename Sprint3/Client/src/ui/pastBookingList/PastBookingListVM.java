@@ -15,12 +15,21 @@ import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * ViewModel for displaying past bookings of a user.
+ * It listens for property changes from the BookingHistoryClient
+ * and updates the list of past bookings accordingly.
+ */
 public class PastBookingListVM implements PropertyChangeListener
 {
   private ObservableList<BookingHistory> bookings;
   private User user;
   private BookingHistoryClient bookingHistoryClient;
 
+  /**
+   * Constructor initializes the BookingHistoryClient and the list of bookings.
+   * It also retrieves the current user from the UserSession.
+   */
   public PastBookingListVM()
   {
     this.bookings = FXCollections.observableArrayList();
@@ -35,6 +44,12 @@ public class PastBookingListVM implements PropertyChangeListener
     this.user = UserSession.getInstance().getCurrentUser();
   }
 
+  /**
+   * Retrieves the past bookings for the current user.
+   * It calls the BookingHistoryClient to fetch the data.
+   *
+   * @return an ObservableList of BookingHistory objects representing past bookings.
+   */
   public ObservableList<BookingHistory> getBookingHistory()
   {
     bookingHistoryClient.getPastBookings(getUser());
@@ -51,6 +66,13 @@ public class PastBookingListVM implements PropertyChangeListener
     return currentUser.getUsername();
   }
 
+  /**
+   * Property change listener that updates the bookings list
+   * when the "pastBookings" property changes.
+   * It also handles error messages if the "error" property changes.
+   * @param evt A PropertyChangeEvent object describing the event source
+   *          and the property that has changed.
+   */
   @Override public void propertyChange(PropertyChangeEvent evt)
   {
     if (evt.getPropertyName().equals("pastBookings"))

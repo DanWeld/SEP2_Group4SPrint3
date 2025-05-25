@@ -11,6 +11,10 @@ import javafx.scene.control.TableView;
 import startup.viewHandler.ViewHandler;
 import ui.pastBookingList.PastBookingListVM;
 
+/**
+ * Controller for the Current Booking List view.
+ * This class handles the user interactions and updates the UI based on the ViewModel.
+ */
 public class CurrentBookingListCtrl
 {
   @FXML private TableView<BookingHistory> table;
@@ -23,10 +27,21 @@ public class CurrentBookingListCtrl
   private CurrentBookingListVM currentBookingListVM;
   private ViewHandler viewHandler;
 
+  /**
+   * Default constructor for CurrentBookingListCtrl.
+   * Initializes the controller without any parameters.
+   */
   public CurrentBookingListCtrl()
   {
   }
 
+  /**
+   * Initializes the controller with the provided ViewModel and ViewHandler.
+   * Binds the UI components to the ViewModel properties and sets up the table view.
+   *
+   * @param currentBookingListVM the ViewModel for this view
+   * @param viewHandler the ViewHandler for navigating between views
+   */
   public void initialize(CurrentBookingListVM currentBookingListVM,
       ViewHandler viewHandler)
   {
@@ -68,11 +83,19 @@ public class CurrentBookingListCtrl
     messageLabel.textProperty().bindBidirectional(currentBookingListVM.msgProperty());
   }
 
+  /**
+   * Called when the view is shown.
+   * This method is used to refresh the booking list when the view is displayed.
+   */
   public void onBackButton()
   {
     viewHandler.showView(ViewHandler.ViewType.USER_DASHBOARD);
   }
 
+  /**
+   * Called when the "View Past Bookings" button is clicked.
+   * This method navigates to the Past Booking List view.
+   */
   public void onExtendBooking()
   {
     if (selectedBooking.get() == null)

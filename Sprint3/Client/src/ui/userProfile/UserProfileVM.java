@@ -27,6 +27,12 @@ public class UserProfileVM implements PropertyChangeListener
   private final StringProperty repeatProperty;
   private UserClient userClient;
 
+  /**
+   * Constructor initializes the UserClient and sets up properties
+   * to hold user data.
+   * Initializes the properties for username, email, userType,
+   * password, and repeat.
+   */
   public UserProfileVM()
   {
     try
@@ -63,6 +69,11 @@ public class UserProfileVM implements PropertyChangeListener
     }
   }
 
+  /**
+   * Getters for the properties.
+   * These properties are bound to the UI components in the AddProperty view.
+   * @return the property values as JavaFX properties
+   */
   public StringProperty usernameProperty()
   {
     return username;
@@ -93,6 +104,12 @@ public class UserProfileVM implements PropertyChangeListener
     return repeatProperty;
   }
 
+  /**
+   * PropertyChange method to handle events from the UserClient.
+   * This method updates the view model properties based on the event type.
+   * @param evt A PropertyChangeEvent object describing the event source
+   *          and the property that has changed.
+   */
   @Override public void propertyChange(PropertyChangeEvent evt)
   {
     switch (evt.getPropertyName())
@@ -118,6 +135,12 @@ public class UserProfileVM implements PropertyChangeListener
     }
   }
 
+  /**
+   * Returns an ObservableValue that indicates whether the register button
+   * should be enabled based on the password and repeat fields.
+   * The button is enabled when both fields are not empty and match.
+   * @return An ObservableValue<Boolean> indicating the button state.
+   */
   public ObservableValue<Boolean> enableRegisterButtonProperty()
   {
     return passwordProperty.isNotEmpty()
@@ -125,6 +148,11 @@ public class UserProfileVM implements PropertyChangeListener
         .and(passwordProperty.isEqualTo(repeatProperty));
   }
 
+  /**
+   * Updates the user profile with the current values in the view model.
+   * This method retrieves the current user from the UserSession and updates
+   * their password if they are logged in.
+   */
   public void updateUser()
   {
     User currentUser = UserSession.getInstance().getCurrentUser();
@@ -139,6 +167,11 @@ public class UserProfileVM implements PropertyChangeListener
     }
   }
 
+  /**
+   * Deletes the current user profile.
+   * This method retrieves the current user from the UserSession and deletes
+   * their profile if they are logged in.
+   */
   public void deleteUser()
   {
     User currentUser = UserSession.getInstance().getCurrentUser();

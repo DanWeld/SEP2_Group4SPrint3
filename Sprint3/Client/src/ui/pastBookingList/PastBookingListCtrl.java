@@ -9,6 +9,15 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import startup.viewHandler.ViewHandler;
 
+/**
+ * Controller for the Past Booking List view
+ * This class handles the initialization of the view and binds the data
+ * to the UI components.
+ * It also provides functionality to navigate back to the user dashboard.
+ * @author Group 4
+ * @version 1.0
+
+ */
 public class PastBookingListCtrl
 {
   @FXML private TableView<BookingHistory> table;
@@ -21,10 +30,20 @@ public class PastBookingListCtrl
   private PastBookingListVM pastBookingListVM;
   private ViewHandler viewHandler;
 
+  /**
+   * Default constructor for PastBookingListCtrl.
+   * Initializes the controller without any parameters.
+   */
   public PastBookingListCtrl()
   {
   }
 
+  /**
+   * Initializes the controller with the provided ViewModel and ViewHandler.
+   * Binds the TableView to the booking history data and sets up the columns.
+   * @param pastBookingListVM The ViewModel containing booking history data.
+   * @param viewHandler The ViewHandler for navigating between views.
+   */
   public void initialize(PastBookingListVM pastBookingListVM, ViewHandler viewHandler)
   {
     this.viewHandler = viewHandler;
@@ -42,6 +61,10 @@ public class PastBookingListCtrl
         data.getValue().getPricePerNight()).asObject());
   }
 
+  /**
+   * Handles the back button click event.
+   * Navigates back to the user dashboard view.
+   */
   public void onBackButton()
   {
     viewHandler.showView(ViewHandler.ViewType.USER_DASHBOARD);

@@ -13,6 +13,10 @@ import services.UserSession;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+/**
+ * ViewModel for the registration view.
+ * Handles user input and communicates with the authentication service.
+ */
 public class RegisterVM implements PropertyChangeListener
 {
   private final StringProperty usernameProp = new SimpleStringProperty();
@@ -26,6 +30,10 @@ public class RegisterVM implements PropertyChangeListener
       false);
   private final Authentication authService;
 
+  /**
+   * Constructor for RegisterVM.
+   * Initializes the authentication service and sets up property listeners.
+   */
   public RegisterVM()
   {
     try
@@ -45,6 +53,11 @@ public class RegisterVM implements PropertyChangeListener
     repeatProp.addListener(this::updateRegisterButtonState);
   }
 
+  /**
+   * Updates the state of the register button based on the input fields.
+   * Disables the button if any field is empty or if passwords do not match.
+   * @param observable the observable property that changed
+   */
   private void updateRegisterButtonState(Observable observable)
   {
     boolean shouldDisable =
@@ -56,6 +69,11 @@ public class RegisterVM implements PropertyChangeListener
     enableRegisterButtonProp.set(shouldDisable);
   }
 
+  /**
+   * Getters for the properties.
+   * These properties are bound to the UI components in the AddProperty view.
+   * @return the property values as JavaFX properties
+   */
   public StringProperty emailProperty()
   {
     return emailProp;
@@ -91,6 +109,10 @@ public class RegisterVM implements PropertyChangeListener
     return registrationSuccessfulProp;
   }
 
+  /**
+   * Registers a new user with the provided username, email, and password.
+   * Calls the authentication service to handle the registration process.
+   */
   public void register()
   {
     String username = usernameProp.get();
@@ -100,6 +122,12 @@ public class RegisterVM implements PropertyChangeListener
     authService.registerUser(new User(username, email, password));
   }
 
+  /**
+   * Property change handler for the authentication service.
+   * Handles events related to user registration.
+   * @param evt A PropertyChangeEvent object describing the event source
+   *          and the property that has changed.
+   */
   @Override public void propertyChange(PropertyChangeEvent evt)
   {
     String evtName = evt.getPropertyName();

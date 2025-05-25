@@ -1,5 +1,12 @@
 package dtos;
 
+/**
+ * Represents a login request containing user credentials.
+ * Can be used for both email and username-based authentication.
+ *
+ * @author Group 4
+ * @version 1.0
+ */
 public class LoginRequest {
     private final String email; // Can be either email or username
     private final String password;
@@ -20,7 +27,12 @@ public class LoginRequest {
     public String getEmail() {
         return email;
     }
-    
+
+    /**
+     * Returns the password for this login request.
+     *
+     * @return the password string
+     */
     public String getPassword() {
         return password;
     }

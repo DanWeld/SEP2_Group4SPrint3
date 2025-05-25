@@ -7,6 +7,13 @@ import javafx.scene.control.TextField;
 import services.UserSession;
 import startup.viewHandler.ViewHandler;
 
+/**
+ * Controller for the Login view
+ * Handles user input and interactions with the LoginVM
+ *
+ * @author Group 4
+ * @version 1.0
+ */
 public class LoginCtrl
 {
   @FXML private TextField emailField;
@@ -17,10 +24,22 @@ public class LoginCtrl
   private LoginVM viewModel;
   private ViewHandler viewHandler;
 
+  /**
+   * Default constructor for LoginCtrl
+   * Initializes the controller without any parameters
+   */
   public LoginCtrl()
   {
   }
 
+  /**
+   * Initializes the controller with the provided ViewModel and ViewHandler
+   * Binds UI components to the ViewModel properties
+   * Sets up listeners for login success and button enablement
+   *
+   * @param vm the LoginVM instance to bind to
+   * @param vh the ViewHandler instance to navigate views
+   */
   public void initialize(LoginVM vm, ViewHandler vh)
   {
     this.viewModel = vm;
@@ -46,11 +65,19 @@ public class LoginCtrl
     });
   }
 
+  /**
+   * Handles the back button action
+   * Navigates the user back to the welcome view
+   */
   public void onBack()
   {
     viewHandler.showView(ViewHandler.ViewType.WELCOME);
   }
 
+  /**
+   * Handles the login button action
+   * Invokes the login method on the ViewModel to process user credentials
+   */
   public void onLogin()
   {
     viewModel.login();

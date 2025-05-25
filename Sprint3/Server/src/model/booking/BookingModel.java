@@ -4,6 +4,12 @@ import observer.PropertyChangeSubject;
 
 import java.sql.Date;
 
+/**
+ * Interface for booking-related operations and property change support.
+ *
+ * @author Group 4
+ * @version 1.0
+ */
 public interface BookingModel extends PropertyChangeSubject
 {
   void createBooking(int propertyID, Date startDate, Date endDate, String username);

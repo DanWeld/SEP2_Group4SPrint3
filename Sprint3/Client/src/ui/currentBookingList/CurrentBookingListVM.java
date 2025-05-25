@@ -20,6 +20,10 @@ import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * ViewModel for the Current Booking List view.
+ * This class handles the logic for displaying the current bookings of a user.
+ */
 public class CurrentBookingListVM implements PropertyChangeListener
 {
   private final ObservableList<BookingHistory> bookings;
@@ -27,7 +31,10 @@ public class CurrentBookingListVM implements PropertyChangeListener
   private final StringProperty msgProp;
   private final ObjectProperty<BookingHistory> selectedBooking;
 
-
+  /**
+   * Default constructor for CurrentBookingListVM.
+   * Initializes the BookingHistoryClient and sets up the properties.
+   */
   public CurrentBookingListVM()
   {
     this.bookings = FXCollections.observableArrayList();
@@ -44,18 +51,35 @@ public class CurrentBookingListVM implements PropertyChangeListener
     }
   }
 
+  /**
+   * Returns the list of current bookings for the user.
+   * This method fetches the current bookings from the BookingHistoryClient.
+   *
+   * @return an ObservableList of BookingHistory objects
+   */
   public ObservableList<BookingHistory> getBookingHistory()
   {
     bookingHistoryClient.getCurrentBookings(getUser());
     return bookings;
   }
 
+  /**
+   * get the current user from the UserSession.
+   *
+   * @return the username of the current user
+   */
   private String getUser()
   {
     User currentUser = UserSession.getInstance().getCurrentUser();
     return currentUser.getUsername();
   }
 
+  /**
+   * Getters for the properties.
+   * These properties are bound to the UI components in the AddProperty view.
+   *
+   * @return the property values as JavaFX properties
+   */
   public StringProperty msgProperty()
   {
     return msgProp;
@@ -66,6 +90,12 @@ public class CurrentBookingListVM implements PropertyChangeListener
     return selectedBooking;
   }
 
+  /**
+   * Property change listener method.
+   * This method is called when a property change event occurs in the BookingHistoryClient.
+   * @param evt A PropertyChangeEvent object describing the event source
+   *          and the property that has changed.
+   */
   @Override public void propertyChange(PropertyChangeEvent evt)
   {
     if (evt.getPropertyName().equals("getCurrentBookings"))

@@ -102,18 +102,31 @@ public class PropertyListVM implements PropertyChangeListener
     return selectedProperty;
   }
 
+  /**
+   * Gets the property ID.
+   *
+   * @return An IntegerProperty representing the property ID.
+   */
   public StringProperty errorMsgProperty()
   {
     return errorMsg;
   }
 
+  /**
+   * Property change listener method.
+   * This method is called when a property change event occurs.
+   *
+   * @param evt A PropertyChangeEvent object describing the event source
+   *            and the property that has changed.
+   */
   @Override public void propertyChange(PropertyChangeEvent evt)
   {
     switch (evt.getPropertyName())
     {
       case "getAllProperties":
         // Convert the payload to a list of properties
-        List<Property> propertyArray = JsonParser.toList(evt.getNewValue(), Property[].class);
+        List<Property> propertyArray = JsonParser.toList(evt.getNewValue(),
+            Property[].class);
         properties.clear();
         for (Property property : propertyArray)
         {
@@ -122,7 +135,8 @@ public class PropertyListVM implements PropertyChangeListener
         break;
       case "readAvailable":
         // Convert the payload to a list of properties
-        List<Property> availableProperties = JsonParser.toList(evt.getNewValue(), Property[].class);
+        List<Property> availableProperties = JsonParser.toList(
+            evt.getNewValue(), Property[].class);
         properties.clear();
         properties.addAll(availableProperties);
         break;

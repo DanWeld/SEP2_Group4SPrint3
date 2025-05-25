@@ -10,6 +10,10 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.PrintWriter;
 
+/**
+ * Handles requests related to booking history, including current, past, future,
+ * and all bookings.
+ */
 public class BookingHistoryRequestHandler
     implements RequestHandler, PropertyChangeListener
 {
@@ -17,6 +21,12 @@ public class BookingHistoryRequestHandler
   private final Logger logger;
   private PrintWriter out;
 
+  /**
+   * Constructs a BookingHistoryRequestHandler with the specified model and logger.
+   *
+   * @param bookingHistoryModel the model to handle booking history requests
+   * @param logger              the logger for logging events
+   */
   public BookingHistoryRequestHandler(BookingHistoryModel bookingHistoryModel,
       Logger logger)
   {
@@ -25,6 +35,13 @@ public class BookingHistoryRequestHandler
     this.logger = logger;
   }
 
+  /**
+   * Checks if this handler can handle the specified action for the booking history.
+   *
+   * @param handler the handler name
+   * @param action  the action to check
+   * @return true if this handler can handle the action, false otherwise
+   */
   @Override public boolean canHandle(String handler, String action)
   {
     if (handler.equalsIgnoreCase("bookingHistory") && (
@@ -38,6 +55,13 @@ public class BookingHistoryRequestHandler
     return false;
   }
 
+  /**
+   * Handles the specified action with the given payload.
+   *
+   * @param action  the action to handle
+   * @param payload the payload for the action
+   * @param out     the PrintWriter to send responses to the client
+   */
   @Override public void handle(String action, String payload, PrintWriter out)
   {
     this.out = out;
@@ -60,6 +84,11 @@ public class BookingHistoryRequestHandler
     }
   }
 
+  /**
+   * Handles property change events from the BookingHistoryModel.
+   *
+   * @param evt the property change event
+   */
   @Override public void propertyChange(PropertyChangeEvent evt)
   {
     String name = evt.getPropertyName();

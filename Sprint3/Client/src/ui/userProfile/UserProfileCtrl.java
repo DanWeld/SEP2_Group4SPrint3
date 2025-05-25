@@ -20,11 +20,19 @@ public class UserProfileCtrl
   private UserProfileVM viewModel;
   private ViewHandler viewHandler;
 
+  /**
+   * Constructor for UserProfileCtrl
+   */
   public UserProfileCtrl()
   {
     // Empty constructor
   }
 
+  /**
+   * Initializes the UserProfileCtrl.
+   * @param vm the ViewModel for the UserProfile view
+   * @param vh the ViewHandler for handling view changes
+   */
   public void initialize(UserProfileVM vm, ViewHandler vh)
   {
     this.viewModel = vm;
@@ -43,11 +51,19 @@ public class UserProfileCtrl
     buttonSave.disableProperty().bind(viewModel.enableRegisterButtonProperty());
   }
 
+  /**
+   * Initializes the UserProfileCtrl with the current user data.
+   * This method is called by the JavaFX framework to initialize the controller.
+   */
   public void onBack()
   {
     viewHandler.showView(ViewHandler.ViewType.USER_DASHBOARD);
   }
 
+  /**
+   * Saves the updated user profile.
+   * This method is called when the user clicks the save button.
+   */
   public void onSave()
   {
     new Alert(Alert.AlertType.CONFIRMATION,
@@ -59,6 +75,10 @@ public class UserProfileCtrl
     });
   }
 
+  /**
+   * Deletes the user account.
+   * This method is called when the user clicks the delete account button.
+   */
   public void onDeleteAccount()
   {
     new Alert(Alert.AlertType.CONFIRMATION,

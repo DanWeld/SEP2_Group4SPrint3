@@ -12,6 +12,16 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 
+/**
+ * ViewModel for managing property details in the Property Management view.
+ * This class handles the
+ * logic for updating property information, including location,
+ * price per night, and facilities.
+ * It listens for property change events and updates the UI accordingly.
+ *
+ * @author Group 4
+ * @version 1.0
+ */
 public class PropertyManagementVM implements PropertyChangeListener
 {
   private final IntegerProperty propertyID = new SimpleIntegerProperty(-1);
@@ -27,6 +37,11 @@ public class PropertyManagementVM implements PropertyChangeListener
   private final BooleanProperty saveDisabled = new SimpleBooleanProperty(true);
   private PropertyClient propertyClient;
 
+  /**
+   * Constructor for PropertyManagementVM.
+   * Initializes the properties and the property client.
+   * It also sets up a listener for changes in the property client.
+   */
   public PropertyManagementVM()
   {
     saveDisabled.bind(location.isEmpty().or(pricePerNight.isEmpty()));
@@ -41,6 +56,13 @@ public class PropertyManagementVM implements PropertyChangeListener
     }
   }
 
+  /**
+   * Sets the property details in the ViewModel.
+   * This method is called when a property is selected for editing.
+   * It updates the properties with the details of the selected property.
+   *
+   * @param property the Property object containing the details to set
+   */
   public void setProperty(Property property)
   {
     if (property == null)
@@ -67,6 +89,12 @@ public class PropertyManagementVM implements PropertyChangeListener
     }
   }
 
+  /**
+   * Getters for the properties.
+   * These properties are bound to the UI components in the AddProperty view.
+   *
+   * @return the property values as JavaFX properties
+   */
   public StringProperty locationProperty()
   {
     return location;
@@ -112,6 +140,13 @@ public class PropertyManagementVM implements PropertyChangeListener
     return saveDisabled;
   }
 
+  /**
+   * Gets the property change event.
+   * This method is called when a property change event occurs,
+   * such as when a property is updated or an error occurs.
+   *
+   * @param evt the PropertyChangeEvent containing the details of the change
+   */
   @Override public void propertyChange(PropertyChangeEvent evt)
   {
     String propertyName = evt.getPropertyName();
@@ -130,6 +165,12 @@ public class PropertyManagementVM implements PropertyChangeListener
     }
   }
 
+  /**
+   * Saves the updated property details.
+   * This method is called when the user clicks the save button.
+   * It creates a new Property object with the updated details and sends it
+   * to the property client for updating.
+   */
   public void saveUpdatedProperty()
   {
     Property property = new Property(propertyID.get(), location.get(),

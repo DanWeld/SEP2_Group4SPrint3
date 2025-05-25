@@ -10,6 +10,13 @@ import startup.viewHandler.ViewHandler;
 
 import java.io.IOException;
 
+/**
+ * Class for the UserList controller.
+ * This class handles the logic for displaying a list of users,
+ * searching for users, and promoting users to admin.
+ * @author Group 4
+ * @version 1.0
+ */
 public class UserListCtrl
 {
   @FXML private TableView<User> table;
@@ -27,10 +34,22 @@ public class UserListCtrl
   private UserListVM userListVM;
   private ObjectProperty<User> selectedUser;
 
+  /**
+   * Default constructor for UserListCtrl.
+   * Initializes the controller.
+   */
   public UserListCtrl()
   {
   }
 
+  /**
+   * Initializes the UserListCtrl with the given ViewModel and ViewHandler.
+   * This method is called by the JavaFX framework to initialize the controller.
+   *
+   * @param userListVM The ViewModel for the UserList view.
+   * @param viewHandler The ViewHandler for handling view changes.
+   * @throws IOException If an I/O error occurs during initialization.
+   */
   @FXML public void initialize(UserListVM userListVM, ViewHandler viewHandler)
       throws IOException
   {
@@ -78,6 +97,10 @@ public class UserListCtrl
         });
   }
 
+  /**
+   * Called when the search button is pressed.
+   * This method searches for users based on the input in the username and email fields.
+   */
   @FXML public void onSearch()
   {
     String usernameInput = userName.getText();
@@ -97,6 +120,10 @@ public class UserListCtrl
     }
   }
 
+  /**
+   * Called when the upgrade to admin button is pressed.
+   * This method promotes the selected user to admin.
+   */
   @FXML public void onUpgradeToAdmin()
   {
     User selectedUser = table.getSelectionModel().getSelectedItem();
@@ -107,10 +134,13 @@ public class UserListCtrl
     }
   }
 
+  /**
+   * Called when the back button is pressed.
+   * This method navigates back to the admin dashboard view.
+   */
   @FXML public void onBack()
   {
     viewHandler.showView(ViewHandler.ViewType.ADMIN_DASHBOARD);
 
   }
-
 }

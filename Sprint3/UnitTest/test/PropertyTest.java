@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 public class PropertyTest
@@ -18,7 +20,7 @@ public class PropertyTest
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        property = new Property(6, "Test Location", 100.0, true ,mockFacilities);
+        property = new Property(6, "Test Location", 100.0 ,mockFacilities);
     }
 
     @Test
@@ -45,24 +47,8 @@ public class PropertyTest
     }
 
     @Test
-    public void testGetAvailability() {
-        assertTrue(property.getAvailability());
-    }
-
-    @Test
-    public void testSetAvailability() {
-        property.setAvailability(false);
-        assertTrue(property.getAvailability());
-    }
-
-    @Test
     public void testGetFacilities() {
         when(mockFacilities.toString()).thenReturn("Mock Facilities");
         assertEquals(mockFacilities, property.getFacilities());
-    }
-
-    @Test
-    public void testChangeEndDate() {
-
     }
 }

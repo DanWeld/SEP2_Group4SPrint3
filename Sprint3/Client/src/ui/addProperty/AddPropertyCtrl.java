@@ -4,6 +4,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import startup.viewHandler.ViewHandler;
 
+/**
+ * Controller for the Add Property view.
+ * This class handles user interactions and updates the ViewModel accordingly.
+ */
 public class AddPropertyCtrl
 {
   @FXML public TextField locationTextField;
@@ -69,6 +73,10 @@ public class AddPropertyCtrl
     viewHandler.showView(ViewHandler.ViewType.ADMIN_PROPERTY_LIST);
   }
 
+  /**
+   * Called when the save button is pressed.
+   * This method prompts the user for confirmation before saving the changes.
+   */
   public void onSave()
   {
     new Alert(Alert.AlertType.CONFIRMATION,

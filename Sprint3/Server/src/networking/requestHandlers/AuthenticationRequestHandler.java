@@ -13,6 +13,11 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.PrintWriter;
 
+/**
+ * Handles authentication requests such as login and registration.
+ * It listens for property changes from the AuthenticationService to respond
+ * to the client with appropriate messages.
+ */
 public class AuthenticationRequestHandler
     implements RequestHandler, PropertyChangeListener
 {
@@ -20,6 +25,13 @@ public class AuthenticationRequestHandler
   private PrintWriter out;
   private Logger logger;
 
+  /**
+   * Constructs an AuthenticationRequestHandler with the given authentication service
+   * and logger.
+   *
+   * @param authService the authentication service to handle login and registration
+   * @param logger      the logger to log events
+   */
   public AuthenticationRequestHandler(AuthenticationService authService,
       Logger logger)
   {
@@ -28,12 +40,27 @@ public class AuthenticationRequestHandler
     this.logger = logger;
   }
 
+  /**
+   * Checks if this handler can handle the given action for the specified handler.
+   *
+   * @param handler the name of the handler
+   * @param action  the action to be handled
+   * @return true if this handler can handle the action, false otherwise
+   */
   @Override public boolean canHandle(String handler, String action)
   {
     return handler.equals("auth") && (action.equals("login") || action.equals(
         "register"));
   }
 
+  /**
+   * Handles the authentication request based on the action and payload.
+   * It processes login and registration requests and sends responses back to the client.
+   *
+   * @param action  the action to be handled (login or register)
+   * @param payload the payload containing request data
+   * @param out     the PrintWriter to send responses back to the client
+   */
   @Override public void handle(String action, String payload, PrintWriter out)
   {
     this.out = out;
@@ -53,6 +80,13 @@ public class AuthenticationRequestHandler
     }
   }
 
+  /**
+   * Handles property change events from the AuthenticationService.
+   * It processes login and registration success or failure events and sends
+   * appropriate responses back to the client.
+   *
+   * @param evt the property change event containing the response data
+   */
   @Override public void propertyChange(PropertyChangeEvent evt)
   {
     String eventName = evt.getPropertyName();

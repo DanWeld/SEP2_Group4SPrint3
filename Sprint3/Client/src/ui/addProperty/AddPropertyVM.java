@@ -12,6 +12,10 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 
+/**
+ * ViewModel for the AddProperty view.
+ * Handles the logic for adding a new property, including validation and communication with the PropertyClient.
+ */
 public class AddPropertyVM implements PropertyChangeListener
 {
   private final IntegerProperty propertyID = new SimpleIntegerProperty(-1);
@@ -27,6 +31,10 @@ public class AddPropertyVM implements PropertyChangeListener
   private final BooleanProperty saveDisabled = new SimpleBooleanProperty(true);
   private PropertyClient propertyClient;
 
+  /**
+   * Constructor for AddPropertyVM.
+   * Initializes the properties and sets up the PropertyClient.
+   */
   public AddPropertyVM()
   {
     saveDisabled.bind(location.isEmpty().or(pricePerNight.isEmpty()));
@@ -41,10 +49,16 @@ public class AddPropertyVM implements PropertyChangeListener
     }
   }
 
+  /**
+   * Getters for the properties.
+   * These properties are bound to the UI components in the AddProperty view.
+   * @return the property values as JavaFX properties
+   */
   public StringProperty locationProperty()
   {
     return location;
   }
+
 
   public StringProperty pricePerNightProperty()
   {
@@ -86,6 +100,11 @@ public class AddPropertyVM implements PropertyChangeListener
     return saveDisabled;
   }
 
+  /**
+   * Handles property change events from the PropertyClient.
+   * @param evt A PropertyChangeEvent object describing the event source
+   *          and the property that has changed.
+   */
   @Override public void propertyChange(PropertyChangeEvent evt)
   {
     String propertyName = evt.getPropertyName();
@@ -104,6 +123,10 @@ public class AddPropertyVM implements PropertyChangeListener
     }
   }
 
+  /**
+   * Adds a new property using the PropertyClient.
+   * Validates the input and creates a Property object to send to the server.
+   */
   public void addProperty()
   {
     Property property = new Property(propertyID.get(), location.get(),

@@ -13,11 +13,22 @@ public class UserDAOImpl implements UserDAO
 {
   private static UserDAOImpl instance;
 
+  /**
+   * Private constructor to prevent instantiation
+   *
+   * @throws SQLException If an error occurs while registering the driver
+   */
   private UserDAOImpl() throws SQLException
   {
     DriverManager.registerDriver(new org.postgresql.Driver());
   }
 
+  /**
+   * Get the singleton instance of UserDAOImpl
+   *
+   * @return The singleton instance
+   * @throws SQLException If an error occurs while registering the driver
+   */
   public static synchronized UserDAOImpl getInstance() throws SQLException
   {
     if (instance == null)
@@ -27,6 +38,12 @@ public class UserDAOImpl implements UserDAO
     return instance;
   }
 
+  /**
+   * Get a connection to the PostgreSQL database
+   *
+   * @return A Connection object
+   * @throws SQLException If an error occurs while connecting to the database
+   */
   private Connection getConnection() throws SQLException
   {
     return DriverManager.getConnection(
@@ -135,6 +152,11 @@ public class UserDAOImpl implements UserDAO
     }
   }
 
+  /**
+   * Update a user (only password can be updated)
+   * @param user The user to update
+   * @throws SQLException If an error occurs
+   */
   public void update(User user) throws SQLException
   {
     try (Connection connection = getConnection())
@@ -152,6 +174,12 @@ public class UserDAOImpl implements UserDAO
     }
   }
 
+  /**
+   * Delete a user by username
+   *
+   * @param username The username of the user to delete
+   * @throws SQLException If an error occurs
+   */
   public void delete(String username) throws SQLException
   {
     try (Connection connection = getConnection())
@@ -168,6 +196,12 @@ public class UserDAOImpl implements UserDAO
     }
   }
 
+  /**
+   * Promote a user to admin by username
+   *
+   * @param username The username of the user to promote
+   * @throws SQLException If an error occurs
+   */
   public void promoteToAdmin(String username) throws SQLException
   {
     try (Connection connection = getConnection())
@@ -185,6 +219,12 @@ public class UserDAOImpl implements UserDAO
     }
   }
 
+  /**
+   * Get all users from the database
+   *
+   * @return A list of all users
+   * @throws SQLException If an error occurs
+   */
   public List<User> getAllUsers() throws SQLException
   {
     try (Connection connection = getConnection())

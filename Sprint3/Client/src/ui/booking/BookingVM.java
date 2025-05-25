@@ -43,6 +43,10 @@ public class BookingVM implements PropertyChangeListener
   private final BookingClient bookingClient;
   private User user;
 
+  /**
+   * Default constructor for BookingVM.
+   * Initializes the BookingClient and sets up default values for properties.
+   */
   public BookingVM()
   {
     try
@@ -68,6 +72,12 @@ public class BookingVM implements PropertyChangeListener
     submitButtonDisabled.set(false);
   }
 
+  /**
+   * Sets the property details for the booking.
+   * This method updates the ViewModel with the selected property information.
+   *
+   * @param property the Property object containing details of the property
+   */
   public void setProperty(Property property)
   {
     this.property = property;
@@ -77,6 +87,13 @@ public class BookingVM implements PropertyChangeListener
     propertyID.set(property.id());
   }
 
+  /**
+   * Sets the start and end dates for the booking.
+   * This method is called when the user selects dates in the UI.
+   *
+   * @param start the start date of the booking
+   * @param end the end date of the booking
+   */
   public void setDates(Date start, Date end)
   {
     startDate.set(start);
@@ -84,6 +101,12 @@ public class BookingVM implements PropertyChangeListener
     changeEndDate.set(end);
   }
 
+  /**
+   * Handles changes to the end date selected by the user.
+   * This method validates the new end date and checks availability.
+   *
+   * @param newEndDate the new end date selected by the user
+   */
   public void onChangeEndDate(LocalDate newEndDate)
   {
     if (newEndDate == null)
@@ -118,6 +141,11 @@ public class BookingVM implements PropertyChangeListener
     }
   }
 
+  /**
+   * Creates a booking for the selected property with the specified dates.
+   * This method is called when the user submits the booking form.
+   * It checks if the user is logged in and then sends the booking request to the server.
+   */
   public void createBooking()
   {
     // Get the current user
@@ -133,6 +161,12 @@ public class BookingVM implements PropertyChangeListener
     bookingClient.createBooking(booking);
   }
 
+  /**
+   * Property change listener method.
+   * This method is called when a property change event occurs in the BookingClient.
+   * @param evt A PropertyChangeEvent object describing the event source
+   *          and the property that has changed.
+   */
   @Override public void propertyChange(PropertyChangeEvent evt)
   {
     switch (evt.getPropertyName())
@@ -162,6 +196,11 @@ public class BookingVM implements PropertyChangeListener
     }
   }
 
+  /**
+   * Getters for the properties.
+   * These properties are bound to the UI components in the AddProperty view.
+   * @return the property values as JavaFX properties
+   */
   // Getters for View Binding
   public StringProperty getLocationProperty()
   {

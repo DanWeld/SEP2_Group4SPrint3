@@ -5,6 +5,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import startup.viewHandler.ViewHandler;
 
+/**
+ * Controller for the Property Management view.
+ * This class handles the logic for managing properties, including editing and saving property details.
+ *
+ * @author Group 4
+ * @version 1.0
+ */
 public class PropertyManagementCtrl
 {
   @FXML public TextField locationTextField;
@@ -76,6 +83,10 @@ public class PropertyManagementCtrl
     viewHandler.showView(ViewHandler.ViewType.ADMIN_PROPERTY_LIST);
   }
 
+  /**
+   * Called when the save button is pressed.
+   * This method prompts the user for confirmation before saving the changes to the property.
+   */
   public void onSave()
   {
     new Alert(Alert.AlertType.CONFIRMATION,

@@ -17,12 +17,25 @@ import java.io.PrintWriter;
 import java.sql.Date;
 import java.util.List;
 
+/**
+ * Handles requests related to property management, including creating,
+ * updating, reading, and deleting properties.
+ *
+ * @author Group 4
+ * @version 1.0
+ */
 public class PropertyRequestHandler
     implements PropertyChangeListener, RequestHandler
 {
   private final PropertyModel propertyModel;
   private PrintWriter out;
   private Logger logger;
+
+  /**
+   * Constructor for PropertyRequestHandler.
+   * @param propertyModel the model managing properties
+   * @param logger the logger for logging events
+   */
   public PropertyRequestHandler(PropertyModel propertyModel, Logger logger)
   {
     this.propertyModel = propertyModel;
@@ -30,6 +43,14 @@ public class PropertyRequestHandler
     this.logger = logger;
   }
 
+  /**
+   * Can handle method to determine if this handler can process the
+   * given action for the specified handler.
+   *
+   * @param handler the name of the handler
+   * @param action the action to be performed
+   * @return true if this handler can process the action, false otherwise
+   */
   @Override public boolean canHandle(String handler, String action)
   {
     return handler.equals("property") && (action.equals("create")
@@ -37,6 +58,13 @@ public class PropertyRequestHandler
         "readAvailable") || action.equals("delete"));
   }
 
+  /**
+   * Handles the request based on the action and payload provided.
+   *
+   * @param action the action to be performed
+   * @param payload the data associated with the action
+   * @param out the PrintWriter to send responses back to the client
+   */
   @Override public void handle(String action, String payload, PrintWriter out)
   {
     this.out = out;
@@ -71,6 +99,12 @@ public class PropertyRequestHandler
     }
   }
 
+  /**
+   * Handles property change events and sends appropriate responses
+   * based on the event type.
+   *
+   * @param evt the property change event
+   */
   public void propertyChange(PropertyChangeEvent evt)
   {
     String eventName = evt.getPropertyName();
@@ -79,53 +113,62 @@ public class PropertyRequestHandler
     {
       case "propertyCreationSuccess" ->
       {
-        logger.log("Property creation success: " + ((Property) response.payload()).id(), LogLevel.INFO);
+        logger.log("Property creation success: "
+            + ((Property) response.payload()).id(), LogLevel.INFO);
         out.println(JsonParser.toJson(response));
         out.flush();
       }
       case "propertyCreationFailure" ->
       {
         logger.log("Property creation failure: "
-            + ((ErrorResponse) response.payload()).errorMessage(), LogLevel.ERROR);
+                + ((ErrorResponse) response.payload()).errorMessage(),
+            LogLevel.ERROR);
         out.println(JsonParser.toJson(response));
         out.flush();
       }
       case "propertyUpdateSuccess" ->
       {
-        logger.log("Property update success: " + ((Property) response.payload()).id(), LogLevel.INFO);
+        logger.log(
+            "Property update success: " + ((Property) response.payload()).id(),
+            LogLevel.INFO);
         out.println(JsonParser.toJson(response));
         out.flush();
-       }
+      }
       case "propertyUpdateFailure" ->
       {
         logger.log("Property update failure: "
-            + ((ErrorResponse) response.payload()).errorMessage(), LogLevel.ERROR);
+                + ((ErrorResponse) response.payload()).errorMessage(),
+            LogLevel.ERROR);
         out.println(JsonParser.toJson(response));
         out.flush();
       }
       case "propertyDeletionSuccess" ->
       {
-        logger.log("Property deletion success: " + ((Property) response.payload()).id(), LogLevel.INFO);
+        logger.log("Property deletion success: "
+            + ((Property) response.payload()).id(), LogLevel.INFO);
         out.println(JsonParser.toJson(response));
         out.flush();
       }
       case "propertyDeletionFailure" ->
       {
         logger.log("Property deletion failure: "
-            + ((ErrorResponse) response.payload()).errorMessage(), LogLevel.ERROR);
+                + ((ErrorResponse) response.payload()).errorMessage(),
+            LogLevel.ERROR);
         out.println(JsonParser.toJson(response));
         out.flush();
       }
       case "propertyListSuccess" ->
       {
-        logger.log("Property list success, count: " + ((List<Property>) response.payload()).size(), LogLevel.INFO);
+        logger.log("Property list success, count: "
+            + ((List<Property>) response.payload()).size(), LogLevel.INFO);
         out.println(JsonParser.toJson(response));
         out.flush();
       }
       case "propertyListFailure" ->
       {
         logger.log("Property list failure: "
-            + ((ErrorResponse) response.payload()).errorMessage(), LogLevel.ERROR);
+                + ((ErrorResponse) response.payload()).errorMessage(),
+            LogLevel.ERROR);
         out.println(JsonParser.toJson(response));
         out.flush();
       }
@@ -139,7 +182,8 @@ public class PropertyRequestHandler
       case "availablePropertiesFailure" ->
       {
         logger.log("Available properties failure: "
-            + ((ErrorResponse) response.payload()).errorMessage(), LogLevel.ERROR);
+                + ((ErrorResponse) response.payload()).errorMessage(),
+            LogLevel.ERROR);
         out.println(JsonParser.toJson(response));
         out.flush();
       }

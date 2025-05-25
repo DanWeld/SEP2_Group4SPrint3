@@ -23,6 +23,13 @@ import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * ViewModel for the Future Booking List view
+ * Handles the logic for displaying future bookings and cancelling them
+ *
+ * @author Group 4
+ * @version 1.0
+ */
 public class FutureBookingListVM implements PropertyChangeListener
 {
 
@@ -32,6 +39,11 @@ public class FutureBookingListVM implements PropertyChangeListener
   private User user;
   private BookingHistoryClient bookingHistoryClient;
 
+  /**
+   * Constructor for FutureBookingListVM
+   * Initializes the observable list of bookings and the selected booking property
+   * Sets up the booking history client to listen for property changes
+   */
   public FutureBookingListVM()
   {
     this.bookings = FXCollections.observableArrayList();
@@ -49,12 +61,23 @@ public class FutureBookingListVM implements PropertyChangeListener
     }
   }
 
+  /**
+   * Retrieves future bookings for the logged-in user
+   * Calls the booking history client to fetch bookings and returns the observable list
+   *
+   * @return ObservableList of BookingHistory objects representing future bookings
+   */
   public ObservableList<BookingHistory> getFutureBookings()
   {
     bookingHistoryClient.getFutureBookings(getUsername());
     return bookings;
   }
 
+  /**
+   * Gets the username of the currently logged-in user
+   *
+   * @return String representing the username, or null if not logged in
+   */
   private String getUsername()
   {
     if (UserSession.getInstance().isLoggedIn())
@@ -65,6 +88,11 @@ public class FutureBookingListVM implements PropertyChangeListener
     return null;
   }
 
+  /**
+   * Returns the property for the selected booking
+   *
+   * @return ObjectProperty of BookingHistory representing the selected booking
+   */
   public ObjectProperty<BookingHistory> selectedBookingProperty()
   {
     return selectedBooking;
@@ -75,6 +103,11 @@ public class FutureBookingListVM implements PropertyChangeListener
     return errMsg;
   }
 
+  /**
+   * Cancels the selected booking
+   * Checks if a booking is selected and if it can be cancelled (not starting in less than 7 days)
+   * If valid, shows a confirmation dialog and cancels the booking
+   */
   public void cancelBooking()
   {
     BookingHistory booking = selectedBooking.get();
@@ -105,6 +138,14 @@ public class FutureBookingListVM implements PropertyChangeListener
     }
   }
 
+  /**
+   * Property change listener for the booking history client
+   * Handles events such as fetching future bookings,
+   * cancelling bookings, and error responses
+   *
+   * @param evt A PropertyChangeEvent object describing the event source
+   *            and the property that has changed.
+   */
   @Override public void propertyChange(PropertyChangeEvent evt)
   {
     String eventName = evt.getPropertyName();

@@ -7,6 +7,10 @@ import javafx.scene.control.TextField;
 import services.UserSession;
 import startup.viewHandler.ViewHandler;
 
+/**
+ * Controller for the registration view.
+ * Handles user input for registration and communicates with the ViewModel.
+ */
 public class RegisterCtrl
 {
   @FXML private TextField usernameField;
@@ -19,10 +23,21 @@ public class RegisterCtrl
   private RegisterVM viewModel;
   private ViewHandler viewHandler;
 
+  /**
+   * Constructor for RegisterCtrl.
+   * Initializes the controller without any parameters.
+   */
   public RegisterCtrl()
   {
   }
 
+  /**
+   * Initializes the RegisterCtrl with the provided ViewModel and ViewHandler.
+   * Binds UI components to ViewModel properties and sets up listeners for user actions.
+   *
+   * @param vm The ViewModel for registration logic.
+   * @param vh The ViewHandler for navigating between views.
+   */
   public void initialize(RegisterVM vm, ViewHandler vh)
   {
     this.viewModel = vm;
@@ -52,11 +67,19 @@ public class RegisterCtrl
         });
   }
 
+  /**
+   * Handles the back button action.
+   * Navigates the user back to the welcome view.
+   */
   public void onBack()
   {
     viewHandler.showView(ViewHandler.ViewType.WELCOME);
   }
 
+  /**
+   * Handles the register button action.
+   * Calls the ViewModel to perform the registration logic.
+   */
   public void onRegister()
   {
     viewModel.register();

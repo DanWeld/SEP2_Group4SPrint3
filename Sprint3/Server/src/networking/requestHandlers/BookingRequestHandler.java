@@ -13,6 +13,10 @@ import java.beans.PropertyChangeListener;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+/**
+ * Handles booking-related requests such as creating, deleting, extending bookings,
+ * and checking availability.
+ */
 public class BookingRequestHandler
     implements RequestHandler, PropertyChangeListener
 {
@@ -20,6 +24,12 @@ public class BookingRequestHandler
   private final Logger logger;
   private PrintWriter out;
 
+  /**
+   * Constructs a BookingRequestHandler with the specified BookingModel and Logger.
+   *
+   * @param bookingModel the model to handle booking operations
+   * @param logger       the logger for logging events
+   */
   public BookingRequestHandler(BookingModel bookingModel, Logger logger)
   {
     this.bookingModel = bookingModel;
@@ -27,6 +37,13 @@ public class BookingRequestHandler
     this.logger = logger;
   }
 
+  /**
+   * Checks if this handler can handle the specified request.
+   *
+   * @param handler the name of the handler
+   * @param action  the action to be performed
+   * @return true if this handler can handle the request, false otherwise
+   */
   @Override public boolean canHandle(String handler, String action)
   {
     if (handler.equalsIgnoreCase("Booking") && (
@@ -39,6 +56,13 @@ public class BookingRequestHandler
     return false;
   }
 
+  /**
+   * Handles the specified action with the provided payload.
+   *
+   * @param action  the action to be performed
+   * @param payload the data associated with the action
+   * @param out     the PrintWriter to send responses back to the client
+   */
   @Override public void handle(String action, String payload, PrintWriter out)
   {
     this.out = out;
@@ -75,6 +99,11 @@ public class BookingRequestHandler
     }
   }
 
+  /**
+   * Handles property change events from the BookingModel.
+   *
+   * @param evt the property change event
+   */
   @Override public void propertyChange(PropertyChangeEvent evt)
   {
     // Handle the property change event

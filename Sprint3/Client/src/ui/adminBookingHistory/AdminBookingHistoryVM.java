@@ -18,6 +18,10 @@ import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * ViewModel for the Admin Booking History view.
+ * This class handles the logic for displaying booking history for a specific property.
+ */
 public class AdminBookingHistoryVM implements PropertyChangeListener
 {
   private Property property;
@@ -29,6 +33,10 @@ public class AdminBookingHistoryVM implements PropertyChangeListener
   private final BookingHistoryClient bookingHistoryClient;
   private final StringProperty errorMessage;
 
+  /**
+   * Default constructor for AdminBookingHistoryVM.
+   * Initializes the BookingHistoryClient and sets up the properties.
+   */
   public AdminBookingHistoryVM()
   {
     try
@@ -48,11 +56,22 @@ public class AdminBookingHistoryVM implements PropertyChangeListener
     this.errorMessage = new SimpleStringProperty();
   }
 
+  /**
+   * Returns the list of booking history for the property.
+   * This list is observable and can be used to update the UI.
+   *
+   * @return an ObservableList of BookingHistory
+   */
   public ObservableList<BookingHistory> getAllPropertyBookingHistory()
   {
     return bookingHistoryList;
   }
 
+  /**
+   * Getters for the properties.
+   * These properties are bound to the UI components in the AddProperty view.
+   * @return the property values as JavaFX properties
+   */
   public StringProperty getPropertyIDProperty()
   {
     return propertyIDProperty;
@@ -79,6 +98,10 @@ public class AdminBookingHistoryVM implements PropertyChangeListener
     return errorMessage;
   }
 
+  /**
+   * Refreshes the booking history for the current property.
+   * This method updates the property details and fetches the booking history from the server.
+   */
   public void refresh()
   {
     System.out.println("Refreshing booking history for property: " + property);
@@ -90,6 +113,12 @@ public class AdminBookingHistoryVM implements PropertyChangeListener
     bookingHistoryClient.getBookingHistory(propertyId);
   }
 
+  /**
+   * Handles property change events from the BookingHistoryClient.
+   * Updates the booking history list or error message based on the event type.
+   *
+   * @param evt the PropertyChangeEvent containing the new value
+   */
   @Override public void propertyChange(PropertyChangeEvent evt)
   {
     String propertyName = evt.getPropertyName();

@@ -8,15 +8,29 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementation of BookingDAO that uses a PostgreSQL database for storage
+ */
 public class BookingDAOImpl implements BookingDAO
 {
   private static BookingDAOImpl instance;
 
+  /**
+   * Private constructor to prevent instantiation
+   *
+   * @throws SQLException If an error occurs while registering the driver
+   */
   private BookingDAOImpl() throws SQLException
   {
     DriverManager.registerDriver(new org.postgresql.Driver());
   }
 
+  /**
+   * Get the singleton instance of BookingDAOImpl
+   *
+   * @return The singleton instance of BookingDAOImpl
+   * @throws SQLException If an error occurs while getting the connection
+   */
   public static synchronized BookingDAOImpl getInstance() throws SQLException
   {
     if (instance == null)
@@ -26,6 +40,12 @@ public class BookingDAOImpl implements BookingDAO
     return instance;
   }
 
+  /**
+   * Get a connection to the PostgreSQL database
+   *
+   * @return A Connection object to the database
+   * @throws SQLException If an error occurs while getting the connection
+   */
   private Connection getConnection() throws SQLException
   {
     return DriverManager.getConnection(
@@ -33,6 +53,16 @@ public class BookingDAOImpl implements BookingDAO
         "postgres", "viaviavia");
   }
 
+  /**
+   * Create a new booking
+   *
+   * @param startDate  The start date of the booking
+   * @param endDate    The end date of the booking
+   * @param propertyId The ID of the property being booked
+   * @param username   The username of the user making the booking
+   * @return The newly created Booking object
+   * @throws SQLException If an error occurs while creating the booking
+   */
   @Override public Booking create(Date startDate, Date endDate, int propertyId,
       String username) throws SQLException
   {
@@ -80,6 +110,15 @@ public class BookingDAOImpl implements BookingDAO
     }
   }
 
+  /**
+   * Read a booking by start date, property ID, and username
+   *
+   * @param startDate  The start date of the booking
+   * @param propertyId The ID of the property being booked
+   * @param username   The username of the user who made the booking
+   * @return The Booking object if found
+   * @throws SQLException If an error occurs while reading the booking
+   */
   @Override public Booking read(Date startDate, int propertyId, String username)
       throws SQLException
   {
@@ -119,6 +158,16 @@ public class BookingDAOImpl implements BookingDAO
     }
   }
 
+  /**
+   * Update an existing booking
+   *
+   * @param startDate  The start date of the booking to update
+   * @param endDate    The new end date for the booking
+   * @param propertyId The ID of the property being booked
+   * @param username   The username of the user who made the booking
+   * @return The updated Booking object
+   * @throws SQLException If an error occurs while updating the booking
+   */
   @Override public Booking update(Date startDate, Date endDate, int propertyId,
       String username) throws SQLException
   {
@@ -179,6 +228,14 @@ public class BookingDAOImpl implements BookingDAO
     }
   }
 
+  /**
+   * Delete a booking by start date, property ID, and username
+   *
+   * @param startDate  The start date of the booking to delete
+   * @param propertyId The ID of the property being booked
+   * @param username   The username of the user who made the booking
+   * @throws SQLException If an error occurs while deleting the booking
+   */
   @Override public void delete(Date startDate, int propertyId, String username)
       throws SQLException
   {
@@ -214,6 +271,13 @@ public class BookingDAOImpl implements BookingDAO
     }
   }
 
+  /**
+   * Get all bookings for a specific property
+   *
+   * @param propertyId The ID of the property
+   * @return A list of BookingHistory objects for the specified property
+   * @throws SQLException If an error occurs while retrieving the bookings
+   */
   @Override public List<BookingHistory> getAllBookingsByProperty(int propertyId)
       throws SQLException
   {
@@ -245,6 +309,15 @@ public class BookingDAOImpl implements BookingDAO
     return bookingHistoryArrayList;
   }
 
+  /**
+   * Check if a property is available for booking within a specified date range
+   *
+   * @param startDate The start date of the booking
+   * @param endDate   The end date of the booking
+   * @param id        The ID of the property being checked
+   * @return true if the property is available, false otherwise
+   * @throws SQLException If an error occurs while checking availability
+   */
   @Override public boolean isAvailable(Date startDate, Date endDate, int id)
       throws SQLException
   {
@@ -271,6 +344,13 @@ public class BookingDAOImpl implements BookingDAO
     }
   }
 
+  /**
+   * Read past bookings for a specific user
+   *
+   * @param username The username of the user
+   * @return A list of BookingHistory objects for past bookings
+   * @throws SQLException If an error occurs while retrieving the bookings
+   */
   public List<BookingHistory> readPastBookings(String username)
       throws SQLException
   {
@@ -308,6 +388,13 @@ public class BookingDAOImpl implements BookingDAO
     }
   }
 
+  /**
+   * Read current bookings for a specific user
+   *
+   * @param username The username of the user
+   * @return A list of BookingHistory objects for current bookings
+   * @throws SQLException If an error occurs while retrieving the bookings
+   */
   public List<BookingHistory> readCurrentBookings(String username)
       throws SQLException
   {
@@ -345,6 +432,13 @@ public class BookingDAOImpl implements BookingDAO
     }
   }
 
+  /**
+   * Read current bookings for a specific user
+   *
+   * @param username The username of the user
+   * @return A list of BookingHistory objects for current bookings
+   * @throws SQLException If an error occurs while retrieving the bookings
+   */
   public List<BookingHistory> readFutureBookings(String username)
       throws SQLException
   {

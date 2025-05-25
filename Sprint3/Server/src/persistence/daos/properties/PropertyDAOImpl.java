@@ -7,6 +7,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementation of PropertyDAO that uses a PostgreSQL database for storage
+ */
 public class PropertyDAOImpl implements PropertyDAO
 {
   private static PropertyDAOImpl instance;
@@ -16,6 +19,12 @@ public class PropertyDAOImpl implements PropertyDAO
     DriverManager.registerDriver(new org.postgresql.Driver());
   }
 
+  /**
+   * Get the singleton instance of PropertyDAOImpl
+   *
+   * @return The singleton instance
+   * @throws SQLException If an error occurs while registering the driver
+   */
   public static synchronized PropertyDAOImpl getInstance() throws SQLException
   {
     if (instance == null)
@@ -25,6 +34,12 @@ public class PropertyDAOImpl implements PropertyDAO
     return instance;
   }
 
+  /**
+   * Get a connection to the PostgreSQL database
+   *
+   * @return A Connection object
+   * @throws SQLException If an error occurs while establishing the connection
+   */
   private Connection getConnection() throws SQLException
   {
     return DriverManager.getConnection(
@@ -32,6 +47,16 @@ public class PropertyDAOImpl implements PropertyDAO
         "postgres", "viaviavia");
   }
 
+  /**
+   * Create a new property in the database
+   *
+   * @param id            The ID of the property (not used, as ID is auto-generated)
+   * @param location      The location of the property
+   * @param pricePerNight The price per night for the property
+   * @param facilities    The facilities available at the property
+   * @return The newly created Property object
+   * @throws SQLException If an error occurs while creating the property
+   */
   @Override public Property create(int id, String location,
       double pricePerNight, Facilities facilities) throws SQLException
   {
@@ -73,6 +98,13 @@ public class PropertyDAOImpl implements PropertyDAO
     }
   }
 
+  /**
+   * Read a property by its ID from the database
+   *
+   * @param id The ID of the property
+   * @return The Property object if found, null otherwise
+   * @throws SQLException If an error occurs while reading the property
+   */
   @Override public Property readByID(int id) throws SQLException
   {
     try (Connection connection = getConnection())
@@ -102,6 +134,12 @@ public class PropertyDAOImpl implements PropertyDAO
     }
   }
 
+  /**
+   * Read all properties from the database
+   *
+   * @return A list of all Property objects
+   * @throws SQLException If an error occurs while reading the properties
+   */
   @Override public List<Property> readAll()
       throws SQLException
   {
@@ -138,6 +176,12 @@ public class PropertyDAOImpl implements PropertyDAO
     }
   }
 
+  /**
+   * Update an existing property in the database
+   *
+   * @param property The Property object containing updated information
+   * @throws SQLException If an error occurs while updating the property
+   */
   @Override public void update(Property property) throws SQLException
   {
     try (Connection connection = getConnection())
@@ -176,6 +220,12 @@ public class PropertyDAOImpl implements PropertyDAO
     }
   }
 
+  /**
+   * Delete a property by its ID from the database
+   *
+   * @param id The ID of the property to delete
+   * @throws SQLException If an error occurs while deleting the property
+   */
   @Override public void delete(int id) throws SQLException
   {
     try (Connection connection = getConnection())
@@ -194,6 +244,14 @@ public class PropertyDAOImpl implements PropertyDAO
     }
   }
 
+  /**
+   * Get all properties that are available for booking within a specified date range
+   *
+   * @param startDate The start date of the booking
+   * @param endDate   The end date of the booking
+   * @return A list of available Property objects
+   * @throws SQLException If an error occurs while fetching available properties
+   */
   @Override public List<Property> getAvailableProperties(Date startDate,
       Date endDate) throws SQLException
   {

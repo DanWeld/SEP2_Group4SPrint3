@@ -17,12 +17,23 @@ public class AuthenticationServiceImpl implements AuthenticationService
   private final UserDAO userDAO;
   private PropertyChangeSupport support;
 
+  /**
+   * Constructor for AuthenticationServiceImpl
+   *
+   * @param userDAO UserDAO instance for database operations
+   */
   public AuthenticationServiceImpl(UserDAO userDAO)
   {
     this.userDAO = userDAO;
     this.support = new PropertyChangeSupport(this);
   }
 
+  /**
+   * Constructor for AuthenticationServiceImpl with PropertyChangeSupport
+   *
+   * @param email User's email
+   * @param password User's password
+   */
   @Override public void authenticate(String email, String password)
   {
     try
@@ -39,6 +50,11 @@ public class AuthenticationServiceImpl implements AuthenticationService
     }
   }
 
+  /**
+   * Registers a new user after validating email and password
+   *
+   * @param user User to register
+   */
   @Override public void registerUser(User user)
   {
     // Validate the email
@@ -74,6 +90,11 @@ public class AuthenticationServiceImpl implements AuthenticationService
     }
   }
 
+  /**
+   * Validates if the password contains at least one upper case and one lower case character
+   * @param password Password to validate
+   * @return true if valid, false otherwise
+   */
   // Helper methods for validation
   private boolean containsUpperCaseAndLowerCase(String password)
   {
@@ -98,6 +119,11 @@ public class AuthenticationServiceImpl implements AuthenticationService
     return false;
   }
 
+  /**
+   * Validates if the password contains at least one number, one letter and one symbol
+   * @param pw Password to validate
+   * @return true if valid, false otherwise
+   */
   private boolean containsNumberLetterAndSymbol(String pw)
   {
     boolean hasNumber = false;
@@ -126,6 +152,11 @@ public class AuthenticationServiceImpl implements AuthenticationService
     return false;
   }
 
+  /**
+   * Validates the email format
+   * @param email Email to validate
+   * @return "OK" if valid, error message otherwise
+   */
   private String validateEmail(String email)
   {
     if (!email.contains("@"))
@@ -135,6 +166,11 @@ public class AuthenticationServiceImpl implements AuthenticationService
     return "OK";
   }
 
+  /**
+   * Validates the password format
+   * @param newPassword Password to validate
+   * @return "OK" if valid, error message otherwise
+   */
   private String validatePassword(String newPassword)
   {
     if (newPassword.length() < 8)
@@ -152,6 +188,10 @@ public class AuthenticationServiceImpl implements AuthenticationService
     return "OK";
   }
 
+  /**
+   * Adds a PropertyChangeListener to the service
+   * @param listener PropertyChangeListener to add
+   */
   @Override public void addPropertyChangeListener(
       PropertyChangeListener listener)
   {

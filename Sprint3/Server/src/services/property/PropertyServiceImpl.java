@@ -14,18 +14,32 @@ import java.util.List;
 
 import dtos.Property;
 
+/**
+ * Implementation of the PropertyService interface, providing methods
+ * for managing properties, including creation, updating, deletion,
+ * and retrieval of properties.
+ */
 public class PropertyServiceImpl implements PropertyService,
     PropertyCustomerPrivileges, PropertyAdminPrivileges
 {
   private PropertyDAO propertyDAO;
   private PropertyChangeSupport support;
 
+  /**
+   * Constructor for PropertyServiceImpl.
+   *
+   * @param propertyDAO the PropertyDAO instance to use for database operations
+   */
   public PropertyServiceImpl(PropertyDAO propertyDAO)
   {
     this.propertyDAO = propertyDAO;
     this.support = new PropertyChangeSupport(this);
   }
 
+  /**
+   * Creates a new property in the database.
+   * @param property the Property object containing details of the property to be created
+   */
   @Override public void createProperty(Property property)
   {
     int id = property.id();
@@ -49,6 +63,11 @@ public class PropertyServiceImpl implements PropertyService,
     }
   }
 
+  /**
+   * Updates an existing property in the database.
+   *
+   * @param property the Property object containing updated details of the property
+   */
   @Override public void updateProperty(Property property)
   {
     try
@@ -65,6 +84,11 @@ public class PropertyServiceImpl implements PropertyService,
     }
   }
 
+  /**
+   * Deletes a property from the database by its ID.
+   *
+   * @param id the ID of the property to be deleted
+   */
   @Override public void deleteProperty(int id)
   {
     try
@@ -81,6 +105,9 @@ public class PropertyServiceImpl implements PropertyService,
     }
   }
 
+  /**
+   * Retrieves all properties from the database.
+   */
   @Override public void getAllProperties()
   {
     try
@@ -97,6 +124,12 @@ public class PropertyServiceImpl implements PropertyService,
     }
   }
 
+  /**
+   * Retrieves available properties within a specified date range.
+   *
+   * @param startDate the start date of the range
+   * @param endDate   the end date of the range
+   */
   @Override public void getAvailableProperties(Date startDate, Date endDate)
   {
     // Fetch available properties from the database
@@ -115,6 +148,11 @@ public class PropertyServiceImpl implements PropertyService,
     }
   }
 
+  /**
+   * Adds a PropertyChangeListener to the service.
+   *
+   * @param listener the PropertyChangeListener to be added
+   */
   @Override public void addPropertyChangeListener(
       PropertyChangeListener listener)
   {

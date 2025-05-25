@@ -10,18 +10,35 @@ import java.beans.PropertyChangeSupport;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * UserServiceImpl is the implementation of the UserService interface,
+ * providing methods for user management, including promoting users to admin,
+ * updating user details, deleting users, and retrieving all users.
+ * It also implements UserAdminPrivileges and UserCustomerPrivileges interfaces
+ * to handle admin and customer-specific operations.
+ */
 public class UserServiceImpl
     implements UserService, UserAdminPrivileges, UserCustomerPrivileges
 {
   private UserDAO userDAO;
   private PropertyChangeSupport support;
 
+  /**
+   * Constructor for UserServiceImpl.
+   *
+   * @param userDAO the UserDAO instance used for database operations
+   */
   public UserServiceImpl(UserDAO userDAO)
   {
     this.userDAO = userDAO;
     this.support = new PropertyChangeSupport(this);
   }
 
+  /**
+   * Promotes a user to admin status.
+   *
+   * @param username the username of the user to be promoted
+   */
   @Override public void promoteToAdmin(String username)
   {
     try
@@ -37,6 +54,11 @@ public class UserServiceImpl
     }
   }
 
+  /**
+   * Updates the details of a user.
+   *
+   * @param user the User object containing updated user details
+   */
   @Override public void updateUser(User user)
   {
     String passwordValidationResult = validatePassword(user.getPassword());
@@ -61,6 +83,11 @@ public class UserServiceImpl
     }
   }
 
+  /**
+   * Deletes a user by username.
+   *
+   * @param username the username of the user to be deleted
+   */
   @Override public void deleteUser(String username)
   {
     try
@@ -76,6 +103,9 @@ public class UserServiceImpl
     }
   }
 
+  /**
+   * Retrieves all users from the database.
+   */
   @Override public void getAllUsers()
   {
     try
@@ -91,12 +121,21 @@ public class UserServiceImpl
     }
   }
 
+  /**
+   * Adds a property change listener to the service.
+   * @param listener the PropertyChangeListener to be added
+   */
   @Override public void addPropertyChangeListener(
       PropertyChangeListener listener)
   {
     support.addPropertyChangeListener(listener);
   }
 
+  /**
+   * Checks if the password contains at least one upper case and one lower case character.
+   * @param password the password to check
+   * @return true if the password contains both upper and lower case characters, false otherwise
+   */
   // Helper methods for validation
   private boolean containsUpperCaseAndLowerCase(String password)
   {
@@ -121,6 +160,11 @@ public class UserServiceImpl
     return false;
   }
 
+  /**
+   * Checks if the password contains at least one number, one letter, and one symbol.
+   * @param pw the password to check
+   * @return true if the password contains at least one number, one letter, and one symbol, false otherwise
+   */
   private boolean containsNumberLetterAndSymbol(String pw)
   {
     boolean hasNumber = false;
@@ -149,6 +193,11 @@ public class UserServiceImpl
     return false;
   }
 
+  /**
+   * Validates the new password based on specific criteria.
+   * @param newPassword the new password to validate
+   * @return "OK" if the password is valid, otherwise an error message
+   */
   private String validatePassword(String newPassword)
   {
     if (newPassword.length() < 8)

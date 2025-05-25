@@ -10,6 +10,10 @@ import startup.viewHandler.ViewHandler;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 
+/**
+ * Controller for the Admin Booking History view.
+ * This class handles the user interactions and updates the UI based on the ViewModel.
+ */
 public class AdminBookingHistoryCtrl
 {
   @FXML private TableView<BookingHistory> tableView;
@@ -28,10 +32,22 @@ public class AdminBookingHistoryCtrl
   private AdminBookingHistoryVM adminBookingHistoryVM;
   private ViewHandler viewHandler;
 
+  /**
+   * Default constructor for AdminBookingHistoryCtrl.
+   * Initializes the controller without any parameters.
+   */
   public AdminBookingHistoryCtrl()
   {
   }
 
+  /**
+   * Initializes the controller with the provided ViewModel, ViewHandler, and Property.
+   * Binds the UI components to the ViewModel properties and sets up the table view.
+   *
+   * @param viewModel the ViewModel for this view
+   * @param viewHandler the ViewHandler for navigating between views
+   * @param property the Property for which booking history is displayed
+   */
   public void initialize(AdminBookingHistoryVM viewModel,
       ViewHandler viewHandler, Property property)
   {
@@ -65,11 +81,19 @@ public class AdminBookingHistoryCtrl
     errorMsg.textProperty().bind(viewModel.getErrorMessage());
   }
 
+  /**
+   * Called when the view is shown.
+   * Refreshes the booking history to ensure the latest data is displayed.
+   */
   @FXML private void onBackButtonPressed()
   {
     viewHandler.showView(ViewHandler.ViewType.ADMIN_PROPERTY_LIST);
   }
 
+  /**
+   * Refreshes the booking history when the refresh button is pressed.
+   * This method calls the ViewModel to update the booking history data.
+   */
   @FXML private void onRefreshButtonPressed()
   {
     adminBookingHistoryVM.refresh();

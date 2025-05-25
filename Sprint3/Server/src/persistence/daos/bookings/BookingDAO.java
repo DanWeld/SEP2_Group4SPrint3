@@ -8,6 +8,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Interface for Booking Data Access Object (DAO)
+ * Provides methods to manage bookings in the system
+ */
 public interface BookingDAO
 {
   Booking create(Date startDate, Date endDate, int propertyId, String username) throws

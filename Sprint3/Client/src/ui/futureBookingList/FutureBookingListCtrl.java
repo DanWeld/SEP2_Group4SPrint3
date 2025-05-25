@@ -5,6 +5,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import startup.viewHandler.ViewHandler;
 
+/**
+ * Controller for the Future Booking List view
+ * This class handles the interaction between the view and the ViewModel,
+ * displaying future bookings and allowing the user to cancel them.
+ *
+ * @author Group 4
+ * @version 1.0
+ */
 public class FutureBookingListCtrl
 {
   @FXML private TableView<BookingHistory> table;
@@ -18,10 +26,22 @@ public class FutureBookingListCtrl
   private FutureBookingListVM futureBookingListVM;
   private ViewHandler viewHandler;
 
+  /**
+   * Default constructor for FutureBookingListCtrl.
+   * Initializes the controller without any parameters.
+   */
   public FutureBookingListCtrl()
   {
   }
 
+  /**
+   * Initializes the controller with the ViewModel and ViewHandler.
+   * Binds the table view to the ViewModel's future bookings and sets up
+   * the columns to display booking details.
+   *
+   * @param futureBookingListVM The ViewModel containing future bookings data.
+   * @param viewHandler The ViewHandler to manage view transitions.
+   */
   public void initialize(FutureBookingListVM futureBookingListVM,
       ViewHandler viewHandler)
   {
@@ -49,11 +69,19 @@ public class FutureBookingListCtrl
             data.getValue().getPricePerNight()).asObject());
   }
 
+  /**
+   * Handles the action when the user clicks the "Back" button.
+   * Calls the ViewModel to cancel the selected booking.
+   */
   public void onBackButton()
   {
     viewHandler.showView(ViewHandler.ViewType.USER_DASHBOARD);
   }
 
+  /**
+   * Handles the action when the user clicks the "Cancel Booking" button.
+   * Calls the ViewModel to cancel the selected booking.
+   */
   public void onCancelButton()
   {
     futureBookingListVM.cancelBooking();

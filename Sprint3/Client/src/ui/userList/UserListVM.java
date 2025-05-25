@@ -19,9 +19,12 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * ViewModel for the UserList view.
+ * This class handles the logic for displaying a list of users and managing user-related actions.
+ */
 public class UserListVM implements PropertyChangeListener
 {
-
   private ObservableList<User> users;
   private StringProperty username;
   private StringProperty email;
@@ -31,6 +34,10 @@ public class UserListVM implements PropertyChangeListener
   private StringProperty errorMsg;
   private Client client;
 
+  /**
+   * Constructor for UserListVM.
+   * Initializes the user list and the user client.
+   */
   public UserListVM()
   {
     this.users = FXCollections.observableArrayList();
@@ -53,32 +60,28 @@ public class UserListVM implements PropertyChangeListener
     userClient.getAllUsers();
   }
 
+  /**
+   * Gets the list of users.
+   *
+   * @return ObservableList of User objects
+   */
   public ObservableList<User> getUserList()
   {
     return users;
   }
 
-  public SimpleObjectProperty<User> getSelectedUser()
-  {
-    if (selectedUser.getValue() == null)
-    {
-      errorMsg.set("No User selected");
-    }
-    return selectedUser;
-  }
-
-  public void bindSelectedUser(
-      ReadOnlyObjectProperty<User> selectedUserFromTable)
-  {
-    selectedUser.bind(selectedUserFromTable);
-  }
-
+  /**
+   * Searches for users based on the provided username input.
+   *
+   * @param usernameInput the username input to search for
+   */
   public void searchUsers(String usernameInput)
   {
     List<User> searchResults = new ArrayList<>();
     for (User user : users)
     {
-      if (user.getUsername().toLowerCase().contains(usernameInput.toLowerCase()))
+      if (user.getUsername().toLowerCase()
+          .contains(usernameInput.toLowerCase()))
       {
         searchResults.add(user);
       }
@@ -100,6 +103,11 @@ public class UserListVM implements PropertyChangeListener
     users.addAll(searchResults);
   }
 
+  /**
+   * Searches for users based on the provided email input.
+   *
+   * @param emailInput the email input to search for
+   */
   public void searchUsersByEmail(String emailInput)
   {
     List<User> searchResults = new ArrayList<>();
@@ -123,6 +131,11 @@ public class UserListVM implements PropertyChangeListener
     users.addAll(searchResults);
   }
 
+  /**
+   * Promotes a selected user to admin status.
+   *
+   * @param selectedUser the user to be promoted
+   */
   public void promoteUserToAdmin(User selectedUser)
   {
     new Alert(Alert.AlertType.INFORMATION,
@@ -132,11 +145,24 @@ public class UserListVM implements PropertyChangeListener
     });
   }
 
+  /**
+   * Message property for displaying error messages.
+   * This property is used to show messages in the UI.
+   *
+   * @return Observable String for error messages
+   */
   public ObservableValue<String> messageProperty()
   {
     return errorMsg;
   }
 
+  /**
+   * Property for the username input field.
+   * This property is used to bind the username input field in the UI.
+   *
+   * @param evt A PropertyChangeEvent object describing the event source
+   *            and the property that has changed.
+   */
   @Override public void propertyChange(PropertyChangeEvent evt)
   {
     if (evt.getPropertyName().equals("getAllUsers"))

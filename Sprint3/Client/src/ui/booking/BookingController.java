@@ -25,8 +25,19 @@ public class BookingController
   private BookingVM bookingVM;
   private ViewHandler viewHandler;
 
+  /**
+   * Default constructor for BookingController.
+   * Initializes the controller without any parameters.
+   */
   public BookingController() {}
 
+  /**
+   * Initializes the controller with the provided ViewModel and ViewHandler.
+   * Binds the UI components to the ViewModel properties and sets up listeners.
+   *
+   * @param bookingVM the ViewModel for this view
+   * @param viewHandler the ViewHandler for navigating between views
+   */
   public void initialize(BookingVM bookingVM, ViewHandler viewHandler)
   {
     this.bookingVM = bookingVM;
@@ -59,12 +70,22 @@ public class BookingController
     newEndDateAvailabilityField.textProperty().bind(bookingVM.getAvailabilityProperty());
   }
 
+  /**
+   * Back button click handler.
+   * Navigates back to the Property List view.
+   * This method is called when the back button is clicked.
+   */
   @FXML
   public void onBackButtonClicked()
   {
     viewHandler.showView(ViewHandler.ViewType.PROPERTY_LIST);
   }
 
+  /**
+   * Submit button click handler.
+   * Calls the ViewModel to create a booking.
+   * This method is called when the submit button is clicked.
+   */
   @FXML
   public void onSubmitButtonClicked()
   {

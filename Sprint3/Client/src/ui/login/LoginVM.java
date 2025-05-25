@@ -17,6 +17,15 @@ import services.UserSession;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+/**
+ * ViewModel for the Login view
+ * Handles user login logic and state management
+ * This class listens for property changes in the authentication service
+ * and updates the UI accordingly.
+ *
+ * @author Group 4
+ * @version 1.0
+ */
 public class LoginVM implements PropertyChangeListener
 {
   private final StringProperty emailProp = new SimpleStringProperty(); // Can be email or username
@@ -27,6 +36,10 @@ public class LoginVM implements PropertyChangeListener
       false);
   private final Authentication authService;
 
+  /**
+   * Constructor for LoginVM
+   * Initializes the authentication service and sets up property listeners
+   */
   public LoginVM()
   {
     try
@@ -46,6 +59,11 @@ public class LoginVM implements PropertyChangeListener
     pwProp.addListener(this::updateLoginButtonState);
   }
 
+  /**
+   * Getters for the properties.
+   * These properties are bound to the UI components in the AddProperty view.
+   * @return the property values as JavaFX properties
+   */
   public StringProperty emailProperty()
   {
     return emailProp;
@@ -71,6 +89,13 @@ public class LoginVM implements PropertyChangeListener
     return loginSuccessfulProp;
   }
 
+  /**
+   * Updates the state of the login button based on the email and password fields.
+   * If either field is empty, the button is disabled.
+   * This method is called whenever the email or password properties change.
+   *
+   * @param observable the observable object that changed
+   */
   public void updateLoginButtonState(Observable observable)
   {
     boolean shouldDisable = emailProp.get() == null || emailProp.get().isEmpty()
@@ -78,6 +103,11 @@ public class LoginVM implements PropertyChangeListener
     loginBtnEnabledProp.set(!shouldDisable);
   }
 
+  /**
+   * Attempts to log in the user with the provided email and password.
+   * This method sends a login request to the authentication service.
+   * If the login is successful, it updates the UserSession with the logged-in user.
+   */
   public void login()
   {
     String email = emailProp.get();
@@ -85,6 +115,12 @@ public class LoginVM implements PropertyChangeListener
     authService.loginUser(new LoginRequest(email, password));
   }
 
+  /**
+   * Handles property change events from the authentication service.
+   * This method updates the message and login success state based on the event type.
+   *
+   * @param evt the property change event
+   */
   @Override public void propertyChange(PropertyChangeEvent evt)
   {
     String eventName = evt.getPropertyName();

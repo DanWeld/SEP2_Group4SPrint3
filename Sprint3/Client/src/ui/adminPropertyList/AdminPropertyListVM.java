@@ -32,6 +32,10 @@ public class AdminPropertyListVM implements PropertyChangeListener
   private final PropertyListClient propertyListClient;
   private final PropertyClient propertyClient;
 
+  /**
+   * Default constructor for AdminPropertyListVM.
+   * Initializes the PropertyListClient and PropertyClient, and sets up the properties.
+   */
   public AdminPropertyListVM()
   {
     try
@@ -56,16 +60,33 @@ public class AdminPropertyListVM implements PropertyChangeListener
     Refresh();
   }
 
+  /**
+   * Returns the list of all properties.
+   * This list is bound to the UI components in the Admin Property List view.
+   *
+   * @return the observable list of properties
+   */
   public ObservableList<Property> getAllPropertiesList()
   {
     return properties;
   }
 
+  /**
+   * Returns the selected property.
+   * This property is bound to the UI components in the Admin Property List view.
+   *
+   * @return the selected property as an ObjectProperty
+   */
   public ObjectProperty<Property> getSelectedProperty()
   {
     return selectedProperty;
   }
 
+  /**
+   * Binds the selected property from the table to the ViewModel.
+   *
+   * @param selectedFromTable the ReadOnlyObjectProperty of the selected property from the table
+   */
   public void bindSelectedProperty(
       ReadOnlyObjectProperty<Property> selectedFromTable)
   {
@@ -87,27 +108,45 @@ public class AdminPropertyListVM implements PropertyChangeListener
     });
   }
 
+  /**
+   * Getter for the properties.
+   * These properties are bound to the UI components in the AddProperty view.
+   *
+   * @return the property values as JavaFX properties
+   */
   public StringProperty messageProperty()
   {
     return errorMessage;
   }
 
+  /**
+   * Refreshes the list of properties.
+   * This method clears the current properties and fetches the latest properties from the server.
+   * This is typically called when the view is initialized or when the user requests a refresh.
+   */
   public void Refresh()
   {
     this.properties.clear();
     propertyListClient.getAllProperties();
   }
 
+  /**
+   * Deletes the selected property.
+   * This method sends a request to the server to delete the property with the currently selected ID.
+   * It also updates the properties list and error message accordingly.
+   */
   public void deleteSelectedProperty()
   {
     propertyClient.deleteProperty(selectedPropertyId.get());
   }
 
-  public void addNewProperty(Property property)
-  {
-    //TODO implement add new property functionality;
-  }
-
+  /**
+   * Property change event handler.
+   * This method listens for property change events from the PropertyClient and PropertyListClient.
+   * It updates the properties list, selected property, or error message based on the event type.
+   * @param evt the PropertyChangeEvent containing the new value
+   *            and the property that has changed.
+   */
   @Override public void propertyChange(PropertyChangeEvent evt)
   {
     switch (evt.getPropertyName())
@@ -122,7 +161,8 @@ public class AdminPropertyListVM implements PropertyChangeListener
       case "delete":
         Integer deletedPropertyId = (Integer) evt.getNewValue();
         properties.removeIf(property -> property.id() == deletedPropertyId);
-        errorMessage.set("Property with ID " + deletedPropertyId + " has been deleted successfully.");
+        errorMessage.set("Property with ID " + deletedPropertyId
+            + " has been deleted successfully.");
         break;
 
       case "error":
