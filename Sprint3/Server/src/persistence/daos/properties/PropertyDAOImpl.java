@@ -140,8 +140,7 @@ public class PropertyDAOImpl implements PropertyDAO
    * @return A list of all Property objects
    * @throws SQLException If an error occurs while reading the properties
    */
-  @Override public List<Property> readAll()
-      throws SQLException
+  @Override public List<Property> readAll() throws SQLException
   {
     try (Connection connection = getConnection())
     {
@@ -197,7 +196,8 @@ public class PropertyDAOImpl implements PropertyDAO
       Property existingProperty = readByID(property.id());
       if (existingProperty == null)
       {
-        throw new SQLException("Property with ID " + property.id() + " does not exist.");
+        throw new SQLException(
+            "Property with ID " + property.id() + " does not exist.");
       }
 
       // Update the property in the database
@@ -215,7 +215,8 @@ public class PropertyDAOImpl implements PropertyDAO
 
       if (rowsUpdated == 0)
       {
-        throw new SQLException("Failed to update property with ID " + property.id());
+        throw new SQLException(
+            "Failed to update property with ID " + property.id());
       }
     }
   }

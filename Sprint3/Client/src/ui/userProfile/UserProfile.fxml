@@ -63,13 +63,13 @@
             <HBox spacing="10.0">
                <children>
                   <Label text="New password: " />
-                  <TextField alignment="CENTER" />
+                  <TextField fx:id="newPasswordField" alignment="CENTER" />
                </children>
             </HBox>
             <HBox spacing="10.0">
                <children>
                   <Label text="Repeat password: " />
-                  <TextField alignment="CENTER" />
+                  <TextField fx:id="repeatPasswordField" alignment="CENTER" />
                </children>
             </HBox>
             <Label fx:id="messageLabel" textFill="RED" />

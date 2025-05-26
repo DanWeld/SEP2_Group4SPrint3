@@ -29,15 +29,9 @@ public class ViewModelFactory
   private SpecifyDatesVM specifyDatesVM;
   private PropertyListVM propertyListVM;
   private BookingVM bookingVM;
-  private PastBookingListVM pastBookingListVM;
-  private CurrentBookingListVM currentBookingListVM;
-  private FutureBookingListVM futureBookingListVM;
   private ExtendBookingVM extendBookingVM;
-  private UserListVM userListVM;
-  private AdminPropertyListVM adminPropertyListVM;
   private AdminBookingHistoryVM adminBookingHistoryVM;
   private PropertyManagementVM propertyManagementVM;
-  private AddPropertyVM addPropertyVM;
   private UserProfileVM userProfileVM;
 
   public ViewModelFactory()
@@ -45,15 +39,9 @@ public class ViewModelFactory
     specifyDatesVM = new SpecifyDatesVM();
     propertyListVM = new PropertyListVM();
     bookingVM = new BookingVM();
-    pastBookingListVM = new PastBookingListVM();
-    currentBookingListVM = new CurrentBookingListVM();
-    futureBookingListVM = new FutureBookingListVM();
     extendBookingVM = new ExtendBookingVM();
-    userListVM = new UserListVM();
-    adminPropertyListVM = new AdminPropertyListVM();
     adminBookingHistoryVM = new AdminBookingHistoryVM();
     propertyManagementVM = new PropertyManagementVM();
-    addPropertyVM = new AddPropertyVM();
     userProfileVM = new UserProfileVM();
   }
 
@@ -114,7 +102,7 @@ public class ViewModelFactory
    */
   public PastBookingListVM getBookingHistoryVM()
   {
-    return pastBookingListVM;
+    return new PastBookingListVM();
   }
 
   /**
@@ -124,7 +112,7 @@ public class ViewModelFactory
    */
   public CurrentBookingListVM getCurrentBookingListVM()
   {
-    return currentBookingListVM;
+    return new CurrentBookingListVM();
   }
 
   /**
@@ -134,7 +122,7 @@ public class ViewModelFactory
    */
   public FutureBookingListVM getFutureBookingListVM()
   {
-    return futureBookingListVM;
+    return new FutureBookingListVM();
   }
 
   /**
@@ -154,7 +142,7 @@ public class ViewModelFactory
    */
   public UserListVM getUserListVM()
   {
-    return userListVM;
+    return new UserListVM();
   }
 
   /**
@@ -164,7 +152,7 @@ public class ViewModelFactory
    */
   public AdminPropertyListVM getAdminPropertyListVM()
   {
-    return adminPropertyListVM;
+    return new AdminPropertyListVM();
   }
 
   /**
@@ -194,7 +182,7 @@ public class ViewModelFactory
    */
   public AddPropertyVM getAddPropertyVM()
   {
-    return addPropertyVM;
+    return new AddPropertyVM();
   }
 
   /**

@@ -71,6 +71,8 @@ public class SpecifyDatesCtrl
   {
     specifyDatesVM.setStartDate(startDate.getValue());
     specifyDatesVM.setEndDate(endDate.getValue());
+    System.out.println("Start Date: " + startDate.getValue() +
+        ", End Date: " + endDate.getValue());
     viewHandler.setDates(Date.valueOf(startDate.getValue()),
         Date.valueOf(endDate.getValue()));
     viewHandler.showView(ViewHandler.ViewType.PROPERTY_LIST);

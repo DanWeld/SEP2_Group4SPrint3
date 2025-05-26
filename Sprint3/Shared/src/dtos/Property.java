@@ -12,6 +12,7 @@ package dtos;
     private String location;
     private double pricePerNight;
     private Facilities facilities;
+    private boolean availability;
 
     /**
      * Constructs a Property with the specified details.
@@ -122,5 +123,23 @@ package dtos;
     public Facilities getFacilities()
     {
       return facilities;
+    }
+
+    /**
+     * Get availability status of the property.
+     * @return true if the property is available, false otherwise
+     */
+    public boolean getAvailability()
+    {
+      return availability;
+    }
+
+    /**
+     * Sets the availability status of the property.
+     * @param availability true if the property is available, false otherwise
+     */
+    public void setAvailability(boolean availability)
+    {
+      this.availability = availability;
     }
   }

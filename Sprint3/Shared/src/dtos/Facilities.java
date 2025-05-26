@@ -13,6 +13,7 @@ package dtos;
     private boolean dishwasher;
     private boolean laundryMachine;
     private boolean swimmingPool;
+    private boolean availability;
 
     /**
      * Constructs a Facilities object with the specified facility availability.
@@ -81,6 +82,16 @@ package dtos;
     public boolean swimmingPool()
     {
       return swimmingPool;
+    }
+
+    /**
+     * Checks if the facilities are available.
+     *
+     * @return true if any facility is available, false otherwise
+     */
+    public boolean isAvailable()
+    {
+      return kitchen || internet || dishwasher || laundryMachine || swimmingPool;
     }
 
     /**

@@ -64,20 +64,23 @@ public class PropertyListVM implements PropertyChangeListener
    */
   public void setDates(Date startDate, Date endDate)
   {
+    System.out.println("setDates called with startDate: " + startDate +
+        ", endDate: " + endDate);
     this.startDate = startDate;
     this.endDate = endDate;
+    System.out.println("Dates set: " + this.startDate + " to " + this.endDate);
   }
 
   /**
    * Gets the list of properties available for booking.
    *
    * @return An ObservableList of Property objects.
-   * @throws Exception If an error occurs while getting the properties.
    */
-  public ObservableList<Property> getPropertyList() throws Exception
+  public ObservableList<Property> getPropertyList()
   {
     //Call the client controller to get the properties
     propertyListClient.getAvailableProperties(startDate, endDate);
+    System.out.println("After" + " PropertyListVM");
     return properties;
   }
 

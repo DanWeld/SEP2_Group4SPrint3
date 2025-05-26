@@ -2,6 +2,7 @@ package ui.userProfile;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import services.UserSession;
 import startup.viewHandler.ViewHandler;
 
 /**
@@ -57,7 +58,14 @@ public class UserProfileCtrl
    */
   public void onBack()
   {
-    viewHandler.showView(ViewHandler.ViewType.USER_DASHBOARD);
+    if (UserSession.getInstance().getCurrentUser().isAdmin())
+    {
+      viewHandler.showView(ViewHandler.ViewType.ADMIN_DASHBOARD);
+    }
+    else
+    {
+      viewHandler.showView(ViewHandler.ViewType.USER_DASHBOARD);
+    }
   }
 
   /**

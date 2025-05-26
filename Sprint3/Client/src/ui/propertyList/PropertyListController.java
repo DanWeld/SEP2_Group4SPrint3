@@ -11,6 +11,8 @@ import javafx.scene.control.TableView;
 import dtos.Property;
 import startup.viewHandler.ViewHandler;
 
+import java.sql.Date;
+
 /**
  * Controller for the PropertyList view.
  * This class handles the logic for displaying a list of properties.
@@ -52,14 +54,9 @@ public class PropertyListController
     this.viewHandler = viewHandler;
 
     // Bind the TableView to the ViewModel
-    try
-    {
+      System.out.println("V Before");
       table.setItems(propertyListVM.getPropertyList());
-    }
-    catch (Exception e)
-    {
-      throw new RuntimeException(e);
-    }
+      System.out.println("V After");
 
     // Set up the columns
     locationColumn.setCellValueFactory(
