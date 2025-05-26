@@ -26,8 +26,35 @@ public class ViewModelFactory
    * Default constructor for ViewModelFactory
    * Initializes the factory without any parameters
    */
+  private SpecifyDatesVM specifyDatesVM;
+  private PropertyListVM propertyListVM;
+  private BookingVM bookingVM;
+  private PastBookingListVM pastBookingListVM;
+  private CurrentBookingListVM currentBookingListVM;
+  private FutureBookingListVM futureBookingListVM;
+  private ExtendBookingVM extendBookingVM;
+  private UserListVM userListVM;
+  private AdminPropertyListVM adminPropertyListVM;
+  private AdminBookingHistoryVM adminBookingHistoryVM;
+  private PropertyManagementVM propertyManagementVM;
+  private AddPropertyVM addPropertyVM;
+  private UserProfileVM userProfileVM;
+
   public ViewModelFactory()
   {
+    specifyDatesVM = new SpecifyDatesVM();
+    propertyListVM = new PropertyListVM();
+    bookingVM = new BookingVM();
+    pastBookingListVM = new PastBookingListVM();
+    currentBookingListVM = new CurrentBookingListVM();
+    futureBookingListVM = new FutureBookingListVM();
+    extendBookingVM = new ExtendBookingVM();
+    userListVM = new UserListVM();
+    adminPropertyListVM = new AdminPropertyListVM();
+    adminBookingHistoryVM = new AdminBookingHistoryVM();
+    propertyManagementVM = new PropertyManagementVM();
+    addPropertyVM = new AddPropertyVM();
+    userProfileVM = new UserProfileVM();
   }
 
   /**
@@ -57,7 +84,7 @@ public class ViewModelFactory
    */
   public SpecifyDatesVM getSpecifyDatesVM()
   {
-    return new SpecifyDatesVM();
+    return specifyDatesVM;
   }
 
   /**
@@ -67,7 +94,7 @@ public class ViewModelFactory
    */
   public PropertyListVM getPropertyListVM()
   {
-    return new PropertyListVM();
+    return propertyListVM;
   }
 
   /**
@@ -77,7 +104,7 @@ public class ViewModelFactory
    */
   public BookingVM getBookingVM()
   {
-    return new BookingVM();
+    return bookingVM;
   }
 
   /**
@@ -87,7 +114,7 @@ public class ViewModelFactory
    */
   public PastBookingListVM getBookingHistoryVM()
   {
-    return new PastBookingListVM();
+    return pastBookingListVM;
   }
 
   /**
@@ -97,7 +124,7 @@ public class ViewModelFactory
    */
   public CurrentBookingListVM getCurrentBookingListVM()
   {
-    return new CurrentBookingListVM();
+    return currentBookingListVM;
   }
 
   /**
@@ -107,7 +134,7 @@ public class ViewModelFactory
    */
   public FutureBookingListVM getFutureBookingListVM()
   {
-    return new FutureBookingListVM();
+    return futureBookingListVM;
   }
 
   /**
@@ -117,7 +144,7 @@ public class ViewModelFactory
    */
   public ExtendBookingVM getExtendBookingVM()
   {
-    return new ExtendBookingVM();
+    return extendBookingVM;
   }
 
   /**
@@ -127,7 +154,7 @@ public class ViewModelFactory
    */
   public UserListVM getUserListVM()
   {
-    return new UserListVM();
+    return userListVM;
   }
 
   /**
@@ -137,7 +164,7 @@ public class ViewModelFactory
    */
   public AdminPropertyListVM getAdminPropertyListVM()
   {
-    return new AdminPropertyListVM();
+    return adminPropertyListVM;
   }
 
   /**
@@ -147,7 +174,7 @@ public class ViewModelFactory
    */
   public AdminBookingHistoryVM getAdminBookingHistoryVM()
   {
-    return new AdminBookingHistoryVM();
+    return adminBookingHistoryVM;
   }
 
   /**
@@ -157,7 +184,7 @@ public class ViewModelFactory
    */
   public PropertyManagementVM getPropertyManagementVM()
   {
-    return new PropertyManagementVM();
+    return propertyManagementVM;
   }
 
   /**
@@ -167,7 +194,7 @@ public class ViewModelFactory
    */
   public AddPropertyVM getAddPropertyVM()
   {
-    return new AddPropertyVM();
+    return addPropertyVM;
   }
 
   /**
@@ -177,6 +204,6 @@ public class ViewModelFactory
    */
   public UserProfileVM getUserProfileVM()
   {
-    return new UserProfileVM();
+    return userProfileVM;
   }
 }
