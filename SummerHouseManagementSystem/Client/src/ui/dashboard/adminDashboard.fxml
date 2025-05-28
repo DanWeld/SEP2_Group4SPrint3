@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.dashboard.AdminDashboardCtrl">
+    <top>
+        <VBox alignment="CENTER" prefHeight="100.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label text="Admin Dashboard" textAlignment="CENTER">
+                    <font>
+                        <Font name="System Bold" size="24.0" />
+                    </font>
+                </Label>
+                <Label fx:id="welcomeLabel" text="Welcome, Admin">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets top="5.0" />
+                    </VBox.margin>
+                </Label>
+            </children>
+        </VBox>
+    </top>
+    <center>
+        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" BorderPane.alignment="CENTER">
+            <children>
+                <Button mnemonicParsing="false" onAction="#onViewBookings" prefHeight="40.0" prefWidth="200.0" text="View All Properties" />
+                <Button mnemonicParsing="false" onAction="#onManageUsers" prefHeight="40.0" prefWidth="200.0" text="Manage Users" />
+                <Button mnemonicParsing="false" onAction="#onManageProfile" prefHeight="40.0" prefWidth="200.0" text="Manage Profile" />
+            </children>
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+        </VBox>
+    </center>
+    <bottom>
+        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <children>
+                <Button mnemonicParsing="false" onAction="#onLogout" prefHeight="30.0" prefWidth="100.0" text="Logout" />
+            </children>
+        </HBox>
+    </bottom>
+</BorderPane>

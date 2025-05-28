@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox prefHeight="400.0" prefWidth="650.0"
+      xmlns="http://javafx.com/javafx/17.0.12"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="ui.addProperty.AddPropertyCtrl">
+    <AnchorPane prefHeight="406.0" prefWidth="650.0">
+        <children>
+            <Button fx:id="backButton" layoutX="213.0" layoutY="360.0"
+                    mnemonicParsing="false" onAction="#onBack" text="Back"/>
+            <Label fx:id="messageLabel" layoutX="211.0" layoutY="323.0"
+                   prefHeight="17.0" prefWidth="394.0"/>
+            <Label layoutX="104.0" layoutY="58.0" text="Location: "/>
+            <Text layoutX="213.0" layoutY="40.0" strokeType="OUTSIDE"
+                  strokeWidth="0.0" text="Property Management"
+                  textAlignment="CENTER">
+                <font>
+                    <Font size="24.0"/>
+                </font>
+            </Text>
+            <Label layoutX="104.0" layoutY="100.0" text="Price per night:"/>
+            <Label layoutX="104.0" layoutY="141.0" text="Facilities:"/>
+            <CheckBox fx:id="kitchenCheckBox" layoutX="212.0" layoutY="145.0"
+                      mnemonicParsing="false" text="Kitchen"/>
+            <CheckBox fx:id="dishwasherCheckBox" layoutX="212.0" layoutY="177.0"
+                      mnemonicParsing="false" text="Dish washer"/>
+            <CheckBox fx:id="laundryMachineCheckBox" layoutX="212.0"
+                      layoutY="208.0" mnemonicParsing="false"
+                      text="Laundry machine"/>
+            <CheckBox fx:id="swimmingPoolCheckBox" layoutX="212.0"
+                      layoutY="240.0" mnemonicParsing="false"
+                      text="Swimmin pool"/>
+            <CheckBox fx:id="internetCheckBox" layoutX="212.0" layoutY="272.0"
+                      mnemonicParsing="false" text="Internet"/>
+            <TextField fx:id="locationTextField" layoutX="212.0"
+                       layoutY="58.0"/>
+            <TextField fx:id="pricePerNightTextField" layoutX="212.0"
+                       layoutY="96.0"/>
+            <Button fx:id="saveButton" layoutX="379.0" layoutY="360.0"
+                    mnemonicParsing="false" onAction="#onSave" text="Save"/>
+        </children>
+    </AnchorPane>
+</VBox>
